@@ -6,25 +6,6 @@ The *PCP_Tool* Abstract Base Class specifies the interface for all Tool objects 
 | Revised: 20/10/2019 00:34:27
 | Author: Bijal Patel
 
-Inputs
----------
-    :param test: args
-    :param test: args
-
-Methods
----------
-    :param: args
-    :param test: args
-
-Attributes
-------------
-    :param test: args
-    :param test: args
-
-Outputs
----------
-    :None: Everything output to terminal window, no return value
-
 """
 
 from abc import ABC, abstractmethod
@@ -42,36 +23,8 @@ class PCP_Tool(PCP_BasicLogger,ABC):
         """
         self.name = name
         super().__init__(**kwargs)
-        
-        
-####################### Communication METHODS ###############################        
-    @abstractmethod
-    def handshakeTool(self):
-        """*Perform communications handshake with Tool*
-        | *Parameters* 
-        |   none
-        
-        | *Returns*
-        |   [1, "Handshake Successful"]
-        |   [-1, "Error: Handshake with Tool Failed + error text"]
-        """
-        pass
-    
-    @abstractmethod
-    def setValue(self,param, value):
-        """*Set Tool value of a specified Tool parameter*
-        | *Parameters* 
-        |   param - name of the parameter to set
-        |   value - the new value of the parameter
-        
-        | *Returns*
-        |   [1, "Value Set succesfully"]
-        |   [-1, "Error: Parameter could not be set for Tool + error text"]
-        """
-        pass
-    
-    
-####################### Activate METHODS ############################### 
+            
+############################# Activate ### ############################### 
     @abstractmethod
     def engage(self):
         """*Activate tool (dispense/LASER on, etc)*
@@ -93,6 +46,18 @@ class PCP_Tool(PCP_BasicLogger,ABC):
         | *Returns*
         |   [1, "Tool Disengaged"]
         |   [-1, "Error: Tool could not be disengaged"]
+        """
+        pass
+       
+    @abstractmethod
+    def setValue(self, value):
+        """*Set Tool value of a specified Tool parameter*
+        | *Parameters* 
+        |   value - the new value of the parameter
+        
+        | *Returns*
+        |   [1, "Value Set succesfully"]
+        |   [-1, "Error: Parameter could not be set for Tool + error text"]
         """
         pass
     

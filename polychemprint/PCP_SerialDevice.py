@@ -7,27 +7,9 @@ Serial Device objects that PCP will use (extruders/lasers/etc)
 | Revised: 20/10/2019 00:34:27
 | Author: Bijal Patel
 
-Inputs
----------
-    :param test: args
-    :param test: args
-
-Methods
----------
-    :param: args
-    :param test: args
-
-Attributes
-------------
-    :param test: args
-    :param test: args
-
-Outputs
----------
-    :None: Everything output to terminal window, no return value
-
 """
 from abc import ABC, abstractmethod
+import serial
 
 class PCP_SerialDevice(ABC):
 ################### Construct/Destruct METHODS ###########################
@@ -44,9 +26,33 @@ class PCP_SerialDevice(ABC):
         self.baudRate = baudRate
         self.commsTimeOut = commsTimeOut
         self.verbose = verbose
+        self.ser = serial.Serial()
         super().__init__(**kwargs)
+     
+    @abstractmethod
+    def checkIfSerialConnectParamsSet(self):
+        """*Goes through connection parameters and sees if all are set*
         
+        | *Parameters* 
+        |   none
         
+        | *Returns*
+        |   True if all parameters are set, false if any unset 
+        """
+        connectParam = [self.devAddress,self.firmwareVers,self.baudRate]
+        return 'unset' not in connectParam
+        
+    @abstractmethod
+    def startSerial(self):
+        """*Creates pySerial device*
+        | *Parameters* 
+        |   none
+        
+        | *Returns*
+        |   [1, "Terminated successfully"]
+        |   [-1, "Error: Tool could not be stopped + error text"]
+        """
+        pass
     
     @abstractmethod
     def stopSerial(self):
@@ -62,7 +68,7 @@ class PCP_SerialDevice(ABC):
     
 ####################### Communication METHODS ###############################        
     @abstractmethod
-    def handshakeSerial(self):
+    def handShakeSerial(self):
         """*Perform communications handshake with Tool*
         
         | *Parameters* 
@@ -76,7 +82,20 @@ class PCP_SerialDevice(ABC):
         pass      
        
     @abstractmethod
-    def write(self,command):
+    def __writeSerial__(self,text):
+        """*Writes text to serial device*
+        
+        | *Parameters* 
+        |   text, the string to send
+        
+        | *Returns*
+        |   [1, 'Text Sent + text'] if succesfull 2-way communication
+        |   [0, 'Write Failed + Error'] if exception caught
+        """
+        pass
+    
+    @abstractmethod
+    def writeSerialCommand(self,command):
         """*Writes command to serial device*
         
         | *Parameters* 
@@ -97,32 +116,5 @@ class PCP_SerialDevice(ABC):
         
         | *Returns*
         |   inp String of all text read in, empty string if nothing
-        """
-        pass
-
-    @abstractmethod   
-    def waitReady(self):
-        """*Checks if taz is ready to receive new command by 
-        Looking for "ok" in input*
-        
-        | *Parameters* 
-        |   none
-        
-        | *Returns*
-        |   [1, inp] String read in while waiting if successful
-        |   [-1, "WaitReady Failed + Error"] if error
-        """
-        pass
-    
-    @abstractmethod   
-    def writeReady(self,command):
-        """*Writes when ready*
-        
-        | *Parameters* 
-        |   command, string to write to axes
-        
-        | *Returns*
-        |   [1, "String written"] If success
-        |   [-1, "writeReady Failed + Error"] if error
         """
         pass

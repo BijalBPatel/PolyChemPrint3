@@ -6,25 +6,6 @@ The *Shape* Class contains data and functions for modular pre-written motion and
 | Revised: 20/10/2019 00:34:27
 | Author: Bijal Patel
 
-Inputs
----------
-    :param test: args
-    :param test: args
-    
-Methods
----------
-    :param: args
-    :param test: args
-    
-Attributes
--------------
-    :param test: args
-    :param test: args
-    
-Outputs
----------
-    :None: Everything output to terminal window, no return value
-
 """
 
 class Shape:

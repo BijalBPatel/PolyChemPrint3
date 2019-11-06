@@ -6,17 +6,6 @@ The *Axes3D* class contains all data and methods related to controlling 3D print
 | Revised: 23/10/2019 14:06:59
 | Author: Bijal Patel
   
-Attributes
-----------------
-    :name: axes name [printer name]
-    :devAddress: location of device on local system
-    :firmwareVers: Firmware meant to be used with [for special GCode cmds]
-    
-Methods
-----------------
-    :param: args
-    :param: args
-        
 """
 import serial
 import io
@@ -58,7 +47,7 @@ class Axes3D(PCP_SerialDevice):
            
         
         
-    def connectToAxesHardware(self):
+    def startSerial(self):
         """*Attempts to connect to Hardware and send an initial handshake*
         
         | *Parameters* 
@@ -104,7 +93,7 @@ class Axes3D(PCP_SerialDevice):
                     linesIn.extend(lineIn)                    
                 
             except Exception as inst:
-                return [-1, 'Failed Creating pySerial... ' + inst.__str__]
+                return [-1, 'Failed Creating pySerial... ' + inst.__str__()]
             
         else: #Not all params were set
             return [0, 'Not all connection parameters set']
@@ -137,7 +126,7 @@ class Axes3D(PCP_SerialDevice):
             else:
                 return [1, 'Handshake Success']
         except Exception as inst:
-            return [-1, 'Error on Handshake: ' + inst.__str__]
+            return [-1, 'Error on Handshake: ' + inst.__str__()]
         
        
     def write(self,command):
@@ -156,7 +145,7 @@ class Axes3D(PCP_SerialDevice):
                 print('\tCommand Sent: ' + command)
             return [1,'Command Sent' + command]
         except Exception as inst:
-            return [-1, 'Error on Handshake: ' + inst.__str__]
+            return [-1, 'Error on Write: ' + inst.__str__()]
     
     def readTime(self):
         """*Reads in from serial device until timeout*
