@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>polychemprint3.utility.serialDeviceSpec module &mdash; polychemprint3 3.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> polychemprint3
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">polychemprint3.utility.serialDeviceSpec module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">polychemprint3</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>polychemprint3.utility.serialDeviceSpec module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/polychemprint3.utility.serialDeviceSpec.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-polychemprint3.utility.serialDeviceSpec">
+<span id="polychemprint3-utility-serialdevicespec-module"></span><h1>polychemprint3.utility.serialDeviceSpec module<a class="headerlink" href="#module-polychemprint3.utility.serialDeviceSpec" title="Permalink to this headline">¶</a></h1>
+<p>The <em>PCP_SerialDevice</em> Abstract Base Class specifies the interface for all 
+Serial Device objects that PCP will use (extruders/lasers/etc)</p>
+<div class="line-block">
+<div class="line">First created on Sun Oct 20 00:03:21 2019</div>
+<div class="line">Revised: 20/10/2019 00:34:27</div>
+<div class="line">Author: Bijal Patel</div>
+</div>
+<dl class="class">
+<dt id="polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice">
+<em class="property">class </em><code class="sig-prename descclassname">polychemprint3.utility.serialDeviceSpec.</code><code class="sig-name descname">PCP_SerialDevice</code><span class="sig-paren">(</span><em class="sig-param">devAddress</em>, <em class="sig-param">baudRate</em>, <em class="sig-param">commsTimeOut</em>, <em class="sig-param">verbose</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="method">
+<dt id="polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.checkIfSerialConnectParamsSet">
+<em class="property">abstract </em><code class="sig-name descname">checkIfSerialConnectParamsSet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.checkIfSerialConnectParamsSet" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Goes through connection parameters and sees if all are set</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">True if all parameters are set, false if any unset </div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.handShakeSerial">
+<em class="property">abstract </em><code class="sig-name descname">handShakeSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.handShakeSerial" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Perform communications handshake with Tool</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Handshake Successful”]</div>
+<div class="line">[0, ‘Handshake Failed, Received: + message received’] if unexpected input received</div>
+<div class="line">[-1, “Error: Handshake with Tool Failed + error text”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.readTime">
+<em class="property">abstract </em><code class="sig-name descname">readTime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.readTime" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Reads in from serial device until timeout</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">inp String of all text read in, empty string if nothing</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.startSerial">
+<em class="property">abstract </em><code class="sig-name descname">startSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.startSerial" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Creates pySerial device</em>
+| <em>Parameters</em> 
+|   none</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Terminated successfully”]</div>
+<div class="line">[-1, “Error: Tool could not be stopped + error text”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.stopSerial">
+<em class="property">abstract </em><code class="sig-name descname">stopSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.stopSerial" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Terminates communication</em>
+| <em>Parameters</em> 
+|   none</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Terminated successfully”]</div>
+<div class="line">[-1, “Error: Tool could not be stopped + error text”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.writeSerialCommand">
+<em class="property">abstract </em><code class="sig-name descname">writeSerialCommand</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.serialDeviceSpec.PCP_SerialDevice.writeSerialCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Writes command to serial device</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">command, the string to send</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, ‘Command Sent + command’] if succesfull 2-way communication</div>
+<div class="line">[0, ‘Write Failed + Error’] if exception caught</div>
+</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Bijal Patel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
