@@ -4,7 +4,7 @@ def readme():
     with open('README.rst') as f:
         return f.read()
 
-setup(name='polychemprint',
+setup(name='polychemprint3',
       version='3.0',
       description='Free and Open Source 3D Printer control software (Python) targeted at Research Users (Polymer/Paste/BioPrinting) ',
       long_description= readme(),
@@ -13,13 +13,14 @@ setup(name='polychemprint',
         'License :: Illinois NCSA Open Source License',
         'Programming Language :: Python :: 3.7',
         'Topic :: Scientific/Engineering :: Chemistry',
+        'Operating System :: OS Independent',
       ],
       keywords='3D Printing Additive Manufacturing',
       url='https://github.com/BijalBPatel/PolyChemPrint',
       author='Bijal Patel',
       author_email='bbpatel2@illinois.edu',
       license='Illinois NCSA',
-      packages=['polychemprint'],
+      packages=setuptools.find_packages(),
       install_requires=[
           'pyserial',
       ],
