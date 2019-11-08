@@ -1,9 +1,6 @@
 polychemprint3.userInterface.commandLineInterface namespace
 ===========================================================
 
-Submodules
-----------
-
 .. toctree::
 
    polychemprint3.userInterface.commandLineInterface.ioElementSpec

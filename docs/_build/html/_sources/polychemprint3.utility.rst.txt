@@ -1,9 +1,6 @@
 polychemprint3.utility namespace
 ================================
 
-Submodules
-----------
-
 .. toctree::
 
    polychemprint3.utility.loggerSpec
