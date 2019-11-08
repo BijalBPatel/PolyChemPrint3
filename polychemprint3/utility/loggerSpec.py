@@ -11,7 +11,7 @@ The *PCP_BasicLogger* Abstract Base Class specifies the interface for all classe
 from abc import ABC, abstractmethod
 import json
 
-class PCP_BasicLogger(ABC):
+class loggerSpec(ABC):
     def __init__(self,**kwargs):
         pass
         #kill extra args here

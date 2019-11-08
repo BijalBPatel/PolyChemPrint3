@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The *UI_CLIMenuAbstract(ABC)* Abstract Base Class specifies the interface for CLI menus
+The *ioMenuSpec* Abstract Base Class specifies the interface for CLI menus
 
 | First created on Sun Oct 20 00:03:21 2019
 | Revised: 20/10/2019 00:34:27
@@ -9,9 +9,9 @@ The *UI_CLIMenuAbstract(ABC)* Abstract Base Class specifies the interface for CL
 """
 
 from abc import ABC, abstractmethod
-from UI_CLI_IOElement import UI_CLI_IOElement
+from polychemprint3.userInterface.commandLineInterface.ioElementSpec import ioElementSpec
 
-class UI_CLIMenuAbstract(UI_CLI_IOElement, ABC):
+class ioMenuSpec(ioElementSpec, ABC):
 
     #############################################################################
     ################### Construct/Destruct METHODS ##############################
@@ -35,7 +35,7 @@ class UI_CLIMenuAbstract(UI_CLI_IOElement, ABC):
     #############################################################################
 
         ######################### Operate METHOD #################################
-        def UI_CLI_Operate(self):
+        def io_Operate(self):
             """*Do the primary purpose of the CLI element*
             | *Parameters* 
             |   none
@@ -50,7 +50,7 @@ class UI_CLIMenuAbstract(UI_CLI_IOElement, ABC):
     #############################################################################
 
         ######################### Operation METHODS ############################# 
-        def UI_CLIMENU_printMenu(self):
+        def ioMenu_printMenu(self):
             """*Prints formatted menu options from menuItems dict*
             | *Parameters* 
             |   none
@@ -63,7 +63,7 @@ class UI_CLIMenuAbstract(UI_CLI_IOElement, ABC):
                 print("\t%-25s|  %-25s\n" %(key,self.menuItems.get(key)))
                         
         @abstractmethod
-        def UI_CLIMENU_Operate(self):
+        def ioMenu_Operate(self):
             """*Operate menu*
             | *Parameters* 
             |   none

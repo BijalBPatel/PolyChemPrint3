@@ -11,7 +11,7 @@ Serial Device objects that PCP will use (extruders/lasers/etc)
 from abc import ABC, abstractmethod
 import serial
 
-class PCP_SerialDevice(ABC):
+class serialDeviceSpec(ABC):
 ################### Construct/Destruct METHODS ###########################
     def __init__(self, devAddress, baudRate, commsTimeOut, verbose, **kwargs):
         """*Initializes Tool Object*

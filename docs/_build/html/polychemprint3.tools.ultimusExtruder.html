@@ -167,8 +167,313 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="polychemprint3-tools-ultimusextruder-module">
-<h1>polychemprint3.tools.ultimusExtruder module<a class="headerlink" href="#polychemprint3-tools-ultimusextruder-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-polychemprint3.tools.ultimusExtruder">
+<span id="polychemprint3-tools-ultimusextruder-module"></span><h1>polychemprint3.tools.ultimusExtruder module<a class="headerlink" href="#module-polychemprint3.tools.ultimusExtruder" title="Permalink to this headline">¶</a></h1>
+<p>The <em>T_UltimusExtruder</em> Class implements the Tool base class to handle 
+control of a Nordson EFD Ultimus V Extruder</p>
+<div class="line-block">
+<div class="line">First created on Sun Oct 20 00:03:21 2019</div>
+<div class="line">Revised: 20/10/2019 00:34:27</div>
+<div class="line">Author: Bijal Patel</div>
+</div>
+<dl class="class">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder">
+<em class="property">class </em><code class="sig-prename descclassname">polychemprint3.tools.ultimusExtruder.</code><code class="sig-name descname">ultimusExtruder</code><span class="sig-paren">(</span><em class="sig-param">name='unset'</em>, <em class="sig-param">devAddress='unset'</em>, <em class="sig-param">baudRate='unset'</em>, <em class="sig-param">commsTimeOut=0.5</em>, <em class="sig-param">verbose=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="polychemprint3.utility.serialDeviceSpec.html#polychemprint3.utility.serialDeviceSpec.serialDeviceSpec" title="polychemprint3.utility.serialDeviceSpec.serialDeviceSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">polychemprint3.utility.serialDeviceSpec.serialDeviceSpec</span></code></a>, <a class="reference internal" href="polychemprint3.tools.toolSpec.html#polychemprint3.tools.toolSpec.toolSpec" title="polychemprint3.tools.toolSpec.toolSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">polychemprint3.tools.toolSpec.toolSpec</span></code></a></p>
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.calc_checkSum">
+<code class="sig-name descname">calc_checkSum</code><span class="sig-paren">(</span><em class="sig-param">checkString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.calc_checkSum" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Calculates checksum for UltimusV and returns as string of length 2</em></p>
+<p>Logic: subtract hex value from 0 and output least significant byte
+| <em>Parameters</em> 
+|   checkString, string to compute checksum from</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">Capitalized hex string of length 2</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.checkIfSerialConnectParamsSet">
+<code class="sig-name descname">checkIfSerialConnectParamsSet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.checkIfSerialConnectParamsSet" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Goes through connection parameters and sees if all are set</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">True if all parameters are set, false if any unset </div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.decToHex">
+<code class="sig-name descname">decToHex</code><span class="sig-paren">(</span><em class="sig-param">num</em>, <em class="sig-param">bits</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.decToHex" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Converts number from decimal to 2s compliment hexadecimal</em></p>
+<p>Logic: subtract hex value from 0 and output least significant byte
+| <em>Parameters</em> 
+|   num, decimal number to convert
+|   bits, number of bits [python int = 32 bits]</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">hexNum, number in 2s compliment hexadecimal</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.disengage">
+<code class="sig-name descname">disengage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.disengage" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Toggles Dispense off</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Dispense Off”]</div>
+<div class="line">[0, “Error: Dispense already off”]</div>
+<div class="line">[-1, ‘Failed engaging dispense ‘ + inst.__str__()]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.engage">
+<code class="sig-name descname">engage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.engage" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Toggles Dispense on</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Dispense On”]</div>
+<div class="line">[0, “Error: Dispense Already On”]</div>
+<div class="line">[-1, ‘Failed engaging dispense ‘ + inst.__str__()]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.getState">
+<code class="sig-name descname">getState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.getState" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Returns active state of tool</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Tool On”]</div>
+<div class="line">[0, “Tool Off”]</div>
+<div class="line">[-1, “Error: Tool activation state cannot be determined + Error]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.handShakeSerial">
+<code class="sig-name descname">handShakeSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.handShakeSerial" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Perform communications handshake with Tool</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Handshake Successful”]</div>
+<div class="line">[0, ‘Handshake Failed, Received: + message received’] if unexpected input received</div>
+<div class="line">[-1, “Error: Handshake with Tool Failed + error text”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.loadLogSelf">
+<code class="sig-name descname">loadLogSelf</code><span class="sig-paren">(</span><em class="sig-param">jsonString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.loadLogSelf" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>loads json log back into dict</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">jsonString, json string to be loaded back in</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.pack">
+<code class="sig-name descname">pack</code><span class="sig-paren">(</span><em class="sig-param">cmdString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.pack" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Packages a command packet based on command string and appends Start and End transmission characters</em></p>
+<div class="line-block">
+<div class="line">Proper syntax of command packet: STX + DataString + Checksum + ETX</div>
+<div class="line">Datastring = NumBytes + CommandName + Command Data</div>
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">cmdString, input command string, first 4 char are cmdName, rest are data</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">packaged command string to send to extruder</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.readTime">
+<code class="sig-name descname">readTime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.readTime" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Reads in from serial device until timeout</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, inp String of all text read in, empty string if nothing]</div>
+<div class="line">[0, ‘Read failed + Error’ if exception caught]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.setValue">
+<code class="sig-name descname">setValue</code><span class="sig-paren">(</span><em class="sig-param">pressureVal</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Set Pressure value in kPa</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">pressureVal - new value of pressure to set</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[output of writeSerialCommand]</div>
+<div class="line">[-1, “Error: Pressure could not be set for Extruder + error text”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.startSerial">
+<code class="sig-name descname">startSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.startSerial" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Creates and connects pySerial device</em>
+| <em>Parameters</em> 
+|   none</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Connected Succesfully to Serial Device”]</div>
+<div class="line">[0, ‘Not all connection parameters set’]</div>
+<div class="line">[-1, “Error: Could not connect to serial device: + error text”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.stopSerial">
+<code class="sig-name descname">stopSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.stopSerial" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Terminates communication</em>
+| <em>Parameters</em> 
+|   none</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Terminated successfully”]</div>
+<div class="line">[-1, “Error: Tool could not be stopped + error text”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.unpack">
+<code class="sig-name descname">unpack</code><span class="sig-paren">(</span><em class="sig-param">packetIn</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.unpack" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Unpacks a command packet to obtain the command name string and command value</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">packetIn, data packet from extruder in format STX + DataString + Checksum + ETX</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">cmdName command name</div>
+<div class="line">cmdVal command value [can be empty string]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.writeLogSelf">
+<code class="sig-name descname">writeLogSelf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.writeLogSelf" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Generates json string containing dict to be written to log file</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">logJson, log in json string format</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.writeSerialCommand">
+<code class="sig-name descname">writeSerialCommand</code><span class="sig-paren">(</span><em class="sig-param">cmdString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.writeSerialCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Writes dlcommand to serial device</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">cmdString, the string to send</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, ‘Command Sent: ‘ + cmdString + ‘Received: ‘ + rcvd]</div>
+<div class="line">[0, “Error sending command Serial Device: ” + self.name + ‘ : ‘ + Error’] if exception</div>
+</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

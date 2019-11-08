@@ -1,5 +1,5 @@
 """
-The *UI_CLI_IOElement(ABC)* Abstract Base Class specifies the interface for CLI menus
+The *ioElementSpec* Abstract Base Class specifies the interface for CLI menus/text/etc
 
 | First created on Sun Oct 20 00:03:21 2019
 | Revised: 6/11/2019 00:34:27
@@ -9,7 +9,7 @@ The *UI_CLI_IOElement(ABC)* Abstract Base Class specifies the interface for CLI 
 
 from abc import ABC, abstractmethod
 
-class UI_CLI_IOElement(ABC):
+class ioElementSpec(ABC):
     #############################################################################
     ################### Construct/Destruct METHODS ##############################
     #############################################################################
@@ -23,7 +23,7 @@ class UI_CLI_IOElement(ABC):
             """
             self.name=name
     ############################# IO METHODS ################################
-        def UI_CLI_Prompt(self,promptString, validate=False, validResponse=[], caseSensitive=False):
+        def io_Prompt(self,promptString, validate=False, validResponse=[], caseSensitive=False):
             """*Prompts user for input and optionally validates against a list of options*
             | *Parameters* 
             |   promptString, String to display as prompt
@@ -55,7 +55,7 @@ class UI_CLI_IOElement(ABC):
             
     ############################# Operate METHODS ###########################
         @abstractmethod
-        def UI_CLI_Operate(self):
+        def io_Operate(self):
             """*Do the primary purpose of the CLI element*
             | *Parameters* 
             |   none

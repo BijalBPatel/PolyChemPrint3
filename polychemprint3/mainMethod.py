@@ -11,7 +11,7 @@
 ################### Import Statements #######################################
 #############################################################################
 from colorama import init, Fore, Back, Style 
-from UI_CLIMenuAbstract import UI_CLIMenuAbstract
+from polychemprint3.userInterface.commandLineInterface.ioMenuSpec import ioMenuSpec
 
 #############################################################################
 ################### Main METHOD ##############################
@@ -33,7 +33,7 @@ def main():
 #############################################################################
 ############################ Menu Classes ###################################
 #############################################################################
-class UI_CLIMENU_MainMenu(UI_CLIMenuAbstract):
+class ioMenu_Main(ioMenuSpec):
     
     ################### Construct/Destruct METHODS ###########################
         def __init__(self, **kwargs):
@@ -49,8 +49,8 @@ class UI_CLIMENU_MainMenu(UI_CLIMenuAbstract):
                       'menuItems':{'a':'b'}}
             super().__init__(**kwargs)
 
-    ################### UI_CLIMenuAbstract METHODS ###########################
-        def UI_CLIMENU_Operate(self):
+    ################### ioMenuSpec METHODS ###########################
+        def ioMenuSpec(self):
             """*Operate menu*
             | *Parameters* 
             |   none
@@ -58,4 +58,4 @@ class UI_CLIMENU_MainMenu(UI_CLIMenuAbstract):
             | *Returns*
             |   flag, String with title of next menu to call
             """
-            self.UI_CLI_OperateMenu()
+           

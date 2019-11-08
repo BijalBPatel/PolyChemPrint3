@@ -167,8 +167,244 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="polychemprint3-axes-axes3d-module">
-<h1>polychemprint3.axes.Axes3D module<a class="headerlink" href="#polychemprint3-axes-axes3d-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-polychemprint3.axes.Axes3D">
+<span id="polychemprint3-axes-axes3d-module"></span><h1>polychemprint3.axes.Axes3D module<a class="headerlink" href="#module-polychemprint3.axes.Axes3D" title="Permalink to this headline">¶</a></h1>
+<p>The <em>axes3D</em> class contains all data and methods related to controlling 3D printer axes</p>
+<div class="line-block">
+<div class="line">First created on Sat Oct 19 20:39:58 2019</div>
+<div class="line">Revised: 23/10/2019 14:06:59</div>
+<div class="line">Author: Bijal Patel</div>
+</div>
+<dl class="class">
+<dt id="polychemprint3.axes.Axes3D.axes3D">
+<em class="property">class </em><code class="sig-prename descclassname">polychemprint3.axes.Axes3D.</code><code class="sig-name descname">axes3D</code><span class="sig-paren">(</span><em class="sig-param">devAddress='unset'</em>, <em class="sig-param">firmwareVers='unset'</em>, <em class="sig-param">baudRate='unset'</em>, <em class="sig-param">commsTimeOut=0.5</em>, <em class="sig-param">verbose=0</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="polychemprint3.utility.serialDeviceSpec.html#polychemprint3.utility.serialDeviceSpec.serialDeviceSpec" title="polychemprint3.utility.serialDeviceSpec.serialDeviceSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">polychemprint3.utility.serialDeviceSpec.serialDeviceSpec</span></code></a></p>
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.checkIfConnectParamsSet">
+<code class="sig-name descname">checkIfConnectParamsSet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.checkIfConnectParamsSet" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Goes through connection parameters and sees if all are set</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">True if all parameters are set, false if any unset </div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.getAbsPosXY">
+<code class="sig-name descname">getAbsPosXY</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.getAbsPosXY" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Gets the current position (absolute) from taz and returns XYZ coordinates</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">command, string to write to axes</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[X, Y] X and Y positions as strings</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.goToABSXY">
+<code class="sig-name descname">goToABSXY</code><span class="sig-paren">(</span><em class="sig-param">xAbs</em>, <em class="sig-param">yAbs</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.goToABSXY" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Moves carriage to provided absolute X,Y coordinates</em></p>
+<p>returns to relative positioning at end</p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">xAbs, absolute x position to go to</div>
+<div class="line">yAbs, absolute y position to go to</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.handShake">
+<code class="sig-name descname">handShake</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.handShake" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Attempts to ‘handshake’ with printer</em> - see if correct firmware version returned</p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, ‘Handshake Success’] if succesfull 2-way communication</div>
+<div class="line">[0, ‘Handshake Failed, Received: + message received’] if unexpected input received</div>
+<div class="line">[-1, ‘Handshake failed, Error: + errortext] if exception raised or not correct firmware vers</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.loadLogSelf">
+<code class="sig-name descname">loadLogSelf</code><span class="sig-paren">(</span><em class="sig-param">jsonString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.loadLogSelf" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>loads json log back into dict</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">logJson, json string to be loaded back in</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.readTime">
+<code class="sig-name descname">readTime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.readTime" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Reads in from serial device until timeout</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">inp String of all text read in, empty string if nothing</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.startSerial">
+<code class="sig-name descname">startSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.startSerial" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Attempts to connect to Hardware and send an initial handshake</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, [list of read lines] if succesfully able to connect and handshake</div>
+<div class="line">[0, ‘Not all connection param set’] if not all connection param set</div>
+<div class="line">[-1, ‘Failed Creating pySerial’] if failed creating pyserial device</div>
+<div class="line">[-2, ‘Failed Handshake’] if handshake failed</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Closes serial devices</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.waitReady">
+<code class="sig-name descname">waitReady</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.waitReady" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Checks if taz is ready to receive new command by Looking for “ok” in input</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">inp, String read in while waiting</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.write" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Writes command to serial device</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">command, the string to send</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, ‘Command Sent + command’] if succesfull 2-way communication</div>
+<div class="line">[0, ‘Write Failed + Error’] if exception caught</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.writeLogSelf">
+<code class="sig-name descname">writeLogSelf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.writeLogSelf" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Generates json string containing dict to be written to log file</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">logJson, log in json string format</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.axes.Axes3D.axes3D.writeReady">
+<code class="sig-name descname">writeReady</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.axes.Axes3D.axes3D.writeReady" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Writes when ready</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">command, string to write to axes</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

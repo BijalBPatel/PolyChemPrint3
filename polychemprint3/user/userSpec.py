@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The *User* Class holds data and operations relating to software users such as home directory and software preferences.
+The *userSpec* Class holds data and operations relating to software users such as home directory and software preferences.
 
 | First created on Sat Oct 19 20:39:58 2019
 | Revised: 23/10/2019 14:06:59
@@ -8,7 +8,7 @@ The *User* Class holds data and operations relating to software users such as ho
         
 """
 
-class User:
+class userSpec:
     def __init__(self, name="unset", creationDate="unset", homeDirectory="unset", programSettings="unset"):
         """*Initializes User object*
         

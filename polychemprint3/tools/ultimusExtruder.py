@@ -10,13 +10,13 @@ control of a Nordson EFD Ultimus V Extruder
 ##############################################################################
 ##################### Imports
 ##############################################################################
-from PCP_Tool import PCP_Tool
-from PCP_SerialDevice import PCP_SerialDevice
+from polychemprint3.tools.toolSpec import toolSpec
+from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
 import serial
 import io
 from time import time
 
-class T_UltimusExtruder(PCP_SerialDevice, PCP_Tool):
+class ultimusExtruder(serialDeviceSpec, toolSpec):
 ##############################################################################
 ###################### Construct/Destruct METHODS 
 ##############################################################################

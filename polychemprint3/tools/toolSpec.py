@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The *PCP_Tool* Abstract Base Class specifies the interface for all Tool objects (extruders/lasers/etc)
+The *toolSpec* Abstract Base Class specifies the interface for all Tool objects (extruders/lasers/etc)
 
 | First created on Sun Oct 20 00:03:21 2019
 | Revised: 20/10/2019 00:34:27
@@ -9,9 +9,9 @@ The *PCP_Tool* Abstract Base Class specifies the interface for all Tool objects 
 """
 
 from abc import ABC, abstractmethod
-from PCP_BasicLogger import PCP_BasicLogger
+from polychemprint3.utility.loggerSpec import loggerSpec
 
-class PCP_Tool(PCP_BasicLogger,ABC):
+class toolSpec(loggerSpec,ABC):
 ################### Construct/Destruct METHODS ###########################
     def __init__(self, name, **kwargs):
         """*Initializes Tool Object*

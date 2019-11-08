@@ -11,6 +11,7 @@ Subpackages
    polychemprint3.sequence
    polychemprint3.tools
    polychemprint3.user
+   polychemprint3.userInterface.commandLineInterface
    polychemprint3.utility
 
 Submodules

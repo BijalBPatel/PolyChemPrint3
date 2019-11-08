@@ -167,8 +167,117 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="polychemprint3-tools-toolspec-module">
-<h1>polychemprint3.tools.toolSpec module<a class="headerlink" href="#polychemprint3-tools-toolspec-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-polychemprint3.tools.toolSpec">
+<span id="polychemprint3-tools-toolspec-module"></span><h1>polychemprint3.tools.toolSpec module<a class="headerlink" href="#module-polychemprint3.tools.toolSpec" title="Permalink to this headline">¶</a></h1>
+<p>The <em>toolSpec</em> Abstract Base Class specifies the interface for all Tool objects (extruders/lasers/etc)</p>
+<div class="line-block">
+<div class="line">First created on Sun Oct 20 00:03:21 2019</div>
+<div class="line">Revised: 20/10/2019 00:34:27</div>
+<div class="line">Author: Bijal Patel</div>
+</div>
+<dl class="class">
+<dt id="polychemprint3.tools.toolSpec.toolSpec">
+<em class="property">class </em><code class="sig-prename descclassname">polychemprint3.tools.toolSpec.</code><code class="sig-name descname">toolSpec</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.toolSpec.toolSpec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="polychemprint3.utility.loggerSpec.html#polychemprint3.utility.loggerSpec.loggerSpec" title="polychemprint3.utility.loggerSpec.loggerSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">polychemprint3.utility.loggerSpec.loggerSpec</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="method">
+<dt id="polychemprint3.tools.toolSpec.toolSpec.disengage">
+<em class="property">abstract </em><code class="sig-name descname">disengage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.toolSpec.toolSpec.disengage" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Deactivates tool (stops dispense/LASER off, etc)</em>
+| <em>Parameters</em> 
+|   none</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Tool Disengaged”]</div>
+<div class="line">[-1, “Error: Tool could not be disengaged”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.toolSpec.toolSpec.engage">
+<em class="property">abstract </em><code class="sig-name descname">engage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.toolSpec.toolSpec.engage" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Activate tool (dispense/LASER on, etc)</em>
+| <em>Parameters</em> 
+|   none</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Tool Engaged”]</div>
+<div class="line">[-1, “Error: Tool could not be engaged”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.toolSpec.toolSpec.getState">
+<em class="property">abstract </em><code class="sig-name descname">getState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.toolSpec.toolSpec.getState" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Returns active state of tool</em>
+| <em>Parameters</em> 
+|   none</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Tool On”]</div>
+<div class="line">[0, “Tool Off”]</div>
+<div class="line">[-1, “Error: Tool activation state cannot be determined + Error]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.toolSpec.toolSpec.loadLogSelf">
+<em class="property">abstract </em><code class="sig-name descname">loadLogSelf</code><span class="sig-paren">(</span><em class="sig-param">jsonString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.toolSpec.toolSpec.loadLogSelf" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>loads json log back into dict</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">jsonString, json string to be loaded back in</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.toolSpec.toolSpec.setValue">
+<em class="property">abstract </em><code class="sig-name descname">setValue</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.toolSpec.toolSpec.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Set Tool value of a specified Tool parameter</em>
+| <em>Parameters</em> 
+|   value - the new value of the parameter</p>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">[1, “Value Set succesfully”]</div>
+<div class="line">[-1, “Error: Parameter could not be set for Tool + error text”]</div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="polychemprint3.tools.toolSpec.toolSpec.writeLogSelf">
+<em class="property">abstract </em><code class="sig-name descname">writeLogSelf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.toolSpec.toolSpec.writeLogSelf" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Generates json string containing dict to be written to log file</em></p>
+<div class="line-block">
+<div class="line"><em>Parameters</em> </div>
+<div class="line-block">
+<div class="line">none</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>Returns</em></div>
+<div class="line-block">
+<div class="line">logJson, log in json string format</div>
+</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

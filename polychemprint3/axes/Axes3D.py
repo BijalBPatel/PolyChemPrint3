@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The *Axes3D* class contains all data and methods related to controlling 3D printer axes
+The *axes3D* class contains all data and methods related to controlling 3D printer axes
 
 | First created on Sat Oct 19 20:39:58 2019
 | Revised: 23/10/2019 14:06:59
@@ -11,9 +11,9 @@ import serial
 import io
 
 from time import time
-from PCP_SerialDevice import PCP_SerialDevice
+from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
 
-class Axes3D(PCP_SerialDevice):
+class axes3D(serialDeviceSpec):
     def __init__(self, devAddress="unset",firmwareVers="unset", baudRate="unset", commsTimeOut=0.5, verbose =0):
         """*Initializes Axes3D object*
         

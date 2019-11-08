@@ -6,5 +6,5 @@ Submodules
 
 .. toctree::
 
-   polychemprint3.userInterface.commandLineInterface.ioElement
-   polychemprint3.userInterface.commandLineInterface.menuAbstract
+   polychemprint3.userInterface.commandLineInterface.ioElementSpec
+   polychemprint3.userInterface.commandLineInterface.ioMenuSpec
