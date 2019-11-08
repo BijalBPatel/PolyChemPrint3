@@ -1,4 +1,4 @@
-polychemprint3.sequence namespace
+polychemprint3.sequence 
 =================================
 
 .. toctree::

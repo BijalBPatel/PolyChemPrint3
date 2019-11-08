@@ -1,4 +1,4 @@
-polychemprint3.userInterface.commandLineInterface namespace
+polychemprint3.userInterface.commandLineInterface
 ===========================================================
 
 .. toctree::

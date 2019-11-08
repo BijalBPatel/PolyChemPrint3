@@ -1,4 +1,4 @@
-polychemprint3.utility namespace
+polychemprint3.utility
 ================================
 
 .. toctree::

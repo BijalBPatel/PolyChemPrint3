@@ -1,4 +1,4 @@
-polychemprint3.axes namespace
+polychemprint3.axes
 =============================
 
 .. toctree::

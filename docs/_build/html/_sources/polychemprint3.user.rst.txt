@@ -1,4 +1,4 @@
-polychemprint3.user namespace
+polychemprint3.user
 =============================
 
 .. toctree::
