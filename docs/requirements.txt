@@ -1,0 +1,7 @@
+pyserial
+colorama
+io
+json
+time
+abc
+logging
