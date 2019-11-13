@@ -1,6 +1,5 @@
 pyserial
 colorama
-logging
 io
 json
 time
