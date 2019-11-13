@@ -1,6 +1,0 @@
-pyserial
-colorama
-json
-time
-abc
-
