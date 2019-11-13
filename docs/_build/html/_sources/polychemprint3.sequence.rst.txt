@@ -1,5 +1,8 @@
-polychemprint3.sequence 
+polychemprint3.sequence namespace
 =================================
+
+Submodules
+----------
 
 .. toctree::
 

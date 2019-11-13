@@ -1,5 +1,8 @@
-polychemprint3.tools
+polychemprint3.tools namespace
 ==============================
+
+Submodules
+----------
 
 .. toctree::
 

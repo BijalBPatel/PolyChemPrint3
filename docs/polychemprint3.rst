@@ -1,24 +1,29 @@
-Source Code: polychemprint3 package
-====================================
+polychemprint3 package
+======================
 
 Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 3
 
    polychemprint3.axes
    polychemprint3.sequence
    polychemprint3.tools
    polychemprint3.user
-   polychemprint3.userInterface.commandLineInterface
+   polychemprint3.userInterface
    polychemprint3.utility
 
 Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 3
 
    polychemprint3.mainMethod
 
+Module contents
+---------------
+
+.. automodule:: polychemprint3
+   :members:
+   :undoc-members:
+   :show-inheritance:

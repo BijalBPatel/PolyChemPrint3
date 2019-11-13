@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="polychemprint3.utility.serialDeviceSpec module" href="polychemprint3.utility.serialDeviceSpec.html" />
-    <link rel="prev" title="polychemprint3.utility namespace" href="polychemprint3.utility.html" /> 
+    <link rel="prev" title="polychemprint3.utility.fileHandler module" href="polychemprint3.utility.fileHandler.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,12 +84,13 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="about.html">About/Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Install Info!</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="polychemprint3.html">Source Code: polychemprint3 package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="polychemprint3.html">polychemprint3 package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="polychemprint3.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="polychemprint3.axes.html">polychemprint3.axes namespace</a></li>
 <li class="toctree-l3"><a class="reference internal" href="polychemprint3.sequence.html">polychemprint3.sequence namespace</a></li>
 <li class="toctree-l3"><a class="reference internal" href="polychemprint3.tools.html">polychemprint3.tools namespace</a></li>
 <li class="toctree-l3"><a class="reference internal" href="polychemprint3.user.html">polychemprint3.user namespace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polychemprint3.userInterface.html">polychemprint3.userInterface package</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="polychemprint3.utility.html">polychemprint3.utility namespace</a><ul class="current">
 <li class="toctree-l4 current"><a class="reference internal" href="polychemprint3.utility.html#submodules">Submodules</a></li>
 </ul>
@@ -97,6 +98,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="polychemprint3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polychemprint3.html#module-polychemprint3">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -144,7 +146,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="polychemprint3.html">Source Code: polychemprint3 package</a> &raquo;</li>
+          <li><a href="polychemprint3.html">polychemprint3 package</a> &raquo;</li>
         
           <li><a href="polychemprint3.utility.html">polychemprint3.utility namespace</a> &raquo;</li>
         
@@ -169,7 +171,7 @@
             
   <div class="section" id="module-polychemprint3.utility.loggerSpec">
 <span id="polychemprint3-utility-loggerspec-module"></span><h1>polychemprint3.utility.loggerSpec module<a class="headerlink" href="#module-polychemprint3.utility.loggerSpec" title="Permalink to this headline">¶</a></h1>
-<p>The <em>PCP_BasicLogger</em> Abstract Base Class specifies the interface for all classes to write themselves to log and read in</p>
+<p>Specifies interface for all classes to read/write themselves to string.</p>
 <div class="line-block">
 <div class="line">First created on Sun Oct 20 00:03:21 2019</div>
 <div class="line">Revised: 20/10/2019 00:34:27</div>
@@ -179,40 +181,30 @@
 <dt id="polychemprint3.utility.loggerSpec.loggerSpec">
 <em class="property">class </em><code class="sig-prename descclassname">polychemprint3.utility.loggerSpec.</code><code class="sig-name descname">loggerSpec</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.loggerSpec.loggerSpec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract Base Class for objects that can generate log strings.</p>
 <dl class="method">
 <dt id="polychemprint3.utility.loggerSpec.loggerSpec.loadLogSelf">
 <em class="property">abstract </em><code class="sig-name descname">loadLogSelf</code><span class="sig-paren">(</span><em class="sig-param">jsonString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.loggerSpec.loggerSpec.loadLogSelf" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>loads json log back into dict</em></p>
-<div class="line-block">
-<div class="line"><em>Parameters</em> </div>
-<div class="line-block">
-<div class="line">jsonString, json string to be loaded back in</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><em>Returns</em></div>
-<div class="line-block">
-<div class="line">none</div>
-</div>
-</div>
+<dd><p><em>loads json log back into dict</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>jsonString</strong> (<em>String</em>) – json string to be loaded back in</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="polychemprint3.utility.loggerSpec.loggerSpec.writeLogSelf">
 <em class="property">abstract </em><code class="sig-name descname">writeLogSelf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.utility.loggerSpec.loggerSpec.writeLogSelf" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>Generates json string containing dict to be written to log file</em></p>
-<div class="line-block">
-<div class="line"><em>Parameters</em> </div>
-<div class="line-block">
-<div class="line">none</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><em>Returns</em></div>
-<div class="line-block">
-<div class="line">logJson, log in json string format</div>
-</div>
-</div>
+<dd><p><em>Generates json string containing dict to be written to log file</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>log in json string format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>String</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -230,7 +222,7 @@
         <a href="polychemprint3.utility.serialDeviceSpec.html" class="btn btn-neutral float-right" title="polychemprint3.utility.serialDeviceSpec module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="polychemprint3.utility.html" class="btn btn-neutral float-left" title="polychemprint3.utility namespace" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="polychemprint3.utility.fileHandler.html" class="btn btn-neutral float-left" title="polychemprint3.utility.fileHandler module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

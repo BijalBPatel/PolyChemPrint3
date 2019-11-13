@@ -1,5 +1,8 @@
-polychemprint3.user
+polychemprint3.user namespace
 =============================
+
+Submodules
+----------
 
 .. toctree::
 

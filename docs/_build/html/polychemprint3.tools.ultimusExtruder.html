@@ -84,7 +84,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="about.html">About/Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Install Info!</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="polychemprint3.html">Source Code: polychemprint3 package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="polychemprint3.html">polychemprint3 package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="polychemprint3.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="polychemprint3.axes.html">polychemprint3.axes namespace</a></li>
 <li class="toctree-l3"><a class="reference internal" href="polychemprint3.sequence.html">polychemprint3.sequence namespace</a></li>
@@ -93,10 +93,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="polychemprint3.user.html">polychemprint3.user namespace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polychemprint3.userInterface.html">polychemprint3.userInterface package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="polychemprint3.utility.html">polychemprint3.utility namespace</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="polychemprint3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polychemprint3.html#module-polychemprint3">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -144,7 +146,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="polychemprint3.html">Source Code: polychemprint3 package</a> &raquo;</li>
+          <li><a href="polychemprint3.html">polychemprint3 package</a> &raquo;</li>
         
           <li><a href="polychemprint3.tools.html">polychemprint3.tools namespace</a> &raquo;</li>
         
@@ -169,7 +171,7 @@
             
   <div class="section" id="module-polychemprint3.tools.ultimusExtruder">
 <span id="polychemprint3-tools-ultimusextruder-module"></span><h1>polychemprint3.tools.ultimusExtruder module<a class="headerlink" href="#module-polychemprint3.tools.ultimusExtruder" title="Permalink to this headline">¶</a></h1>
-<p>The <em>T_UltimusExtruder</em> Class implements the Tool base class to handle 
+<p>The <em>T_UltimusExtruder</em> Class implements the Tool base class to handle
 control of a Nordson EFD Ultimus V Extruder</p>
 <div class="line-block">
 <div class="line">First created on Sun Oct 20 00:03:21 2019</div>
@@ -185,7 +187,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">calc_checkSum</code><span class="sig-paren">(</span><em class="sig-param">checkString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.calc_checkSum" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Calculates checksum for UltimusV and returns as string of length 2</em></p>
 <p>Logic: subtract hex value from 0 and output least significant byte
-| <em>Parameters</em> 
+| <em>Parameters</em>
 |   checkString, string to compute checksum from</p>
 <div class="line-block">
 <div class="line"><em>Returns</em></div>
@@ -200,7 +202,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">checkIfSerialConnectParamsSet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.checkIfSerialConnectParamsSet" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Goes through connection parameters and sees if all are set</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">none</div>
 </div>
@@ -208,7 +210,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <div class="line-block">
 <div class="line"><em>Returns</em></div>
 <div class="line-block">
-<div class="line">True if all parameters are set, false if any unset </div>
+<div class="line">True if all parameters are set, false if any unset</div>
 </div>
 </div>
 </dd></dl>
@@ -218,7 +220,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">decToHex</code><span class="sig-paren">(</span><em class="sig-param">num</em>, <em class="sig-param">bits</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.decToHex" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Converts number from decimal to 2s compliment hexadecimal</em></p>
 <p>Logic: subtract hex value from 0 and output least significant byte
-| <em>Parameters</em> 
+| <em>Parameters</em>
 |   num, decimal number to convert
 |   bits, number of bits [python int = 32 bits]</p>
 <div class="line-block">
@@ -234,7 +236,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">disengage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.disengage" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Toggles Dispense off</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">none</div>
 </div>
@@ -254,7 +256,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">engage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.engage" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Toggles Dispense on</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">none</div>
 </div>
@@ -274,7 +276,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">getState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.getState" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Returns active state of tool</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">none</div>
 </div>
@@ -294,7 +296,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">handShakeSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.handShakeSerial" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Perform communications handshake with Tool</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">none</div>
 </div>
@@ -314,7 +316,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">loadLogSelf</code><span class="sig-paren">(</span><em class="sig-param">jsonString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.loadLogSelf" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>loads json log back into dict</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">jsonString, json string to be loaded back in</div>
 </div>
@@ -334,7 +336,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <div class="line-block">
 <div class="line">Proper syntax of command packet: STX + DataString + Checksum + ETX</div>
 <div class="line">Datastring = NumBytes + CommandName + Command Data</div>
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">cmdString, input command string, first 4 char are cmdName, rest are data</div>
 </div>
@@ -352,7 +354,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">readTime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.readTime" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Reads in from serial device until timeout</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">none</div>
 </div>
@@ -371,7 +373,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">setValue</code><span class="sig-paren">(</span><em class="sig-param">pressureVal</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.setValue" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Set Pressure value in kPa</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">pressureVal - new value of pressure to set</div>
 </div>
@@ -389,7 +391,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.startSerial">
 <code class="sig-name descname">startSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.startSerial" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Creates and connects pySerial device</em>
-| <em>Parameters</em> 
+| <em>Parameters</em>
 |   none</p>
 <div class="line-block">
 <div class="line"><em>Returns</em></div>
@@ -405,7 +407,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <dt id="polychemprint3.tools.ultimusExtruder.ultimusExtruder.stopSerial">
 <code class="sig-name descname">stopSerial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.stopSerial" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Terminates communication</em>
-| <em>Parameters</em> 
+| <em>Parameters</em>
 |   none</p>
 <div class="line-block">
 <div class="line"><em>Returns</em></div>
@@ -421,7 +423,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">unpack</code><span class="sig-paren">(</span><em class="sig-param">packetIn</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.unpack" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Unpacks a command packet to obtain the command name string and command value</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">packetIn, data packet from extruder in format STX + DataString + Checksum + ETX</div>
 </div>
@@ -440,7 +442,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">writeLogSelf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.writeLogSelf" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Generates json string containing dict to be written to log file</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">none</div>
 </div>
@@ -458,7 +460,7 @@ control of a Nordson EFD Ultimus V Extruder</p>
 <code class="sig-name descname">writeSerialCommand</code><span class="sig-paren">(</span><em class="sig-param">cmdString</em><span class="sig-paren">)</span><a class="headerlink" href="#polychemprint3.tools.ultimusExtruder.ultimusExtruder.writeSerialCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Writes dlcommand to serial device</em></p>
 <div class="line-block">
-<div class="line"><em>Parameters</em> </div>
+<div class="line"><em>Parameters</em></div>
 <div class="line-block">
 <div class="line">cmdString, the string to send</div>
 </div>

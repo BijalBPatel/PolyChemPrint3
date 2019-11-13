@@ -1,5 +1,8 @@
-polychemprint3.axes
+polychemprint3.axes namespace
 =============================
+
+Submodules
+----------
 
 .. toctree::
 
