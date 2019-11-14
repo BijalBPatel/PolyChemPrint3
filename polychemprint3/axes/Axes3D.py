@@ -17,7 +17,7 @@ from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
 
 class axes3D(serialDeviceSpec):
     def __init__(self, devAddress="unset",firmwareVers="unset", baudRate="unset", commsTimeOut=0.5, verbose =0):
-        """*Initializes Axes3D object*
+        """*Initializes Axes3D object*.
 
         | *Parameters* All default to "unset"
         |   devAddress - device address on this computer
@@ -35,8 +35,23 @@ class axes3D(serialDeviceSpec):
         self.verbose = verbose
         self.commsTimeOut = commsTimeOut
 
-    def checkIfConnectParamsSet(self):
-        """*Goes through connection parameters and sees if all are set*
+    def move(self, gcodeString):
+        """*Initializes Axes3D object*.
+
+        Parameters
+        ----------
+        gCodeString: String
+            Motion command in terms of Gcode G0/G1/G2/G3 supported
+
+        | *Returns*
+        |   none
+        """
+        self.writeReady(gcodeString)
+
+
+
+    def checkIfSerialConnectParamsSet(self):
+        """*Goes through connection parameters and sees if all are set*.
 
         | *Parameters*
         |   none
@@ -62,7 +77,7 @@ class axes3D(serialDeviceSpec):
         |   [-2, 'Failed Handshake'] if handshake failed
         """
 
-        if self.checkIfConnectParamsSet():
+        if self.checkIfSerialConnectParamsSet():
             #Try to connect, catch errors and return to user
             try:
                 self.ser = serial.Serial(port = self.devAddress,\
@@ -101,13 +116,13 @@ class axes3D(serialDeviceSpec):
             return [0, 'Not all connection parameters set']
 
         #Try initial handshake
-        handShakeResponse = self.handShake()
+        handShakeResponse = self.handShakeSerial()
         if (handShakeResponse[0]==1):
             return [1,linesIn]
         else:
             return [-2,handShakeResponse[1]]
 
-    def handShake(self):
+    def handShakeSerial(self):
         """*Attempts to 'handshake' with printer* - see if correct firmware version returned
 
         | *Parameters*
@@ -131,7 +146,7 @@ class axes3D(serialDeviceSpec):
             return [-1, 'Error on Handshake: ' + inst.__str__()]
 
 
-    def write(self,command):
+    def __writeSerial__(self,command):
         """*Writes command to serial device*
 
         | *Parameters*
@@ -240,7 +255,7 @@ class axes3D(serialDeviceSpec):
         self.writeReady('G1 F2000 X' + xAbs + ' Y' + yAbs + '\n')
         self.writeReady('G91\n') #return to relative positioning
 
-    def stop(self):
+    def stopSerial(self):
         """*Closes serial devices*
 
         | *Parameters*

@@ -1,7 +1,7 @@
-polychemprint3.tools.toolSpec module
+polychemprint3.tools.nullTool module
 ====================================
 
-.. automodule:: polychemprint3.tools.toolSpec
+.. automodule:: polychemprint3.tools.nullTool
    :members:
    :undoc-members:
    :show-inheritance:

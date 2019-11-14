@@ -18,11 +18,10 @@ class serialDeviceSpec(ABC):
     def __init__(self, devAddress, baudRate, commsTimeOut, verbose, **kwargs):
         """*Initializes Tool Object*.
 
-        | *Parameters*
-        |   name, String - tool name
-
-        | *Returns*
-        |   none
+        Parameters
+        ----------
+        name : String
+            device name
         """
         self.devAddress = devAddress
         self.baudRate = baudRate
@@ -35,11 +34,10 @@ class serialDeviceSpec(ABC):
     def checkIfSerialConnectParamsSet(self):
         """*Goes through connection parameters and sees if all are set*.
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   True if all parameters are set, false if any unset
+        Returns
+        -------
+        bool
+            True if all parameters are set, false if any unset
         """
         connectParam = [self.devAddress, self.firmwareVers, self.baudRate]
         return 'unset' not in connectParam
@@ -48,12 +46,12 @@ class serialDeviceSpec(ABC):
     def startSerial(self):
         """*Creates pySerial device*.
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   [1, "Terminated successfully"]
-        |   [-1, "Error: Tool could not be stopped + error text"]
+        Returns
+        -------
+        [1, "Terminated successfully"]
+            started succesfully
+        [-1, "Error: Tool could not be stopped + error text"]
+            could not start
         """
         pass
 
@@ -61,12 +59,12 @@ class serialDeviceSpec(ABC):
     def stopSerial(self):
         """*Terminates communication*.
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   [1, "Terminated successfully"]
-        |   [-1, "Error: Tool could not be stopped + error text"]
+        Returns
+        -------
+        [1, "Terminated successfully"]
+            started succesfully
+        [-1, "Error: Tool could not be stopped + error text"]
+            could not start
         """
         pass
 
@@ -75,13 +73,14 @@ class serialDeviceSpec(ABC):
     def handShakeSerial(self):
         """*Perform communications handshake with Tool*.
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   [1, "Handshake Successful"]
-        |   [0, 'Handshake Failed, Rcvd + message received']
-        |   [-1, "Error: Handshake with Tool Failed + error text"]
+        Returns
+        -------
+        [1, "Handshake Successful"]
+            success occured
+        [0, 'Handshake Failed, Rcvd + message received']
+            failure occured
+        [-1, "Error: Handshake with Tool Failed + error text"]
+            Error received
         """
         pass
 
@@ -89,25 +88,17 @@ class serialDeviceSpec(ABC):
     def __writeSerial__(self, text):
         """*Writes text to serial device*.
 
-        | *Parameters*
-        |   text, the string to send
+        Parameters
+        ----------
+        text: String
+            message to send
 
-        | *Returns*
-        |   [1, 'Text Sent + text'] if succesfull 2-way communication
-        |   [0, 'Write Failed + Error'] if exception caught
-        """
-        pass
-
-    @abstractmethod
-    def writeSerialCommand(self, command):
-        """*Writes command to serial device*.
-
-        | *Parameters*
-        |   command, the string to send
-
-        | *Returns*
-        |   [1, 'Command Sent + command'] if succesfull 2-way communication
-        |   [0, 'Write Failed + Error'] if exception caught
+        Returns
+        -------
+        [1, 'Text Sent + text']
+            succesfull 2-way communication
+        [-1, 'Write Failed + Error']
+            Exception caught
         """
         pass
 
@@ -115,10 +106,9 @@ class serialDeviceSpec(ABC):
     def readTime(self):
         """*Reads in from serial device until timeout*.
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   inp String of all text read in, empty string if nothing
+        Returns
+        -------
+        String
+            All text read in, empty string if nothing
         """
         pass

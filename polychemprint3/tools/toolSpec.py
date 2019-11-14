@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-The *toolSpec* Abstract Base Class specifies the interface for all Tool objects (extruders/lasers/etc)
+"""Contains toolSpec Abstract Base Class.
 
 | First created on Sun Oct 20 00:03:21 2019
-| Revised: 20/10/2019 00:34:27
+| Revised: 13/11/2019 14:29:53
 | Author: Bijal Patel
 
 """
@@ -12,17 +11,24 @@ sys.path.append("../../")
 from abc import ABC, abstractmethod
 from polychemprint3.utility.loggerSpec import loggerSpec
 
-class toolSpec(loggerSpec,ABC):
-################### Construct/Destruct METHODS ###########################
-    def __init__(self, name, **kwargs):
-        """*Initializes Tool Object*
-        | *Parameters*
-        |   name, String - tool name
 
-        | *Returns*
-        |   none
+class toolSpec(loggerSpec, ABC):
+    """Interface for all dispensing/writing tools."""
+
+################### Construct/Destruct METHODS ###########################
+    def __init__(self, name, units, **kwargs):
+        """*Initializes Tool Object*.
+
+        Parameters
+        ----------
+        name: String
+            tool name
+        units: String
+            Units this tool operates in
+
         """
         self.name = name
+        self.units = units
         super().__init__(**kwargs)
 
 ############################# Activate ### ###############################
@@ -78,26 +84,23 @@ class toolSpec(loggerSpec,ABC):
 ####################### Logging METHODS ###############################
     @abstractmethod
     def writeLogSelf(self):
-        """*Generates json string containing dict to be written to log file*
+        """*Generates json string containing dict to be written to log file*.
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |    logJson, log in json string format
+        Returns
+        -------
+        String
+            log in json string format
         """
         return super().writeLogSelf()
 
     @abstractmethod
-    def loadLogSelf(self,jsonString):
-        """*loads json log back into dict*
+    def loadLogSelf(self, jsonString):
+        """*loads json log back into dict*.
 
-        | *Parameters*
-        |   jsonString, json string to be loaded back in
+        Parameters
+        ----------
+        jsonString: String
+            json string to be loaded back in
 
-        | *Returns*
-        |    none
         """
         super().loadLogSelf(jsonString)
-
-

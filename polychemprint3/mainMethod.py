@@ -13,7 +13,13 @@ import sys
 sys.path.append("../")
 from polychemprint3.userInterface.commandLineInterface.ioMenuSpec \
     import ioMenuSpec
+from polychemprint3.axes.Axes3D import axes3D
+from polychemprint3.tools.nullTool import nullTool
+from polychemprint3.tools.ultimusExtruder import ultimusExtruder
+
 import logging
+import os
+from pathlib import Path
 from colorama import init, Fore, Back, Style
 
 
@@ -611,15 +617,57 @@ def io_MenuManager(initialMenuString):
             menuFlag = 'M0MainMenu'
 
     return menuFlag
+
+
+def io_loadSeq(seqDir):
+    """*Search for, instantiate, and load sequence objects into seqDict*.
+
+    Parameters
+    ----------
+    seqDir : Path
+        Path object referring to directory where path scripts are located
+
+    Returns
+    list of Strings
+        list of names of loaded sequence files
+
+    """
+    global __seqDict__
+    print(Fore.LIGHTGREEN_EX
+          + "Attempting to load sequences from root/sequence...")
+    filesInFolder = os.listdir(seqDir)
+    pySeq = []
+
+    for name in filesInFolder:
+        if (".py" in name[-3:]) and ("Spec" not in name):
+            pySeq.append(name)
+
+    syntaxValidSeq = []
+    for seq in pySeq:
+        try:
+            compile(open(seqDir / seq, 'r').read(), seq, "exec")
+            syntaxValidSeq.append(seq)
+            print('\t' + seq + "\tpasses syntax check")
+        except Exception as inst:
+            print(Fore.LIGHTRED_EX+ '\t' + seq + "\tfailed syntax check")
+        __seqDict__.update({seq[:-3]: seqDir / seq})
+
+    print(Fore.LIGHTGREEN_EX + "Finished Loading Sequence Files..."
+          + Style.RESET_ALL)
+
+
+
+
+
+
 #############################################################################
 ### Global attributes
 #############################################################################
-
-
 # Program Details
 __version__ = 3.0
 __date__ = "2019/02/15"
 __verbose__ = 1  # reflects how many status messages are shown
+__rootDir__ = Path.cwd().parent / 'polychemprint3'
 
 # User Input helper variables
 __input__ = ""
@@ -635,7 +683,13 @@ M2AxesOrigin = ioMenu_2AxesOrigin()
 M2PrintFileOptions = ioMenu_2PrintFileOptions()
 M1PrintSequence = ioMenu_1PrintSequence()
 
-# Add menu names
+# Instantiated Hardware
+axes = axes3D()
+tool = nullTool()
+
+# Instantiated Shapes
+__seqDict__ = {}
+io_loadSeq(__rootDir__ / 'sequence')
 
 #############################################################################
 ### Main METHOD
@@ -643,14 +697,7 @@ M1PrintSequence = ioMenu_1PrintSequence()
 
 
 def main():
-    """*Runs program*.
-
-    | *Parameters*
-    |   none
-
-    | *Returns*
-    |   none
-    """
+    """*Runs program*."""
     # Interface Start Sequencea
     io_StartText()
     logging.basicConfig(level=logging.DEBUG)  # logging
