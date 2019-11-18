@@ -112,3 +112,4 @@ class serialDeviceSpec(ABC):
             All text read in, empty string if nothing
         """
         pass
+

@@ -66,9 +66,9 @@ class ioMenuSpec(ioElementSpec, ABC):
         | *Returns*
         |   none
         """
-        print("-" * 80)
+        print("-" * 120)
         print("###\t" + self.menuTitle)
-        print("-" * 80)
+        print("-" * 120)
         for key in sorted(self.menuItems):
             print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
 

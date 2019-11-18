@@ -12,7 +12,6 @@ Welcome to PolyChemPrint's documentation!
    
    about
    install
-   polychemprint3
 
 Indices and tables
 ==================

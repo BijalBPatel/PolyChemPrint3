@@ -14,8 +14,9 @@ import io
 import json
 from time import time
 from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
+from polychemprint3.utility.loggerSpec import loggerSpec
 
-class axes3D(serialDeviceSpec):
+class axes3D(serialDeviceSpec, loggerSpec):
     def __init__(self, devAddress="unset",firmwareVers="unset", baudRate="unset", commsTimeOut=0.5, verbose =0):
         """*Initializes Axes3D object*.
 
@@ -267,24 +268,24 @@ class axes3D(serialDeviceSpec):
         self.ser.close()
         self.sReader.close()
 
+    ### Logging METHODS
     def writeLogSelf(self):
-        """*Generates json string containing dict to be written to log file*
+        """*Generates log string containing dict to be written to log file*.
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |    logJson, log in json string format
+        Returns
+        -------
+        String
+            log in string format
         """
-        return json.dumps(self.__dict__)
+        return super().writeLogSelf()
 
-    def loadLogSelf(self,jsonString):
-        """*loads json log back into dict*
+    def loadLogSelf(self, logString):
+        """*loads log back into dict*.
 
-        | *Parameters*
-        |   logJson, json string to be loaded back in
+        Parameters
+        ----------
+        logString: String
+            log string to be loaded back in
 
-        | *Returns*
-        |    none
         """
-        self.__dict__ = json.loads(jsonString)
+        super().loadLogSelf(logString)

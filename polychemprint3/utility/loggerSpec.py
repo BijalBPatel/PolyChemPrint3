@@ -9,7 +9,7 @@
 import sys
 sys.path.append("../../")
 from abc import ABC, abstractmethod
-import json
+import yaml
 
 
 class loggerSpec(ABC):
@@ -22,23 +22,23 @@ class loggerSpec(ABC):
 ####################### Logging METHODS ###############################
     @abstractmethod
     def writeLogSelf(self):
-        """*Generates json string containing dict to be written to log file*.
+        """*Generates yaml string containing dict to be written to log file*.
 
         Returns
         -------
         String
-            log in json string format
+            log in yaml string format
         """
-        return json.dumps(self.__dict__)
+        return yaml.dumps(self.__dict__)
 
     @abstractmethod
-    def loadLogSelf(self, jsonString):
-        """*loads json log back into dict*.
+    def loadLogSelf(self, yamlString):
+        """*loads yaml log back into dict*.
 
         Parameters
         ----------
-        jsonString: String
-            json string to be loaded back in
+        yamlString: String
+            yaml string to be loaded back in
 
         """
-        self.__dict__ = json.loads(jsonString)
+        self.__dict__ = yaml.load(yamlString)

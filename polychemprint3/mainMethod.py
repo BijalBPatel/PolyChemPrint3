@@ -16,11 +16,12 @@ from polychemprint3.userInterface.commandLineInterface.ioMenuSpec \
 from polychemprint3.axes.Axes3D import axes3D
 from polychemprint3.tools.nullTool import nullTool
 from polychemprint3.tools.ultimusExtruder import ultimusExtruder
-
+from tqdm import tqdm
 import logging
 import os
+import importlib
 from pathlib import Path
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style
 
 
 #############################################################################
@@ -109,6 +110,7 @@ class ioMenu_0Main(ioMenuSpec):
                     io_TestCode()
                     promptIn = True
                 else:
+                    print("Received: " + choiceString)
                     print(Fore.LIGHTRED_EX
                           + "\tInvalid Choice, resetting menu"
                           + Style.RESET_ALL)
@@ -144,7 +146,7 @@ class ioMenu_1Settings(ioMenuSpec):
                                 Fore.LIGHTMAGENTA_EX + "List Commands",
                                 Fore.WHITE + "(0) info":
                                     Fore.WHITE + "Program Info",
-                                Fore.WHITE + "(1) out":
+                                Fore.WHITE + "(1) verbose":
                                     Fore.WHITE
                                     + "Toggles level of output details"}}
         super().__init__(**kwargs)
@@ -186,10 +188,9 @@ class ioMenu_1Settings(ioMenuSpec):
                 elif choiceString == 'q':
                     return 'M0MainMenu'
                 elif choiceString == '0':
-                    return 'M1SettingsMenu'
-                elif choiceString == '0':
-                    print("PolyChemPrintv" + __version__ + " " + __date__
-                          + " By Bijal Patel bbpatel2@illinois.edu")
+                    print("\tPolyChemPrintv" + str(__version__) + "\n\t"
+                          + str(__date__)
+                          + "\n\tBy Bijal Patel bbpatel2@illinois.edu")
                 elif choiceString == '1':
                     __verbose__ = 1 - __verbose__
                     if __verbose__:
@@ -197,6 +198,7 @@ class ioMenu_1Settings(ioMenuSpec):
                     else:
                         print("\tFewer Details will be displayed.")
                 else:
+                    print("Received: " + choiceString)
                     print(Fore.LIGHTRED_EX
                           + "\tInvalid Choice, resetting menu"
                           + Style.RESET_ALL)
@@ -436,20 +438,62 @@ class ioMenu_1PrintSequence(ioMenuSpec):
                                 Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
                                 Fore.LIGHTMAGENTA_EX + "List Commands",
-                                "STOP": "Emergency STOP",
-                                "L": "Advanced Log Options",
-                                "(0) clean": "raise/lower 20mm",
-                                "(1) hardware": "Go to hardware menu",
-                                "(2) plate": "Print plate",
-                                "(3) gapLine": "Print Broken Line",
-                                "(4) cuboid": "Print cuboid",
-                                "(5) electrode1": "Print electrode1",
-                                "(6) Line": "Print Simple Line +Reset",
-                                "(7) hydroGrid": "Print Hydrogel Grid Pattern"
+                                Fore.WHITE + "L": "Advanced Log Options",
+                                Fore.WHITE + "(1) hardware":
+                                    "Go to hardware menu"
                                 }}
         super().__init__(**kwargs)
 
-### ioMenuSpec METHODS
+    ### ioMenuSpec METHODS
+
+    # Operation Methods
+    def ioMenu_printMenu(self):
+        """*Prints formatted menu options from menuItems dict*.
+
+        | *Parameters*
+        |   none
+
+        | *Returns*
+        |   none
+        """
+        # Need to generate menu items and actions based on shapes loaded in
+        # For now just 1 big list
+
+        seqDictMenu = {}  # Contains name: filename pairs
+
+        for seq in __seqDict__:
+            fileName = __seqDict__.get(seq)
+            seqDictMenu.update({seq: fileName})
+
+        print(Style.RESET_ALL)
+        print("-" * 120)
+        print("###\t" + self.menuTitle)
+        print("-" * 120)
+
+        # Print sequences
+        print(Fore.LIGHTGREEN_EX + "\n\tLoaded Sequences:")
+        for seqNum in __seqDict__:
+            seqName = __seqDict__.get(seqNum).nameString
+            seqDescription = __seqDict__.get(seqNum).descrip
+            print("\t(%s) %-12s|  %-55s" % (seqNum, seqName, seqDescription))
+
+        print(Style.RESET_ALL)
+        # Print std menu options
+        for key in sorted(self.menuItems):
+            print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
+        print(Style.RESET_ALL)
+
+        storedCmds = {Fore.LIGHTCYAN_EX
+                      + "[/] Repeat Last Command": self.lastCmd,
+                      Fore.LIGHTCYAN_EX
+                      + "[.] Repeat Saved Command": self.memCmd,
+                      Fore.LIGHTCYAN_EX
+                      + "[,] Store Saved Command": "Will Prompt for command"}
+
+        for key in storedCmds:
+            print("\t%-40s|  %-25s" % (key, storedCmds.get(key)))
+        print(Style.RESET_ALL)
+
     def ioMenu_Operate(self):
         """*Performs Menu operations - loops*.
 
@@ -457,10 +501,229 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         |   none
 
         | *Returns*
-        |   flag, String with title of next menu to call
+        |   menuFlag, String with title of next menu to call
         """
-        io_Prompt("This is filler text, enter any key to go back to main menu")
-        return 'M0MainMenu'
+        global __savedInp__
+        global __lastInp__
+        # Menu Loop
+        doQuitMenu = False
+        promptIn = True
+
+        while not doQuitMenu:
+            try:
+                self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+                self.ioMenu_printMenu()
+                # List of sequences as strings
+                stringList = []
+                for x in [*__seqDict__]:
+                    stringList.append(str(x))
+
+                if promptIn:
+                    choiceString = io_Prompt(
+                        "Enter Command:", validate=True,
+                        validResponse=(["q", "?", "1", "/", ".", ","]
+                                       + stringList)).lower()
+
+                if not (choiceString in ["/", ".", ","]):
+                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+
+                if choiceString in ["/", ".", ","]:
+                    (choiceString, promptIn) = io_savedCmdOps(choiceString)
+                elif choiceString == '?':
+                    pass
+                elif choiceString == 'q':
+                    return 'M0MainMenu'
+                elif choiceString == '1':
+                    return 'M1HardwareMenu'
+                elif choiceString.upper() in stringList:
+                    # Instantiate Sequence menu
+                    seqMen = ioMenu_2SequenceOptions(choiceString.upper())
+                    seqMen.ioMenu_Operate()
+                else:
+                    print("\tReceived: " + choiceString)
+                    print(Fore.LIGHTRED_EX
+                          + "\tInvalid Choice, resetting menu"
+                          + Style.RESET_ALL)
+                    promptIn = True
+            except KeyboardInterrupt:
+                print("\n\tKeyboardInterrupt received, resetting menu")
+
+
+class ioMenu_2SequenceOptions(ioMenuSpec):
+    """Contains data and methods for print sequence options Menu."""
+
+    ### Construct/Destruct METHODS
+
+    def __init__(self, seqNum, **kwargs):
+        """*Initializes Print Sequence Options Menu Object*.
+
+        | *Parameters*
+        |   seq: Sequence Object instantiated at start
+
+        | *Returns*
+        |   none
+        ""
+
+        ''' Param to pass into parent class
+        |   name, name of the menu
+        |   menuTitle, name of the menu
+        |   menuItems, dictionary of menu options and text
+        """
+        self.seqNum = seqNum
+        self.seq = __seqDict__.get(seqNum)
+        self.paramsMenuDict = {}  # ParamID:  Param
+
+        menuItems = {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
+                     Fore.LIGHTYELLOW_EX + "[PRIME]":
+                         Fore.LIGHTYELLOW_EX + "Generate Print Commands",
+                     Fore.LIGHTYELLOW_EX + "[VIEW]":
+                         Fore.LIGHTYELLOW_EX + "View Print Commands",
+                     Fore.LIGHTGREEN_EX + "[GO]":
+                         Fore.LIGHTGREEN_EX + "Engage Print Sequence"}
+        print(Style.RESET_ALL)
+
+        kwargs = {'name': self.seq.dictParams.get("name").value,
+                  'menuTitle': "Sequence: "
+                  + self.seq.dictParams.get("name").value,
+                  'menuItems': menuItems}
+        super().__init__(**kwargs)
+
+    ### ioMenuSpec METHODS
+
+    # Operation Methods
+    def ioMenu_printMenu(self):
+        """*Prints formatted menu options from menuItems dict*.
+
+        | *Parameters*
+        |   none
+
+        | *Returns*
+        |   none
+        """
+        print(Style.RESET_ALL)
+        print("-" * 120)
+        print("###\t" + self.menuTitle)
+        print("-" * 120)
+
+        self.paramsMenuDict = {}  # reset params menu dict
+        # First map params onto param number for menu
+        paramNum = 1
+        for paramName in self.seq.dictParams:
+            param = self.seq.dictParams.get(paramName)
+            self.paramsMenuDict.update({"P" + str(paramNum): param})
+            paramNum += 1
+
+        paramStrings = []
+        # Then create formatted menu strings
+        for pNum in self.paramsMenuDict:
+            param = self.paramsMenuDict.get(pNum)
+            paramStrings.append(
+                "\t(%-3s) %-30s| %-15s| %-10s| %-40s"
+                % (str(pNum), param.name, param.value, param.unit,
+                   param.helpString))
+
+        # Print param menu options
+        print("\tEnter Parameter number to modify:")
+        for outString in paramStrings:
+            print(outString)
+
+        print(Style.RESET_ALL)
+        # Print std menu options
+        for key in sorted(self.menuItems):
+            print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
+        print(Style.RESET_ALL)
+
+        storedCmds = {Fore.LIGHTCYAN_EX
+                      + "[/] Repeat Last Command": self.lastCmd,
+                      Fore.LIGHTCYAN_EX
+                      + "[.] Repeat Saved Command": self.memCmd,
+                      Fore.LIGHTCYAN_EX
+                      + "[,] Store Saved Command": "Will Prompt for command"}
+
+        for key in storedCmds:
+            print("\t%-40s|  %-25s" % (key, storedCmds.get(key)))
+        print(Style.RESET_ALL)
+
+    def ioMenu_Operate(self):
+        """*Performs Menu operations - loops*.
+
+        | *Parameters*
+        |   none
+
+        | *Returns*
+        |   menuFlag, String with title of next menu to call
+        """
+        global __savedInp__
+        global __lastInp__
+        # Menu Loop
+        doQuitMenu = False
+        promptIn = True
+        isPrimed = False
+
+        while not doQuitMenu:
+            try:
+                self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+                self.ioMenu_printMenu()
+
+                # List of param options as strings
+                paramOptionList = []
+                for x in [*self.paramsMenuDict]:
+                    paramOptionList.append(str(x))
+
+                if promptIn:
+                    choiceString = io_Prompt(
+                        "Enter Command:",
+                        validate=True,
+                        validResponse=["q", "/", ".", ",",
+                                       "PRIME", "VIEW", "GO"]
+                        + paramOptionList).lower()
+
+                if not (choiceString in ["/", ".", ","]):
+                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+
+                if choiceString in ["/", ".", ","]:
+                    (choiceString, promptIn) = io_savedCmdOps(choiceString)
+                elif choiceString == 'q':
+                    return "M1PrintSequence"
+                elif choiceString.upper() == 'PRIME':
+                    # Prime [generate commands]
+                    print("\tGenerating Print Commands...")
+                    self.seq.genSequence()
+                    isPrimed = True
+                    print("\tCommands Generated!")
+                elif choiceString.upper() == 'VIEW':
+                    print("\tOutputting Python Commands:")
+                    for line in self.seq.cmdList:
+                        print(Fore.LIGHTMAGENTA_EX + "\t" + repr(line))
+                    print(Style.RESET_ALL, end='')
+                elif choiceString.upper() == 'GO':
+                    if isPrimed:
+                        print("\tExecuting Print! Ctrl + C to Cancel")
+                        self.seq.operateSeq()
+                        print("\tSequence Complete!")
+                    else:
+                        print("\tError - you must prime first")
+                elif choiceString.upper() in paramOptionList:
+                    isPrimed = False
+                    # Modify corresponding parameter
+                    paramNum = choiceString.upper()
+                    param = self.paramsMenuDict.get(paramNum)
+                    print("\tModifying parameter %s: %s"
+                          % (paramNum, param.name))
+                    newVal = io_Prompt("Enter new value")
+                    oldVal = param.value
+                    param.value = newVal
+                    print("Value changed from %s to %s"
+                          % (oldVal, param.value))
+                else:
+                    print("\tReceived: " + choiceString)
+                    print(Fore.LIGHTRED_EX
+                          + "\tInvalid Choice, resetting menu"
+                          + Style.RESET_ALL)
+                    promptIn = True
+            except KeyboardInterrupt:
+                print("\n\tKeyboardInterrupt received, resetting menu")
+                isPrimed = False
 
 #############################################################################
 ### Start Sequence Methods
@@ -468,18 +731,11 @@ class ioMenu_1PrintSequence(ioMenuSpec):
 
 
 def io_StartText():
-    """*Displays start screen*.
-
-    | *Parameters*
-    |   none
-
-    | *Returns*
-    |   none
-    """
-    print(("#" * 80) + "\n" + ("#" * 80) + "\n\n")
+    """*Displays start screen*."""
+    print(("#" * 120) + "\n" + ("#" * 120) + "\n\n")
     print("\tPolyChemPrintBP - Version:" + str(__version__)
           + "\tRevised: " + __date__ + "\n\n")
-    print(("#" * 80) + "\n" + ("#" * 80) + "\n")
+    print(("#" * 120) + "\n" + ("#" * 120) + "\n")
 
 
 #########################################################################
@@ -513,7 +769,7 @@ def io_Prompt(promptString, validate=False,
     |   inputString, inputString from user
     """
     global __lastInp__
-    inString = input("\t" + promptString + '>').rstrip()
+    inString = input("\t" + promptString + '> ').rstrip()
 
     if validate:
 
@@ -526,14 +782,14 @@ def io_Prompt(promptString, validate=False,
         if not validString:
             print(Fore.LIGHTRED_EX + "\tNot a valid response, try again.\n"
                   + Style.RESET_ALL)
-            io_Prompt(promptString, validate, validResponse, caseSensitive)
+            inString = io_Prompt(promptString, validate, validResponse,
+                                 caseSensitive)
         else:
             if not (inString in ["/"]):
                 __lastInp__ = inString
     else:
         if not (inString in ["/"]):
             __lastInp__ = inString
-
 
     return inString
 
@@ -628,13 +884,14 @@ def io_loadSeq(seqDir):
         Path object referring to directory where path scripts are located
 
     Returns
+    -------
     list of Strings
         list of names of loaded sequence files
 
     """
-    global __seqDict__
+    global __seqList__
     print(Fore.LIGHTGREEN_EX
-          + "Attempting to load sequences from root/sequence...")
+          + "Attempting to load sequences from polychemprint3/sequence...")
     filesInFolder = os.listdir(seqDir)
     pySeq = []
 
@@ -642,22 +899,33 @@ def io_loadSeq(seqDir):
         if (".py" in name[-3:]) and ("Spec" not in name):
             pySeq.append(name)
 
-    syntaxValidSeq = []
+    seqValidDict = {}
     for seq in pySeq:
         try:
             compile(open(seqDir / seq, 'r').read(), seq, "exec")
-            syntaxValidSeq.append(seq)
-            print('\t' + seq + "\tpasses syntax check")
+            print('\t%-15s passes syntax check' % seq)
+            seqValidDict.update({seq[:-3]: seqDir / seq})
+        except Exception:
+            print(Fore.LIGHTRED_EX + '\t' + seq + "\tfailed syntax check")
+
+    moduleString = "polychemprint3.sequence"
+    # Instantiate all valid objects
+    # Goal: Create sequence with variable name = class name and add to seqList
+    seqNum = 1
+    for seqName in seqValidDict:
+        try:
+            seq = getattr(importlib.import_module(moduleString + "."
+                                                  + seqName), seqName)
+            vars()[seqName] = seq(axes, tool, __verbose__)
+            __seqDict__.update({"S%s" % seqNum: vars()[seqName]})
+            seqNum += 1
+            print('\t%-15s loaded successfully' % (seqName + ".py"))
         except Exception as inst:
-            print(Fore.LIGHTRED_EX+ '\t' + seq + "\tfailed syntax check")
-        __seqDict__.update({seq[:-3]: seqDir / seq})
+            print(Fore.LIGHTRED_EX + '\t' + seqName + "\tfailed to load")
+            logging.exception(inst)
 
     print(Fore.LIGHTGREEN_EX + "Finished Loading Sequence Files..."
           + Style.RESET_ALL)
-
-
-
-
 
 
 #############################################################################
@@ -674,6 +942,13 @@ __input__ = ""
 __lastInp__ = ""
 __savedInp__ = ""
 
+# Instantiated Hardware
+axes = axes3D()
+tool = nullTool()
+
+# Instantiated Sequences
+__seqDict__ = {}
+
 # Instantiated menus
 M0MainMenu = ioMenu_0Main()
 M1SettingsMenu = ioMenu_1Settings()
@@ -682,14 +957,6 @@ M1PrintFile = ioMenu_1PrintFile()
 M2AxesOrigin = ioMenu_2AxesOrigin()
 M2PrintFileOptions = ioMenu_2PrintFileOptions()
 M1PrintSequence = ioMenu_1PrintSequence()
-
-# Instantiated Hardware
-axes = axes3D()
-tool = nullTool()
-
-# Instantiated Shapes
-__seqDict__ = {}
-io_loadSeq(__rootDir__ / 'sequence')
 
 #############################################################################
 ### Main METHOD
@@ -702,7 +969,7 @@ def main():
     io_StartText()
     logging.basicConfig(level=logging.DEBUG)  # logging
     init(convert=True)  # colorama
-
+    io_loadSeq(__rootDir__ / 'sequence')
 
     # make software connections
 

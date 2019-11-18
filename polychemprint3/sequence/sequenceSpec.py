@@ -18,7 +18,7 @@ class sequenceSpec(loggerSpec, ABC):
 
     ################### Construct/Destruct METHODS ###########################
     @abstractmethod
-    def __init__(self, axes, tool, verbose, **kwargs):
+    def __init__(self, nameString, descrip, axes, tool, verbose, **kwargs):
         """*Initializes sequence object*.
 
         Parameters
@@ -30,10 +30,12 @@ class sequenceSpec(loggerSpec, ABC):
         verbose: bool
             level of detail to be printed to cmd line
         """
+        self.nameString = nameString
+        self.descrip = descrip
         self.axes = axes
         self.tool = tool
         self.verbose = verbose
-        super().__init__(self.name, **kwargs)
+        super().__init__(**kwargs)
 
     ################### Parameter Methods ###########################
     def stringParams(self):
@@ -60,29 +62,40 @@ class sequenceSpec(loggerSpec, ABC):
         """
         pass
 
+    @abstractmethod
+    def genSequence(self):
+        """*Loads print sequence into a list into cmdList attribute*.
+
+        Returns
+        -------
+        bool
+            whether successfully reached the end or not
+        """
+        pass
+
     ####################### Logging METHODS ###############################
     @abstractmethod
     def writeLogSelf(self):
-        """*Generates json string containing dict to be written to log file*.
+        """*Generates log string containing dict to be written to log file*.
 
         Returns
         -------
         String
-            log in json string format
+            log in string format
         """
         return super().writeLogSelf()
 
     @abstractmethod
-    def loadLogSelf(self, jsonString):
-        """*loads json log back into dict*.
+    def loadLogSelf(self, logString):
+        """*loads log back into dict*.
 
         Parameters
         ----------
-        jsonString: String
-            json string to be loaded back in
+        logString: String
+            log string to be loaded back in
 
         """
-        super().loadLogSelf(jsonString)
+        super().loadLogSelf(logString)
 
 
 class seqParam():

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Predefined print sequence for plates.
+Predefined print sequence for gapLines.
 
 | First created on 13/11/2019 14:41:31
 | Revised:
@@ -13,12 +13,12 @@ from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 import logging
 
 
-class plate(sequenceSpec):
-    """Implemented print sequence for plates."""
+class gapLine(sequenceSpec):
+    """Implemented print sequence for gapLines."""
 
     ################### Construct/Destruct METHODS ###########################
     def __init__(self, axes, tool, verbose, **kwargs):
-        """*Initializes plate object with default values*.
+        """*Initializes gapLine object with default values*.
 
         Parameters
         ----------
@@ -32,7 +32,7 @@ class plate(sequenceSpec):
         generic seq params
         ------------------
         name: String
-            name of sequence, e.g., Plate
+            name of sequence, e.g., gapLine
         creationDate
             date sequence first defined, e.g., 13/11/2019 13:33:28
         createdBy: String
@@ -43,29 +43,33 @@ class plate(sequenceSpec):
         # Create Params dict
 
         self.dictParams = {
-            "name": seqParam("name", "Plate", "",
+            "name": seqParam("name", "gapLine", "",
                              "Change if modifying from default"),
             "creationDate": seqParam("Creation Date",
                                      "13/11/2019", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_Core", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Electronics", "",
+                              "default: PCP_Core"),
             "printSpd": seqParam("Printing Speed", "60", "", ""),
-            "lineDir": seqParam("Line direction", "X", "", "Along X or Y"),
-            "pitch": seqParam("Center-to-Center Spacing", "1", "mm", ""),
-            "length": seqParam("Line Length", "10", "mm", ""),
-            "numLines": seqParam("Number of lines", "5", "mm", ""),
+            "trvlSpd": seqParam("Travel Speed", "200", "", ""),
+            "xLength": seqParam("X-Length", "10", "mm", "Total X Length"),
+            "yLength": seqParam("Y-Length", "10", "mm", "Total Y Length"),
+            "ySpacing": seqParam("Y-Spacing", "10", "mm", ""),
+            "xGap": seqParam("X-Gap", "2", "mm", "Length of gap in X"),
+            "Z-hop height": seqParam("Z-hop", "0", "",
+                                     "Height to raise Z-axis for gap"),
             "toolOnVal": seqParam("Tool ON Value", "100", tool.units,
                                   "Depends on tool loaded"),
-            "valInc": seqParam("Value Increment", "0", "", ""),
-            "valOp": seqParam("Value Operation", "+", "", ""),
-            "spdInc": seqParam("Speed Increment", "0", "", ""),
-            "spdOp": seqParam("Speed Operation", "+", "", "")}
+            "toolTrvlVal": seqParam("Tool Travel Value", "2", tool.units,
+                                    "Depends on tool loaded"),
+            "toolOffVal": seqParam("Tool OFF Value", "0", tool.units,
+                                   "Depends on tool loaded")}
 
         self.cmdList = []
 
         # Pass values to parent
         nameString = self.dictParams.get("name").value
-        descrip = "Regularly spaced meanderlines along X/Y axis"
+        descrip = "Repeatedly prints lines in X with a gap [tool raised]"
         super().__init__(nameString, descrip, axes, tool, verbose, **kwargs)
 
     ################### Sequence Actions ###################################
@@ -103,17 +107,18 @@ class plate(sequenceSpec):
         self.cmdList = []
         try:
 
-            # Pull values
+            # Pull values for brevity
             printSpd = self.dictParams.get("printSpd").value
-            lineDir = self.dictParams.get("lineDir").value
-            pitch = self.dictParams.get("pitch").value
-            length = self.dictParams.get("length").value
-            numLines = self.dictParams.get("numLines").value
+            trvlSpd = self.dictParams.get("printSpd").value
+            xLength = self.dictParams.get("lineDir").value
+            ySpacing = self.dictParams.get("pitch").value
+            yLength = self.dictParams.get("length").value
+            xGap = self.dictParams.get("numLines").value
+            zHopHeight = self.dictParams.get("valInc").value
             toolOnValue = self.dictParams.get("toolOnVal").value
-            valInc = self.dictParams.get("valInc").value
-            valOp = self.dictParams.get("valOp").value
-            spdInc = self.dictParams.get("spdInc").value
-            spdOp = self.dictParams.get("spdOp").value
+            toolOFFValue = self.dictParams.get("toolOnVal").value
+            toolTrvLValue = self.dictParams.get("toolOnVal").value
+
             self.cmdList.append("tool.setValue(" + str(toolOnValue) + ")")
             self.cmdList.append("tool.engage()")
 
