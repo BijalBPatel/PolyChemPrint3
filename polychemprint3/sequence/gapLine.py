@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-"""
-Predefined print sequence for gapLines.
+"""Predefined print sequence for gapLines.
 
 | First created on 13/11/2019 14:41:31
 | Revised:
 | Author: Bijal Patel
 
 """
-import sys
-sys.path.append("../../")
+
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
+from polychemprint3.tools.nullTool import nullTool
+from polychemprint3.axes.nullAxes import nullAxes
+
 import logging
 
 
@@ -17,7 +18,7 @@ class gapLine(sequenceSpec):
     """Implemented print sequence for gapLines."""
 
     ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes, tool, verbose, **kwargs):
+    def __init__(self, axes=nullAxes(), tool=nullTool(), **kwargs):
         """*Initializes gapLine object with default values*.
 
         Parameters
@@ -40,6 +41,7 @@ class gapLine(sequenceSpec):
         owner: String
             who owns this shape (default: PCP_Core))
         """
+
         # Create Params dict
 
         self.dictParams = {
@@ -50,8 +52,8 @@ class gapLine(sequenceSpec):
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
             "owner": seqParam("Owner", "PCP_Electronics", "",
                               "default: PCP_Core"),
-            "printSpd": seqParam("Printing Speed", "60", "", ""),
-            "trvlSpd": seqParam("Travel Speed", "200", "", ""),
+            "printSpd": seqParam("Printing Speed", "60", "mm/min", ""),
+            "trvlSpd": seqParam("Travel Speed", "200", "mm/min", ""),
             "xLength": seqParam("X-Length", "10", "mm", "Total X Length"),
             "yLength": seqParam("Y-Length", "10", "mm", "Total Y Length"),
             "ySpacing": seqParam("Y-Spacing", "10", "mm", ""),
@@ -70,20 +72,24 @@ class gapLine(sequenceSpec):
         # Pass values to parent
         nameString = self.dictParams.get("name").value
         descrip = "Repeatedly prints lines in X with a gap [tool raised]"
-        super().__init__(nameString, descrip, axes, tool, verbose, **kwargs)
+        super().__init__(nameString, descrip, **kwargs)
 
     ################### Sequence Actions ###################################
     def operateSeq(self):
         """*Performs print sequence*.
 
+        Parameters
+        ----------
+        tool: PCP_ToolSpec object
+            tool to execute code with
+        axes: PCP_Axes object
+            axes to execute code with
         Returns
         -------
         bool
             Whether sequence successfully completed or not
         """
         try:
-            tool = self.tool
-            axes = self.axes
             for line in self.cmdList:
                 eval(line)
             return True

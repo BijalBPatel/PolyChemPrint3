@@ -7,9 +7,10 @@ Predefined print sequence for simple lines.
 | Author: Bijal Patel
 
 """
-import sys
-sys.path.append("../../")
+
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
+from polychemprint3.tools.nullTool import nullTool
+from polychemprint3.axes.nullAxes import nullAxes
 import logging
 
 
@@ -17,7 +18,7 @@ class line(sequenceSpec):
     """Implemented print sequence for single lines."""
 
     ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes, tool, verbose, **kwargs):
+    def __init__(self, axes=nullAxes(), tool=nullTool(), **kwargs):
         """*Initializes line object with default values*.
 
         Parameters
@@ -41,7 +42,6 @@ class line(sequenceSpec):
             who owns this shape (default: PCP_Core))
         """
         # Create Params dict
-
         self.dictParams = {
             "name": seqParam("name", "Line", "",
                              "Change if modifying from default"),
@@ -61,11 +61,18 @@ class line(sequenceSpec):
         # Pass values to parent
         nameString = self.dictParams.get("name").value
         descrip = "Single line along X/Y axis"
-        super().__init__(nameString, descrip, axes, tool, verbose, **kwargs)
+        super().__init__(nameString, descrip, **kwargs)
 
     ################### Sequence Actions ###################################
-    def operateSeq(self):
+    def operateSeq(self, tool, axes):
         """*Performs print sequence*.
+
+        Parameters
+        ----------
+        tool: PCP_ToolSpec object
+            tool to execute code with
+        axes: PCP_Axes object
+            axes to execute code with
 
         Returns
         -------
@@ -73,8 +80,6 @@ class line(sequenceSpec):
             Whether sequence successfully completed or not
         """
         try:
-            tool = self.tool
-            axes = self.axes
             for line in self.cmdList:
                 eval(line)
             return True
@@ -96,6 +101,7 @@ class line(sequenceSpec):
             whether successfully reached the end or not
         """
         self.cmdList = []
+        cmds = self.cmdList
         try:
 
             # Pull values
@@ -104,12 +110,12 @@ class line(sequenceSpec):
             length = self.dictParams.get("length").value
             toolOnValue = self.dictParams.get("toolOnVal").value
 
-            self.cmdList.append("tool.setValue(" + str(toolOnValue) + ")")
+            cmds.append("tool.setValue(" + str(toolOnValue) + ")")
             self.cmdList.append("tool.engage()")
 
             # Print 1st line
             self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " X" + str(length) + "\n" + "\")"))
+                                 + " X" + str(length) + "\\n" + "\")"))
 
             if lineDir == "Y":  # need to rotate coordinates in cmdList
                 self.cmdList = [cmd.replace('X', 'Y') for cmd in self.cmdList]

@@ -10,8 +10,7 @@ Implements the Tool base class for a null Tool [no action, returns true].
 ##############################################################################
 ##################### Imports
 ##############################################################################
-import sys
-sys.path.append("../../")
+
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
 
@@ -22,14 +21,22 @@ class nullTool(toolSpec, serialDeviceSpec):
     ###########################################################################
     ### Construct/Destruct METHODS
     ###########################################################################
-    def __init__(self, name="unset", units="null", devAddress="unset",
-                 baudRate="unset", commsTimeOut=0.5, verbose=0, **kwargs):
+    def __init__(self,
+                 name="nullTool",
+                 units="null",
+                 devAddress="unset",
+                 baudRate="unset",
+                 commsTimeOut=0.5,
+                 __verbose__=0,
+                 **kwargs):
         """*Initializes T_UltimusExtruder Object*.
 
         Parameters
         ----------
         name: String
             tool name
+        units: String
+            units for value
         devAddress: Strong
             device address on this computer
         baudRate: int
@@ -40,15 +47,42 @@ class nullTool(toolSpec, serialDeviceSpec):
             whether details should be printed to cmd line
         """
         self.dispenseStatus = 0  # off
-        inputs = {"name": name, "units": units,
-                  "devAddress": devAddress, "baudRate": baudRate,
-                  "commsTimeOut": commsTimeOut, "verbose": verbose}
+        inputs = {"name": name,
+                  "units": units,
+                  "devAddress": devAddress,
+                  "baudRate": baudRate,
+                  "commsTimeOut": commsTimeOut,
+                  "__verbose__": __verbose__}
         kwargs.update(inputs)
         super().__init__(**kwargs)
 
     ##########################################################################
-    ### PCP_TOOL METHODS
+    ### toolSpec METHODS
     ##########################################################################
+
+    def activate(self):
+        """*Makes required connections and returns status bool*.
+
+        Returns
+        -------
+        bool
+            True if ready to use
+            False if not ready
+        """
+        print("\t\tNull Tool Activated")
+        return True
+
+    def deactivate(self):
+        """*Closes communication and returns status bool*.
+
+        Returns
+        -------
+        bool
+            True if ready to use
+            False if not ready
+        """
+        print("\t\tNull Tool Deactivated")
+        return True
 
     ############################# Activate METHODS ###########################
     def engage(self):
@@ -63,9 +97,11 @@ class nullTool(toolSpec, serialDeviceSpec):
         try:
             if self.dispenseStatus == 0:
                 self.dispenseStatus = 1
+                print("\t\tNull Tool Dispense On")
                 return [1, "Dispense On"]
 
             else:
+                print("\t\tNull Tool Error: Dispense already On")
                 return [0, "Error: Dispense Already On"]
         except Exception as inst:
             return [-1, 'Failed engaging dispense ' + inst.__str__()]
@@ -82,9 +118,11 @@ class nullTool(toolSpec, serialDeviceSpec):
         try:
             if self.dispenseStatus == 1:
                 self.dispenseStatus = 0
+                print("\t\tNull Tool Dispense Off")
                 return [1, "Dispense Off"]
 
             else:
+                print("\t\tNull Tool Error: Dispense already Off")
                 return [0, "Error: Dispense already off"]
         except Exception as inst:
             return [-1, 'Failed disengaging dispense ' + inst.__str__()]
@@ -105,8 +143,10 @@ class nullTool(toolSpec, serialDeviceSpec):
         [-1, "Error: Pressure could not be set for Extruder + error text"]
         """
         try:
+            print("\t\tNull Tool Value set: " + str(newVal))
             return [1, 'null mode: newVal Set']
         except Exception as inst:
+            print("\t\tNull Tool Error: Value not Set")
             return [-1, "Error: value could not be set"
                     + inst.__str__()]
 
@@ -123,8 +163,10 @@ class nullTool(toolSpec, serialDeviceSpec):
         """
         try:
             if self.dispenseStatus():
+                print("\t\tNull Tool Dispense On")
                 return [1, "Tool On"]
             else:
+                print("\t\tNull Tool Dispense Off")
                 return [0, "Tool Off"]
         except Exception as inst:
             return [-1, "Error: Tool activation state cannot be determined"
@@ -185,6 +227,7 @@ class nullTool(toolSpec, serialDeviceSpec):
         -------
         [1, 'Text Sent + text']
         """
+        print("\tNull Tool Write:" + text)
         return [1, 'Text Sent + text']
 
     def writeSerialCommand(self, cmdString):
@@ -200,6 +243,7 @@ class nullTool(toolSpec, serialDeviceSpec):
         [1, 'Command Sent: ' + cmdString + 'Received: ' + rcvd]
             if exception
         """
+        print("\tNull Tool Write:" + cmdString)
         return [1, 'Command Sent: ' + cmdString + '\n Received: '
                 + "Null tool - no receive"]
 

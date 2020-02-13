@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-"""
-Predefined print sequence for plates.
+"""Predefined print sequence for plates.
 
 | First created on 13/11/2019 14:41:31
 | Revised:
 | Author: Bijal Patel
 
 """
-import sys
-sys.path.append("../../")
+
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
+from polychemprint3.tools.nullTool import nullTool
+from polychemprint3.axes.nullAxes import nullAxes
 import logging
 
 
@@ -17,7 +17,7 @@ class plate(sequenceSpec):
     """Implemented print sequence for plates."""
 
     ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes, tool, verbose, **kwargs):
+    def __init__(self, axes=nullAxes(), tool=nullTool(), **kwargs):
         """*Initializes plate object with default values*.
 
         Parameters
@@ -41,7 +41,6 @@ class plate(sequenceSpec):
             who owns this shape (default: PCP_Core))
         """
         # Create Params dict
-
         self.dictParams = {
             "name": seqParam("name", "Plate", "",
                              "Change if modifying from default"),
@@ -51,7 +50,7 @@ class plate(sequenceSpec):
             "owner": seqParam("Owner", "PCP_Core", "", "default: PCP_Core"),
             "printSpd": seqParam("Printing Speed", "60", "", ""),
             "lineDir": seqParam("Line direction", "X", "", "Along X or Y"),
-            "pitch": seqParam("Center-to-Center Spacing", "1", "mm", ""),
+            "pitch": seqParam("Line Pitch", "1", "mm", ""),
             "length": seqParam("Line Length", "10", "mm", ""),
             "numLines": seqParam("Number of lines", "5", "mm", ""),
             "toolOnVal": seqParam("Tool ON Value", "100", tool.units,
@@ -66,20 +65,24 @@ class plate(sequenceSpec):
         # Pass values to parent
         nameString = self.dictParams.get("name").value
         descrip = "Regularly spaced meanderlines along X/Y axis"
-        super().__init__(nameString, descrip, axes, tool, verbose, **kwargs)
+        super().__init__(nameString, descrip, **kwargs)
 
     ################### Sequence Actions ###################################
-    def operateSeq(self):
+    def operateSeq(self, tool, axes):
         """*Performs print sequence*.
 
+        Parameters
+        ----------
+        tool: PCP_ToolSpec object
+            tool to execute code with
+        axes: PCP_Axes object
+            axes to execute code with
         Returns
         -------
         bool
             Whether sequence successfully completed or not
         """
         try:
-            tool = self.tool
-            axes = self.axes
             for line in self.cmdList:
                 eval(line)
             return True
@@ -101,6 +104,7 @@ class plate(sequenceSpec):
             whether successfully reached the end or not
         """
         self.cmdList = []
+        cmds = self.cmdList
         try:
 
             # Pull values
@@ -119,8 +123,8 @@ class plate(sequenceSpec):
 
             count = 1
             # Print 1st line
-            self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " X" + str(length) + "\n" + "\")"))
+            cmds.append(("axes.move(\"G1 F" + str(printSpd)
+                         + " X" + str(length) + "\\n" + "\")"))
             direct = 'forwardR'
             # Write as if printing X lines
             while (count < int(numLines)):
@@ -128,40 +132,40 @@ class plate(sequenceSpec):
                     printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
                     toolOnValue = eval(str(toolOnValue
                                            + str(valOp) + str(valInc)))
-                    self.cmdList.append("tool.setValue("
-                                        + str(toolOnValue) + ")")
-                    self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                         + " X" + str(length) + "\n" + "\")"))
+                    cmds.append("tool.setValue("
+                                + str(toolOnValue) + ")")
+                    cmds.append(("axes.move(\"G1 F" + str(printSpd)
+                                 + " X" + str(length) + "\\n" + "\")"))
                     direct = 'forwardR'
                     count += 1
                 elif (direct == 'forwardR'):
-                    self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                         + " Y-" + str(pitch) + "\n" + "\")"))
+                    cmds.append(("axes.move(\"G1 F" + str(printSpd)
+                                 + " Y-" + str(pitch) + "\\n" + "\")"))
                     direct = 'left'
                 elif (direct == 'left'):
                     printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
                     toolOnValue = eval(str(toolOnValue)
                                        + str(valOp) + str(valInc))
-                    self.cmdList.append("tool.setValue("
-                                        + str(toolOnValue) + ")")
-                    self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                         + " X-" + str(length) + "\n" + "\")"))
+                    cmds.append("tool.setValue("
+                                + str(toolOnValue) + ")")
+                    cmds.append(("axes.move(\"G1 F" + str(printSpd)
+                                 + " X-" + str(length) + "\\n" + "\")"))
                     direct = 'forwardR'
                     count += 1
                 elif (direct == 'forwardL'):
-                    self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                         + " Y-" + str(pitch) + "\n" + "\")"))
+                    cmds.append(("axes.move(\"G1 F" + str(printSpd)
+                                 + " Y-" + str(pitch) + "\\n" + "\")"))
                     direct = 'right'
 
             if lineDir == "Y":  # need to rotate coordinates in cmdList
                 # First map Y onto W
-                self.cmdList = [cmd.replace('Y', 'W') for cmd in self.cmdList]
+                cmds = [cmd.replace('Y', 'W') for cmd in cmds]
                 # Then map X onto Y
-                self.cmdList = [cmd.replace('X', 'Y') for cmd in self.cmdList]
+                cmds = [cmd.replace('X', 'Y') for cmd in cmds]
                 # Then map W onto X
-                self.cmdList = [cmd.replace('W', 'X') for cmd in self.cmdList]
+                cmds = [cmd.replace('W', 'X') for cmd in cmds]
 
-            self.cmdList.append("tool.disengage()")
+            cmds.append("tool.disengage()")
             return True
         except KeyboardInterrupt:
             print("\tgenSequence Terminated by User....")

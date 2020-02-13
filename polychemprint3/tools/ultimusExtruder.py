@@ -10,13 +10,12 @@ Implements the Tool base class for Nordson EFD Ultimus V Extruder.
 ##############################################################################
 ##################### Imports
 ##############################################################################
-import sys
-sys.path.append("../../")
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
 import serial
 import io
-from time import time
+import time
+import logging
 
 
 class ultimusExtruder(serialDeviceSpec, toolSpec):
@@ -25,14 +24,22 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
     ###########################################################################
     ### Construct/Destruct METHODS
     ###########################################################################
-    def __init__(self, name="unset", units="kPa", devAddress="unset",
-                 baudRate=115200, commsTimeOut=0.5, verbose=0, **kwargs):
+    def __init__(self,
+                 name="UltimusExtruder",
+                 units="kPa",
+                 devAddress="/dev/ttyS0",
+                 baudRate=115200,
+                 commsTimeOut=0.1,
+                 __verbose__=1,
+                 **kwargs):
         """*Initializes T_UltimusExtruder Object*.
 
         Parameters
         ----------
         name: String
             tool name
+        units: String
+            units for value
         devAddress: Strong
             device address on this computer
         baudRate: int
@@ -43,12 +50,58 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             whether details should be printed to cmd line
         """
         self.dispenseStatus = 0  # off
-        super().__init__(name, devAddress, baudRate,
-                         commsTimeOut, verbose, **kwargs)
+        inputs = {"name": name,
+                  "units": units,
+                  "devAddress": devAddress,
+                  "baudRate": baudRate,
+                  "commsTimeOut": commsTimeOut,
+                  "__verbose__": __verbose__}
+        kwargs.update(inputs)
+        super().__init__(**kwargs)
 
     ##########################################################################
-    ### PCP_TOOL METHODS
+    ### toolSpec METHODS
     ##########################################################################
+
+    def activate(self):
+        """*Makes required connections and returns status bool*.
+
+        Returns
+        -------
+        bool
+            True if ready to use
+            False if not ready
+        """
+        passed = False
+        # Start Serial Device
+        [status, message] = self.startSerial()
+        print("\t\t\t" + message)
+        if status == 1:
+            # Try initial handshake
+            status, message = self.handShakeSerial()
+            print("\t\t\t" + message)
+            if status == 1:
+                passed = True
+
+        return passed
+
+    def deactivate(self):
+        """*Closes communication and returns status bool*.
+
+        Returns
+        -------
+        bool
+            True if ready to use
+            False if not ready
+        """
+        passed = False
+        # Stop Serial Device
+        [status, message] = self.stopSerial()
+        print("\t\t\t" + message)
+        if status == 1:
+            passed = True
+
+        return passed
 
     ############################# Activate METHODS ###########################
     def engage(self):
@@ -186,7 +239,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                 while lineIn != []:
                     time.sleep(0.25)
                     lineIn = self.sReader.readlines()
-                    linesIn.extend(lineIn)
+                    linesIn.append(lineIn)
 
             except Exception as inst:
                 return [-1, 'Failed Creating pySerial... ' + inst.__str__()]
@@ -232,11 +285,11 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         [-1, "Error: Handshake with Tool Failed + error text"]
         """
         try:
-            if self.verbose:
+            if self.__verbose__:
                 print("\tAttempting handshake with UltimusV...\n")
 
             # send ENQ
-            self.write(chr(5))
+            self.__writeSerial__(chr(5))
 
             # read response, see if matches acknowledge
             readIn = self.readTime()
@@ -245,6 +298,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             else:
                 return [0, "Handshake Failed, Received: " + readIn]
         except Exception as inst:
+            logging.exception(inst)
             return [-1, 'Error on handshake with Serial Device: '
                     + self.name + ' : ' + inst.__str__()]
 
@@ -264,7 +318,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         if (self.checkIfSerialConnectParamsSet()):
             try:
                 self.ser.write(text)
-                if (self.verbose):
+                if (self.__verbose__):
                     print('\tCommand Sent to Extruder: ' + text)
                 return [1, 'Command Sent' + text]
             except Exception as inst:
@@ -343,7 +397,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                     inp += ins
             inp = inp.strip  # removes any newlines
 
-            if self.verbose:
+            if self.__verbose__:
                 print('\tReceived from Serial Device: ' + self.name
                       + ' : ' + inp + '\n')
             return (inp)

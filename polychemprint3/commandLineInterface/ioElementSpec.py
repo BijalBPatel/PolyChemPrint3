@@ -5,10 +5,7 @@
 | Revised: 6/11/2019 00:34:27
 | Author: Bijal Patel
 
-
 """
-import sys
-sys.path.append("../../../")
 from abc import ABC, abstractmethod
 
 
@@ -21,11 +18,10 @@ class ioElementSpec(ABC):
     def __init__(self, name, **kwargs):
         """*Initializes command line interface element*.
 
-        | *Parameters*
-        |   name, the name of CLI element
-
-        | *Returns*
-        |   none
+        Parameters
+        ----------
+        name: String
+            the name of CLI element
         """
         self.name = name
 
@@ -36,10 +32,9 @@ class ioElementSpec(ABC):
     def io_Operate(self):
         """*Do the primary purpose of the CLI element*.
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   flag, an optional string which reflects how operation terminated
+        Returns
+        -------
+        String
+            an optional flag which reflects how operation terminated
         """
         pass

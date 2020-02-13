@@ -8,10 +8,7 @@
 """
 from abc import ABC, abstractmethod
 from colorama import Fore, Style
-import sys
-sys.path.append("../../../")
-
-from polychemprint3.userInterface.commandLineInterface.ioElementSpec \
+from polychemprint3.commandLineInterface.ioElementSpec \
     import ioElementSpec
 
 
@@ -22,14 +19,18 @@ class ioMenuSpec(ioElementSpec, ABC):
     ### Construct/Destruct METHODS
     #####################################################################
     def __init__(self, menuTitle, menuItems, lastCmd="", memCmd="", **kwargs):
-        """*Initializes Tool Object*.
+        """*Initializes Menu Object*.
 
-        | *Parameters*
-        |   menuTitle, name of the menu
-        |   menuItems, dictionary of menu options and text
-
-        | *Returns*
-        |   none
+        Parameters
+        ----------
+        menuTitle: string
+            name of the menu
+        menuItems: Dict of strings
+            menu options and text
+        lastCmd: string
+            last command entered
+        memCmd: String
+            saved command entered
         """
         self.menuTitle = menuTitle
         self.menuItems = menuItems
@@ -41,31 +42,12 @@ class ioMenuSpec(ioElementSpec, ABC):
     ### UI_CLI_IOELement METHODS
     #####################################################################
 
+    @abstractmethod
     def io_Operate(self):
-        """*Do the primary purpose of the CLI element*.
+        pass
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   none or flag, optional string describing operation termination
-        """
-        self.ioMenu_Operate()
-
-    #####################################################################
-    ### Unique METHODS
-    #####################################################################
-
-    # Operation Methods
     def ioMenu_printMenu(self):
-        """*Prints formatted menu options from menuItems dict*.
-
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   none
-        """
+        """*Prints formatted menu options from menuItems dict*."""
         print("-" * 120)
         print("###\t" + self.menuTitle)
         print("-" * 120)
@@ -89,23 +71,12 @@ class ioMenuSpec(ioElementSpec, ABC):
     def ioMenu_updateStoredCmds(self, lastCmd, memCmd):
         """*Updates stored commands local to this menu item from inputs*.
 
-        | *Parameters*
-        |   lastCmd, String specifying the last command entered
-        |   memCmd, String specifying the command saved to memory
-
-        | *Returns*
-        |   none
+        Parameters
+        ----------
+        lastCmd: String
+            specifying the last command entered
+        memCmd: String
+            specifying the command saved to memory
         """
         self.lastCmd = lastCmd
         self.memCmd = memCmd
-
-    @abstractmethod
-    def ioMenu_Operate(self):
-        """*Perform menu operations*.
-
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   flag, String with title of next menu to call
-        """
