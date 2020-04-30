@@ -1,7 +1,7 @@
 # PolyChemPrint3
 Free and Open Source 3D Printer control software targeted at 
 Research Users (Polymer/Paste/BioPrinting)
-Written in/for Python 3.3+
+Written in/for Python 3.3+ (but may work on others)
 
 This software was initially written by Bijal Patel from 2017-2019 as 
 an object-oriented cross-platform tool and successor to 
