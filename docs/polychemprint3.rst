@@ -1,3 +1,4 @@
+SPHINX_APIDOC_OPTIONS=members,undoc-members,private-members,special-members,inherited-members,show-inheritance sphinx-apidoc -o . ..\polychemprint3 -e --implicit-namespace
 polychemprint3 package
 ======================
 
