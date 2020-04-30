@@ -38,7 +38,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='polychemprint3',  # Required
-    version='3.0.1a49',  # Required
+    version='3.0.1a70',  # Required
     description='FOSS additive manufacturing control software targeted at research Users (Polymer/Paste/BioPrinting) ',
     long_description=long_description,  # Optional
     long_description_content_type='text/x-rst',  # Optional (see note above)
@@ -70,7 +70,7 @@ setup(
 	packages=find_packages(),  # Required
 	py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
 	include_package_data=True,
-    python_requires='>=3.5',
+    python_requires='>=3.0',
 
     install_requires=[
 		'pyserial', 

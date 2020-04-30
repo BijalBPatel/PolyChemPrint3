@@ -15,6 +15,7 @@ from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
 import serial
 import io
 import time
+import logging
 
 
 class ultimusExtruder(serialDeviceSpec, toolSpec):
@@ -238,7 +239,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                 while lineIn != []:
                     time.sleep(0.25)
                     lineIn = self.sReader.readlines()
-                    linesIn.extend(lineIn)
+                    linesIn.append(lineIn)
 
             except Exception as inst:
                 return [-1, 'Failed Creating pySerial... ' + inst.__str__()]
@@ -297,6 +298,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             else:
                 return [0, "Handshake Failed, Received: " + readIn]
         except Exception as inst:
+            logging.exception(inst)
             return [-1, 'Error on handshake with Serial Device: '
                     + self.name + ' : ' + inst.__str__()]
 

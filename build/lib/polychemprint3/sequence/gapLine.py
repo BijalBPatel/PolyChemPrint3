@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Predefined print sequence for gapLines.
+"""Predefined print sequence for gapLines.
 
 | First created on 13/11/2019 14:41:31
 | Revised:
@@ -53,8 +52,8 @@ class gapLine(sequenceSpec):
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
             "owner": seqParam("Owner", "PCP_Electronics", "",
                               "default: PCP_Core"),
-            "printSpd": seqParam("Printing Speed", "60", "", ""),
-            "trvlSpd": seqParam("Travel Speed", "200", "", ""),
+            "printSpd": seqParam("Printing Speed", "60", "mm/min", ""),
+            "trvlSpd": seqParam("Travel Speed", "200", "mm/min", ""),
             "xLength": seqParam("X-Length", "10", "mm", "Total X Length"),
             "yLength": seqParam("Y-Length", "10", "mm", "Total Y Length"),
             "ySpacing": seqParam("Y-Spacing", "10", "mm", ""),

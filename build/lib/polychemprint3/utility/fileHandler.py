@@ -38,15 +38,14 @@ class fileHandler(ABC):
         """
         try:
             file = open(self.fullFilePath, modeString)
+            # Close file
+            file.close()
             return True
         except Exception as inst:
             print(Fore.LIGHTRED_EX + "Error Opening and Closing file\n"
                   + Style.RESET_ALL)
             logging.exception(inst)
-            return False
-        finally:
-            # Close file
-            file.close()
+            return False            
 
     ################### File IO METHODS ###############################
     def overWriteToFile(self, outString):

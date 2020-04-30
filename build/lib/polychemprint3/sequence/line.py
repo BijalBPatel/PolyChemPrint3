@@ -42,7 +42,6 @@ class line(sequenceSpec):
             who owns this shape (default: PCP_Core))
         """
         # Create Params dict
-
         self.dictParams = {
             "name": seqParam("name", "Line", "",
                              "Change if modifying from default"),
@@ -65,8 +64,9 @@ class line(sequenceSpec):
         super().__init__(nameString, descrip, **kwargs)
 
     ################### Sequence Actions ###################################
-    def operateSeq(self):
+    def operateSeq(self, tool, axes):
         """*Performs print sequence*.
+
         Parameters
         ----------
         tool: PCP_ToolSpec object
@@ -115,7 +115,7 @@ class line(sequenceSpec):
 
             # Print 1st line
             self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " X" + str(length) + "\n" + "\")"))
+                                 + " X" + str(length) + "\\n" + "\")"))
 
             if lineDir == "Y":  # need to rotate coordinates in cmdList
                 self.cmdList = [cmd.replace('X', 'Y') for cmd in self.cmdList]

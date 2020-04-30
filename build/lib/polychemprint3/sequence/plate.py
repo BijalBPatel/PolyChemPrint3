@@ -50,7 +50,7 @@ class plate(sequenceSpec):
             "owner": seqParam("Owner", "PCP_Core", "", "default: PCP_Core"),
             "printSpd": seqParam("Printing Speed", "60", "", ""),
             "lineDir": seqParam("Line direction", "X", "", "Along X or Y"),
-            "pitch": seqParam("Center-to-Center Spacing", "1", "mm", ""),
+            "pitch": seqParam("Line Pitch", "1", "mm", ""),
             "length": seqParam("Line Length", "10", "mm", ""),
             "numLines": seqParam("Number of lines", "5", "mm", ""),
             "toolOnVal": seqParam("Tool ON Value", "100", tool.units,
@@ -95,7 +95,7 @@ class plate(sequenceSpec):
             logging.exception(inst)
             return False
 
-    def genSequence(self, tool, axes):
+    def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
         Returns
@@ -124,7 +124,7 @@ class plate(sequenceSpec):
             count = 1
             # Print 1st line
             cmds.append(("axes.move(\"G1 F" + str(printSpd)
-                         + " X" + str(length) + "\n" + "\")"))
+                         + " X" + str(length) + "\\n" + "\")"))
             direct = 'forwardR'
             # Write as if printing X lines
             while (count < int(numLines)):
@@ -135,12 +135,12 @@ class plate(sequenceSpec):
                     cmds.append("tool.setValue("
                                 + str(toolOnValue) + ")")
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " X" + str(length) + "\n" + "\")"))
+                                 + " X" + str(length) + "\\n" + "\")"))
                     direct = 'forwardR'
                     count += 1
                 elif (direct == 'forwardR'):
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " Y-" + str(pitch) + "\n" + "\")"))
+                                 + " Y-" + str(pitch) + "\\n" + "\")"))
                     direct = 'left'
                 elif (direct == 'left'):
                     printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
@@ -149,12 +149,12 @@ class plate(sequenceSpec):
                     cmds.append("tool.setValue("
                                 + str(toolOnValue) + ")")
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " X-" + str(length) + "\n" + "\")"))
+                                 + " X-" + str(length) + "\\n" + "\")"))
                     direct = 'forwardR'
                     count += 1
                 elif (direct == 'forwardL'):
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " Y-" + str(pitch) + "\n" + "\")"))
+                                 + " Y-" + str(pitch) + "\\n" + "\")"))
                     direct = 'right'
 
             if lineDir == "Y":  # need to rotate coordinates in cmdList

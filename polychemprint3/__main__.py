@@ -181,11 +181,11 @@ class ioMenu_1Configuration(ioMenuSpec):
                 elif choiceString == 'q':
                     return 'M0MainMenu'
                 elif choiceString.lower() == '0':  # Show Log
-                    print("\t\tPolyChemPrint3 v" + str(__version__)
-                          + "\n\t\t" + str(__date__)
-                          + "\n\t\tBy Bijal Patel bbpatel2@illinois.edu")
-                    print("\n\t\tProvided under the University of Illinois"
-                          "/NCSA\nOpen Source License\n")
+                    print("\n\tPolyChemPrint3 v" + str(__version__)
+                          + "\n\t" + str(__date__)
+                          + "\n\tBy Bijal Patel bbpatel2@illinois.edu")
+                    print("\n\tProvided under the University of Illinois"
+                          "/NCSA\n\tOpen Source License\n")
                     panelTitle = 'License'
                     filePath = __textDict__.get(panelTitle)
                     licensePanel = ioTextPanel(panelTitle, filePath)
@@ -269,8 +269,6 @@ class ioMenu_1Hardware(ioMenuSpec):
                                 Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
                                 Fore.LIGHTMAGENTA_EX + "List Commands",
-                                Fore.LIGHTRED_EX + "STOP":
-                                    Fore.LIGHTRED_EX + "Emergency STOP",
                                 Fore.WHITE + "a,d;r,f;s,w;x,z":
                                     Fore.WHITE
                                     + "Jog -+ 1mm (X; Y; Z; Z-0.1,-.01)",
@@ -278,12 +276,20 @@ class ioMenu_1Hardware(ioMenuSpec):
                                     Fore.WHITE + "Lift up 20 mm, lower on cmd",
                                 Fore.WHITE + "(1) Lift Tool":
                                     Fore.WHITE + "Lift up 20 mm",
-                                Fore.WHITE + "(2) Ext":
-                                    Fore.WHITE + "Send commands to Tool",
-                                Fore.WHITE + "(3) Sequences":
-                                    Fore.WHITE + "Go to sequences menu",
-                                Fore.WHITE + "(4) PrintFile":
-                                    Fore.WHITE + "Go to printFile menu"}}
+                                Fore.GREEN + "Ton":
+                                    Fore.WHITE + "Engage Tool Dispense",
+                                Fore.GREEN + "Toff":
+                                    Fore.WHITE + "Disengage Tool Dispense",
+                                Fore.GREEN + "T[Value]":
+                                    Fore.WHITE + "Sets the tool value",
+                                Fore.WHITE + "(1) Lift Tool":
+                                    Fore.WHITE + "Lift up 20 mm",
+                                Fore.WHITE + "(3) Sequence Menu":
+                                    Fore.WHITE + "Switch to sequences menu",
+                                Fore.WHITE + "(2) GCode File Menu":
+                                    Fore.WHITE + "Switch to GCode File menu",
+                                Fore.WHITE + "(4) Recipe Menu":
+                                    Fore.WHITE + "Switch to Recipe menu"}}
         super().__init__(**kwargs)
 
     ### ioMenuSpec METHODS
@@ -295,9 +301,96 @@ class ioMenu_1Hardware(ioMenuSpec):
             String
                 title of next menu to call
         """
-        io_Prompt("This is filler, enter any key to go back to main menu")
-        return 'M0MainMenu'
+        global __savedInp__
+        global __lastInp__
+        global __verbose__
+        global tool
+        global axes
 
+        # Menu Loop
+        doQuitMenu = False
+        promptIn = True
+
+        print('\tSetting Axes to relative positioning...')
+        axes.setPosMode('relative')
+        while not doQuitMenu:
+            try:
+                self.__init__()
+                self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+                self.ioMenu_printMenu()
+
+                if promptIn:
+                    choiceString = io_Prompt("Enter Command:", validate=False,
+                                             validResponse=["q", "?", "0",
+                                                            "1", "2", "3", "/",
+                                                            ".", ",", "a", "d",
+                                                            "r", "f", "s", "w",
+                                                            "x", "z"]).lower()
+
+                if not (choiceString in ["/", ".", ","]):
+                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+                if choiceString in ["/", ".", ","]:
+                    (choiceString, promptIn) = io_savedCmdOps(choiceString)
+                elif choiceString[:1].lower() == 't':  # Tool command
+                    if choiceString.lower() == 'ton':
+                        print("Engaging Tool")
+                        print(tool.engage()[1])
+
+                    elif choiceString.lower() == 'toff':
+                        print("Disengaging Tool")
+                        print(tool.disengage()[1])
+                    else:
+                        tool.setValue(choiceString[1:])
+                elif choiceString == '?':
+                    pass
+                elif choiceString == 'q':
+                    return 'M0MainMenu'
+                elif choiceString.lower() == 'a':
+                    axes.move("G0 X-1\n")
+                elif choiceString.lower() == 'd':
+                    axes.move("G0 X1\n")
+                elif choiceString.lower() == 'r':
+                    axes.move("G0 Y-1\n")
+                elif choiceString.lower() == 'f':
+                    axes.move("G0 Y1\n")
+                elif choiceString.lower() == 'w':
+                    axes.move("G0 Z1\n")
+                elif choiceString.lower() == 's':
+                    axes.move("G0 Z-1\n")
+                elif choiceString.lower() == 'x':
+                    axes.move("G0 Z-0.1\n")
+                elif choiceString.lower() == 'z':
+                    axes.move("G0 Z-0.01\n")
+                elif choiceString.lower() == '0':  # Clean
+                    print("\t\tRaising Tool by 20 mm...")
+                    axes.move("G1 F2000 Z20\n")
+                    # Prompt to Lower
+                    choiceString = io_Prompt("Lower 20 mm?(Y/N):",
+                                             validate=True,
+                                             validResponse=["Y", "N"]).lower()
+                    if choiceString == 'y':
+                        axes.move("G1 F2000 Z-15\n")
+                        axes.move("G1 F100 Z-9\n")
+                        axes.move("G1 F100 Z-1\n")
+                    else:
+                        pass
+                elif choiceString == '1': # Just Lift
+                    print("\t\tRaising Tool by 20 mm...")
+                    axes.move("G1 F2000 Z20\n")
+                elif choiceString == '2':  # Print File Menu
+                    return 'M1PrintFile'
+                elif choiceString == '3':  # Print File Menu
+                    return 'M1PrintSequence'
+                elif choiceString == '4':  # Print File Menu
+                    return 'M1PrintRecipe'
+                else: # Send to axes
+                    print("Received: " + choiceString)
+                    axes.move(choiceString.upper() + "\n")
+                    promptIn = True
+            except KeyboardInterrupt:
+                tool.disengage()
+                print("\n\tKeyboardInterrupt received, resetting menu")
+                print("\n\tTool Automatically Disengaged")
 
 class ioMenu_1PrintFile(ioMenuSpec):
     """Contains data and methods for implemented Print File Menu."""
@@ -998,7 +1091,7 @@ M1PrintSequence = ioMenu_1PrintSequence()
 
 
 __textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels'
-                / 'License.txt'}
+                / 'LICENSE.txt'}
 
 #############################################################################
 ### Main METHOD

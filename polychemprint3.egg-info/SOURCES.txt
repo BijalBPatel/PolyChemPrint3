@@ -17,12 +17,16 @@ polychemprint3/commandLineInterface/__init__.py
 polychemprint3/commandLineInterface/ioElementSpec.py
 polychemprint3/commandLineInterface/ioMenuSpec.py
 polychemprint3/commandLineInterface/ioTextPanel.py
+polychemprint3/data/__init__.py
+polychemprint3/data/TextPanels/LICENSE.txt
+polychemprint3/data/TextPanels/__init__.py
 polychemprint3/sequence/__init__.py
 polychemprint3/sequence/gapLine.py
 polychemprint3/sequence/line.py
 polychemprint3/sequence/plate.py
 polychemprint3/sequence/sequenceSpec.py
 polychemprint3/tools/__init__.py
+polychemprint3/tools/laser6W.py
 polychemprint3/tools/nullTool.py
 polychemprint3/tools/toolSpec.py
 polychemprint3/tools/ultimusExtruder.py

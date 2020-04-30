@@ -24,7 +24,7 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
                  posMode='relative',
                  devAddress="/dev/ttyACM0",
                  baudRate=115200,
-                 commsTimeOut=0.1,
+                 commsTimeOut=0.01,
                  __verbose__=1,
                  firmwareVers='BP'):
         """*Initializes object with default params DOESNT ACTIVATE*.

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: polychemprint3
-Version: 3.0.1a49
+Version: 3.0.1a70
 Summary: FOSS additive manufacturing control software targeted at research Users (Polymer/Paste/BioPrinting) 
 Home-page: https://github.com/BijalBPatel/PolyChemPrint3
 Author: Bijal Patel
@@ -39,5 +39,5 @@ Classifier: Intended Audience :: Science/Research
 Classifier: Topic :: Scientific/Engineering
 Classifier: License :: OSI Approved :: University of Illinois/NCSA Open Source License
 Classifier: Programming Language :: Python :: 3.7
-Requires-Python: >=3.5
+Requires-Python: >=3.0
 Description-Content-Type: text/x-rst
