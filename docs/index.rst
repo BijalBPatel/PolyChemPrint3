@@ -4,17 +4,10 @@
    contain the root `toctree` directive.
 
 
-Welcome to PolyChemPrint's documentation!
-=========================================
+Welcome to PolyChemPrint3 Software Documentation!
+=================================================
 
 .. toctree::
    :maxdepth: 5
    
-   about
-   install
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
+   sourcedocs
