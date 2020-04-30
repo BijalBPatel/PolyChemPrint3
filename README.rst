@@ -1,5 +1,5 @@
 # PolyChemPrint3
-Free and Open Source 3D Printer control software (Perl) targeted at 
+Free and Open Source 3D Printer control software targeted at 
 Research Users (Polymer/Paste/BioPrinting)
 Written in/for Python 3.3+
 
