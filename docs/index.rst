@@ -1,4 +1,4 @@
-SPHINX_APIDOC_OPTIONS=members,undoc-members,private-members,special-members,inherited-members,show-inheritance sphinx-apidoc -o . ..\polychemprint3 -e --implicit-namespace
+$SPHINX_APIDOC_OPTIONS=members,undoc-members,private-members,special-members,inherited-members,show-inheritance sphinx-apidoc -o . ..\polychemprint3 -e --implicit-namespace
 
 .. polychemprint3 documentation master file, created by
    sphinx-quickstart on Thu Nov  7 12:08:35 2019.

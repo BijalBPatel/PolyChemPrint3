@@ -1,4 +1,4 @@
-SPHINX_APIDOC_OPTIONS=members,undoc-members,private-members,special-members,inherited-members,show-inheritance
+$SPHINX_APIDOC_OPTIONS=members,undoc-members,private-members,special-members,inherited-members,show-inheritance
 ======================
 
 Subpackages
