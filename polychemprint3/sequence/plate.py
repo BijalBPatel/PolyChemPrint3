@@ -42,7 +42,7 @@ class plate(sequenceSpec):
         """
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "Plate", "",
+            "name": seqParam("name", "plate", "",
                              "Change if modifying from default"),
             "creationDate": seqParam("Creation Date",
                                      "13/11/2019", "", "dd/mm/yyyy"),

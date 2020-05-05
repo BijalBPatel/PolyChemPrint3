@@ -123,7 +123,7 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
             print("Error setting position mode to axes")
 
     def move(self, gcodeString):
-        """*Initializes Axes3D object*.
+        """*Moves axes by set amount*.
 
         Parameters
         ----------

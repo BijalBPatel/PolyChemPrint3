@@ -16,11 +16,14 @@ class sequenceSpec(loggerSpec, ABC):
 
     ################### Construct/Destruct METHODS ###########################
     @abstractmethod
-    def __init__(self, nameString, descrip, __verbose__=0, **kwargs):
+    def __init__(self, dictParams=None, __verbose__=0, **kwargs):
         """*Initializes sequence object*.
 
         Parameters
         ----------
+        dictParams: dict
+        __verbose__: bool
+        kwargs
         axes: PCP_Axes object
             Axes object to send motion commands to
         tool: PCP_Tool
@@ -28,23 +31,20 @@ class sequenceSpec(loggerSpec, ABC):
         verbose: bool
             level of detail to be printed to cmd line
         """
-        self.nameString = nameString
-        self.descrip = descrip
+        # Provide default values to dictParams if initialized without
+
+        if dictParams is None:
+            dictParams = {"name": seqParam("Sequence Name", "default", "default", "default"),
+                          "description": seqParam("Sequence description", "default", "default", "default"), }
+        self.dictParams = dictParams
         self.verbose = __verbose__
+        # Unwrap parameter to get just the string name and description
+        self.nameString = self.dictParams.get("name").value
+        self.descriptString = self.dictParams.get("description").value
+
         super().__init__(**kwargs)
 
     ################### Parameter Methods ###########################
-    def stringParams(self):
-        """*Turns paramList into a formatted string*.
-
-        Returns
-        -------
-        String
-            Formatted String containing table of param and current values
-        """
-        outString = ""
-        for param in self.paramList:
-            outString += "\t%-40s|  %-25s\n" % (self.name, self.value)
 
     ################### Sequence Actions ###################################
     @abstractmethod
@@ -101,7 +101,7 @@ class sequenceSpec(loggerSpec, ABC):
         super().loadLogSelf(logString)
 
 
-class seqParam():
+class seqParam:
     """Base Class for parameters used in sequences."""
 
     ################### Construct/Destruct METHODS ###########################

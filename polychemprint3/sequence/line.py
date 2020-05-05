@@ -43,7 +43,7 @@ class line(sequenceSpec):
         """
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "Line", "",
+            "name": seqParam("name", "line", "",
                              "Change if modifying from default"),
             "creationDate": seqParam("Creation Date",
                                      "16/11/2019", "", "dd/mm/yyyy"),

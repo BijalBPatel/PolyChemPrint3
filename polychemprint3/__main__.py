@@ -64,38 +64,35 @@ class ioMenu_0Main(ioMenuSpec):
         global __lastInp__
         # Menu Loop
         doQuitMenu = False
-        promptIn = True
 
         while not doQuitMenu:
             try:
                 self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 self.ioMenu_printMenu()
-                if promptIn:
-                    choiceString = io_Prompt("Enter Command:", validate=True,
-                                             validResponse=["q",
-                                                            "?",
-                                                            "T",
-                                                            "0",
-                                                            "1",
-                                                            "2",
-                                                            "3",
-                                                            "4",
-                                                            "/",
-                                                            ".",
-                                                            ","]).lower()
+                choiceString = io_Prompt("Enter Command:", validate=True,
+                                         validResponse=["q",
+                                                        "?",
+                                                        "T",
+                                                        "0",
+                                                        "1",
+                                                        "2",
+                                                        "3",
+                                                        "4",
+                                                        "/",
+                                                        ".",
+                                                        ","]).lower()
 
                 if not (choiceString in ["/", ".", ","]):
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
 
                 if choiceString in ["/", ".", ","]:
-                    (choiceString, promptIn) = io_savedCmdOps(choiceString)
+                    (choiceString) = io_savedCmdOps(choiceString)
                 elif choiceString == '?':
                     pass
                 elif choiceString == 'q':
                     return 'quit'
                 elif choiceString.lower() == 't':
                     io_TestCode()
-                    promptIn = True
                 elif choiceString == '0':
                     return 'M1ConfigurationMenu'
                 elif choiceString == '1':
@@ -112,7 +109,6 @@ class ioMenu_0Main(ioMenuSpec):
                     print(Fore.LIGHTRED_EX
                           + "\tInvalid Choice, resetting menu"
                           + Style.RESET_ALL)
-                    promptIn = True
             except KeyboardInterrupt:
                 print("\n\tKeyboardInterrupt received, resetting menu")
 
@@ -158,24 +154,22 @@ class ioMenu_1Configuration(ioMenuSpec):
 
         # Menu Loop
         doQuitMenu = False
-        promptIn = True
 
         while not doQuitMenu:
             try:
                 self.__init__()
                 self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 self.ioMenu_printMenu()
-                if promptIn:
-                    choiceString = io_Prompt("Enter Command:", validate=True,
-                                             validResponse=["q", "?", "0",
-                                                            "1", "2", "3", "/",
-                                                            ".", ","]).lower()
+                choiceString = io_Prompt("Enter Command:", validate=True,
+                                         validResponse=["q", "?", "0",
+                                                        "1", "2", "3", "/",
+                                                        ".", ","]).lower()
 
                 if not (choiceString in ["/", ".", ","]):
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
 
                 if choiceString in ["/", ".", ","]:
-                    (choiceString, promptIn) = io_savedCmdOps(choiceString)
+                    (choiceString) = io_savedCmdOps(choiceString)
                 elif choiceString == '?':
                     pass
                 elif choiceString == 'q':
@@ -253,7 +247,6 @@ class ioMenu_1Configuration(ioMenuSpec):
                     print(Fore.LIGHTRED_EX
                           + "\tInvalid Choice, resetting menu"
                           + Style.RESET_ALL)
-                    promptIn = True
             except KeyboardInterrupt:
                 print("\n\tKeyboardInterrupt received, resetting menu")
 
@@ -309,7 +302,6 @@ class ioMenu_1Hardware(ioMenuSpec):
 
         # Menu Loop
         doQuitMenu = False
-        promptIn = True
 
         print('\tSetting Axes to relative positioning...')
         axes.setPosMode('relative')
@@ -319,18 +311,17 @@ class ioMenu_1Hardware(ioMenuSpec):
                 self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 self.ioMenu_printMenu()
 
-                if promptIn:
-                    choiceString = io_Prompt("Enter Command:", validate=False,
-                                             validResponse=["q", "?", "0",
-                                                            "1", "2", "3", "/",
-                                                            ".", ",", "a", "d",
-                                                            "r", "f", "s", "w",
-                                                            "x", "z"]).lower()
+                choiceString = io_Prompt("Enter Command:", validate=False,
+                                         validResponse=["q", "?", "0",
+                                                        "1", "2", "3", "/",
+                                                        ".", ",", "a", "d",
+                                                        "r", "f", "s", "w",
+                                                        "x", "z"]).lower()
 
                 if not (choiceString in ["/", ".", ","]):
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 if choiceString in ["/", ".", ","]:
-                    (choiceString, promptIn) = io_savedCmdOps(choiceString)
+                    (choiceString) = io_savedCmdOps(choiceString)
                 elif choiceString[:1].lower() == 't':  # Tool command
                     if choiceString.lower() == 'ton':
                         print("Engaging Tool")
@@ -384,9 +375,8 @@ class ioMenu_1Hardware(ioMenuSpec):
                 elif choiceString == '4':  # Print File Menu
                     return 'M1PrintRecipe'
                 else: # Send to axes
-                    print("Received: " + choiceString)
+                    print("\tReceived: " + choiceString)
                     axes.move(choiceString.upper() + "\n")
-                    promptIn = True
             except KeyboardInterrupt:
                 tool.disengage()
                 print("\n\tKeyboardInterrupt received, resetting menu")
@@ -567,7 +557,6 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         global __lastInp__
         # Menu Loop
         doQuitMenu = False
-        promptIn = True
 
         while not doQuitMenu:
             try:
@@ -578,17 +567,16 @@ class ioMenu_1PrintSequence(ioMenuSpec):
                 for x in [*__seqDict__]:
                     stringList.append(str(x))
 
-                if promptIn:
-                    choiceString = io_Prompt(
-                        "Enter Command:", validate=True,
-                        validResponse=(["q", "?", "1", "/", ".", ","]
-                                       + stringList)).lower()
+                choiceString = io_Prompt(
+                    "Enter Command:", validate=True,
+                    validResponse=(["q", "?", "1", "/", ".", ","]
+                                   + stringList)).lower()
 
                 if not (choiceString in ["/", ".", ","]):
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
 
                 if choiceString in ["/", ".", ","]:
-                    (choiceString, promptIn) = io_savedCmdOps(choiceString)
+                    (choiceString) = io_savedCmdOps(choiceString)
                 elif choiceString == '?':
                     pass
                 elif choiceString == 'q':
@@ -604,7 +592,6 @@ class ioMenu_1PrintSequence(ioMenuSpec):
                     print(Fore.LIGHTRED_EX
                           + "\tInvalid Choice, resetting menu"
                           + Style.RESET_ALL)
-                    promptIn = True
             except KeyboardInterrupt:
                 print("\n\tKeyboardInterrupt received, resetting menu")
 
@@ -697,7 +684,6 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         global __lastInp__
         # Menu Loop
         doQuitMenu = False
-        promptIn = True
         isPrimed = False
 
         while not doQuitMenu:
@@ -710,19 +696,18 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                 for x in [*self.paramsMenuDict]:
                     paramOptionList.append(str(x))
 
-                if promptIn:
-                    choiceString = io_Prompt(
-                        "Enter Command:",
-                        validate=True,
-                        validResponse=["q", "/", ".", ",",
-                                       "PRIME", "VIEW", "GO"]
-                        + paramOptionList).lower()
+                choiceString = io_Prompt(
+                    "Enter Command:",
+                    validate=True,
+                    validResponse=["q", "/", ".", ",",
+                                   "PRIME", "VIEW", "GO"]
+                    + paramOptionList).lower()
 
                 if not (choiceString in ["/", ".", ","]):
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
 
                 if choiceString in ["/", ".", ","]:
-                    (choiceString, promptIn) = io_savedCmdOps(choiceString)
+                    (choiceString) = io_savedCmdOps(choiceString)
                 elif choiceString == 'q':
                     return "M1PrintSequence"
                 elif choiceString.upper() == 'PRIME':
@@ -765,7 +750,6 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     print(Fore.LIGHTRED_EX
                           + "\tInvalid Choice, resetting menu"
                           + Style.RESET_ALL)
-                    promptIn = True
             except KeyboardInterrupt:
                 print("\n\tKeyboardInterrupt received, resetting menu")
                 isPrimed = False
@@ -867,12 +851,9 @@ def io_savedCmdOps(inString):
     -------
     String
         the String to feed back into the menu loop
-    Boolean
-        whether menu should prompt for input this cycle
     """
     global __lastInp__
     global __savedInp__
-    promptIn = True
     outString = ''
 
     if inString == '/':
@@ -881,7 +862,6 @@ def io_savedCmdOps(inString):
             __lastInp__ = ""
         else:
             outString = __lastInp__
-            promptIn = False
 
     elif inString == '.':
         if __savedInp__ in ["/", "."]:
@@ -889,14 +869,13 @@ def io_savedCmdOps(inString):
             __savedInp__ = ""
         else:
             inString = __savedInp__
-            promptIn = False
     elif inString == ',':
         __savedInp__ = io_Prompt("Enter Command to Save:")
 
     else:
         print("Error")
 
-    return outString, promptIn
+    return outString
 
 
 def io_MenuManager(initialMenuString):
