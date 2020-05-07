@@ -121,9 +121,9 @@ class ioMenu_1Configuration(ioMenuSpec):
         kwargs = {'name': 'ConfigurationMenu',
                   'menuTitle': 'Configuration/About Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                Fore.LIGHTRED_EX + "Quit",
+                                    Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
-                                Fore.LIGHTMAGENTA_EX + "List Commands",
+                                    Fore.LIGHTMAGENTA_EX + "List Commands",
                                 Fore.WHITE + "(0) Info and License":
                                     Fore.WHITE
                                     + "View Program Details and License Text",
@@ -259,9 +259,9 @@ class ioMenu_1Hardware(ioMenuSpec):
         kwargs = {'name': 'HardwareMenu',
                   'menuTitle': 'Hardware Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                Fore.LIGHTRED_EX + "Quit",
+                                    Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
-                                Fore.LIGHTMAGENTA_EX + "List Commands",
+                                    Fore.LIGHTMAGENTA_EX + "List Commands",
                                 Fore.WHITE + "a,d;r,f;s,w;x,z":
                                     Fore.WHITE
                                     + "Jog -+ 1mm (X; Y; Z; Z-0.1,-.01)",
@@ -365,7 +365,7 @@ class ioMenu_1Hardware(ioMenuSpec):
                         axes.move("G1 F100 Z-1\n")
                     else:
                         pass
-                elif choiceString == '1': # Just Lift
+                elif choiceString == '1':  # Just Lift
                     print("\t\tRaising Tool by 20 mm...")
                     axes.move("G1 F2000 Z20\n")
                 elif choiceString == '2':  # Print File Menu
@@ -374,13 +374,14 @@ class ioMenu_1Hardware(ioMenuSpec):
                     return 'M1PrintSequence'
                 elif choiceString == '4':  # Print File Menu
                     return 'M1PrintRecipe'
-                else: # Send to axes
+                else:  # Send to axes
                     print("\tReceived: " + choiceString)
                     axes.move(choiceString.upper() + "\n")
             except KeyboardInterrupt:
                 tool.disengage()
                 print("\n\tKeyboardInterrupt received, resetting menu")
                 print("\n\tTool Automatically Disengaged")
+
 
 class ioMenu_1PrintFile(ioMenuSpec):
     """Contains data and methods for implemented Print File Menu."""
@@ -390,9 +391,9 @@ class ioMenu_1PrintFile(ioMenuSpec):
         kwargs = {'name': 'PrintFileMenu',
                   'menuTitle': 'Print File Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                Fore.LIGHTRED_EX + "Quit",
+                                    Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
-                                Fore.LIGHTMAGENTA_EX + "List Commands",
+                                    Fore.LIGHTMAGENTA_EX + "List Commands",
                                 "STOP": "Emergency STOP",
                                 "a,d;r,f;w,s;x,z": "Jog (X; Y; Z; Zsmall)",
                                 "(0) SetZero": "Perform Origin set sequence",
@@ -430,9 +431,9 @@ class ioMenu_2AxesOrigin(ioMenuSpec):
         kwargs = {'name': 'AxesOriginSet',
                   'menuTitle': 'Axes Origin Set Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                Fore.LIGHTRED_EX + "Quit",
+                                    Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
-                                Fore.LIGHTMAGENTA_EX + "List Commands",
+                                    Fore.LIGHTMAGENTA_EX + "List Commands",
                                 "STOP": "Emergency STOP",
                                 "a,d;r,f;w,s;x,z": "Jog (X; Y; Z; Zsmall)",
                                 "Done": "Tip is at 0,0,0"}}
@@ -458,9 +459,9 @@ class ioMenu_2PrintFileOptions(ioMenuSpec):
         kwargs = {'name': 'PrintFileOptionsMenu',
                   'menuTitle': 'Print File Options Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                Fore.LIGHTRED_EX + "Quit",
+                                    Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
-                                Fore.LIGHTMAGENTA_EX + "List Commands",
+                                    Fore.LIGHTMAGENTA_EX + "List Commands",
                                 "L": "Advanced Log Options",
                                 "(9) Execute": "Start print sequence",
                                 "(6) GenCmds": "Generate command arrays",
@@ -496,9 +497,9 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         kwargs = {'name': 'PrintSequenceMenu',
                   'menuTitle': 'Print Sequence Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                Fore.LIGHTRED_EX + "Quit",
+                                    Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
-                                Fore.LIGHTMAGENTA_EX + "List Commands",
+                                    Fore.LIGHTMAGENTA_EX + "List Commands",
                                 Fore.WHITE + "L": "Advanced Log Options",
                                 Fore.WHITE + "(1) hardware":
                                     "Go to hardware menu"
@@ -517,16 +518,17 @@ class ioMenu_1PrintSequence(ioMenuSpec):
             seqDictMenu.update({seq: fileName})
 
         print(Style.RESET_ALL)
-        print("-" * 100)
+        print("-" * 150)
         print("###\t" + self.menuTitle)
-        print("-" * 100)
+        print("-" * 150)
 
         # Print sequences
         print(Fore.LIGHTGREEN_EX + "\n\tLoaded Sequences:")
         for seqNum in __seqDict__:
             seqName = __seqDict__.get(seqNum).nameString
-            seqDescription = __seqDict__.get(seqNum).descrip
-            print("\t(%s) %-10s|  %-55s" % (seqNum, seqName, seqDescription))
+            seqGrp = __seqDict__.get(seqNum).groupString
+            seqDescription = __seqDict__.get(seqNum).descriptString
+            print("\t(%s) %-15s| %-25s| %-55s" % (seqNum, seqName, seqGrp, seqDescription))
 
         print(Style.RESET_ALL)
         # Print std menu options
@@ -622,16 +624,16 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
 
         kwargs = {'name': self.seq.dictParams.get("name").value,
                   'menuTitle': "Sequence: "
-                  + self.seq.dictParams.get("name").value,
+                               + self.seq.dictParams.get("name").value,
                   'menuItems': menuItems}
         super().__init__(**kwargs)
 
     def ioMenu_printMenu(self):
         """*Prints formatted menu options from menuItems dict*."""
         print(Style.RESET_ALL)
-        print("-" * 100)
+        print("-" * 150)
         print("###\t" + self.menuTitle)
-        print("-" * 100)
+        print("-" * 150)
 
         self.paramsMenuDict = {}  # reset params menu dict
         # First map params onto param number for menu
@@ -646,7 +648,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         for pNum in self.paramsMenuDict:
             param = self.paramsMenuDict.get(pNum)
             paramStrings.append(
-                "\t(%-3s) %-20s| %-15s| %-7s| %-30s"
+                "\t(%-3s) %-20s| %-50s| %-7s| %-30s"
                 % (str(pNum), param.name, param.value, param.unit,
                    param.helpString))
 
@@ -701,7 +703,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     validate=True,
                     validResponse=["q", "/", ".", ",",
                                    "PRIME", "VIEW", "GO"]
-                    + paramOptionList).lower()
+                                  + paramOptionList).lower()
 
                 if not (choiceString in ["/", ".", ","]):
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
@@ -724,14 +726,14 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                 elif choiceString.upper() == 'GO':
                     if isPrimed:
                         print("\tExecuting Print! Ctrl + C to Cancel")
-                        self.seq.operateSeq(tool, axes)
+                        self.seq.operateSeq()
                         print("\tSequence Complete!")
                     else:
                         self.seq.genSequence()
                         isPrimed = True
                         print("\tCommands Generated!")
                         print("\tExecuting Print! Ctrl + C to Cancel")
-                        self.seq.operateSeq(tool, axes)
+                        self.seq.operateSeq()
                         print("\tSequence Complete!")
                 elif choiceString.upper() in paramOptionList:
                     isPrimed = False
@@ -754,6 +756,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                 print("\n\tKeyboardInterrupt received, resetting menu")
                 isPrimed = False
 
+
 #############################################################################
 ### Start Sequence Methods
 #############################################################################
@@ -766,26 +769,28 @@ def io_setupConsole():
 
     try:  # resizing window
         if sys.platform.startswith('win'):
-            os.system("mode con cols=100 lines=2000")
+            os.system("mode con cols=150 lines=2000")
         elif sys.platform.startswith('linux'):
-            os.system("printf '\\e[8;40;100t'")
+            os.system("printf '\\e[8;40;150t'")
     except Exception:
         print("\tFailed to resize terminal")
 
 
 def io_StartText():
     """*Displays start screen*."""
-    print(("#" * 100) + "\n" + ("#" * 100))
+    print(("#" * 150) + "\n" + ("#" * 150))
     print("\tPolyChemPrint3 - Version:" + str(__version__)
           + "\tRevised: " + __date__)
-    print(("#" * 100) + "\n" + ("#" * 100))
+    print(("#" * 150) + "\n" + ("#" * 150))
 
 
 def io_preloadText():
     """*Displays start screen*."""
-    print("#" * 100)
+    print("#" * 150)
     print("\tStarting PolyChemPrint3 Load Sequence...")
-    print("#" * 100)
+    print("#" * 150)
+    print("Step:" + " " * 55 + "| Syntax Checked | Loaded |")
+
 
 #########################################################################
 ### IO Helper METHODS
@@ -944,13 +949,13 @@ def io_loadPCP(objType):
     """
     # Set type-specific values
     if objType == 'sequence':
-        textCol = Fore.LIGHTGREEN_EX
+        textCol = Fore.BLUE
         objDict = __seqDict__
         objCode = 'S'
         moduleDirString = "polychemprint3.sequence"
         objDir = __rootDir__ / 'sequence'
         print(textCol
-              + "\tAttempting to load sequences from Sequence Folder...")
+              + "Loading sequences from Sequence Folder..." + "-" * 46)
     elif objType == 'tools':
         textCol = Fore.LIGHTCYAN_EX
         objDict = __toolDict__
@@ -958,7 +963,7 @@ def io_loadPCP(objType):
         moduleDirString = "polychemprint3.tools"
         objDir = __rootDir__ / 'tools'
         print(textCol
-              + "\tAttempting to load tools from tools Folder...")
+              + "Loading tools from tools Folder..." + "-" * 53)
     elif objType == 'axes':
         textCol = Fore.LIGHTYELLOW_EX
         objCode = 'A'
@@ -966,7 +971,7 @@ def io_loadPCP(objType):
         moduleDirString = "polychemprint3.axes"
         objDir = __rootDir__ / 'axes'
         print(textCol
-              + "\tAttempting to load axes from axes Folder...")
+              + "Loading axes from axes Folder " + "-" * 57)
     elif objType == 'user':
         textCol = Fore.LIGHTMAGENTA_EX
         objCode = 'U'
@@ -974,7 +979,7 @@ def io_loadPCP(objType):
         moduleDirString = "polychemprint3.user"
         objDir = __rootDir__ / 'user'
         print(textCol
-              + "\tAttempting to load user profiles from user Folder...")
+              + "Loading user profiles from user Folder " + "-" * 48)
     else:
         textCol = Fore.WHITE
         objType = 'invalid'
@@ -987,49 +992,67 @@ def io_loadPCP(objType):
     filesInFolder = os.listdir(objDir)
     pcpObjFiles = []
 
+    # Search folder for possible object files
     for name in filesInFolder:
-        if (".py" in name[-3:]) and ("Spec"
-                                     not in name) and ("init" not in name):
+        if (".py" in name[-3:]) and ("Spec" not in name) and ("init" not in name):
             pcpObjFiles.append(name)
 
+    # For each file name, try to compile, if it works, try to load
     objValidDict = {}
+
+    objNum = 0
     for objFile in pcpObjFiles:
+        passCompile = 0
+        passLoad = 0
+
+        # See if file will compile
         try:
             compile(open(objDir / objFile, 'r').read(), objFile, "exec")
-            print('\t\t%-25s passes compile-time syntax check' % objFile)
-            objValidDict.update({objFile[:-3]: objDir / objFile})
+            passCompile = 1
         except Exception:
+            passCompile = 0
             print(Fore.LIGHTRED_EX + '\t\t' + objFile
                   + "\tfailed syntax check" + textCol)
 
-    # Instantiate all valid objects
-    # Goal: Create object with variable name = class name and add to objList
-    objNum = 1
-    for objName in objValidDict:
-        try:
-            obj = getattr(importlib.import_module(moduleDirString + "."
-                                                  + objName), objName)
-            # Depends on object type
-            vars()[objName] = obj(__verbose__=__verbose__, name=objName)
-            objDict.update({"%s%s" % (objCode, objNum): vars()[objName]})
-            objNum += 1
-            print('\t\t%-25s loaded successfully' % (objName + ".py"))
-        except Exception as inst:
-            print(Fore.LIGHTRED_EX + '\t\t' + objName + "\tfailed to load"
-                  + textCol)
-            logging.exception(inst)
+        # See if file will load
+        if passCompile:
+            try:
+                # Load
+                objName = str(objFile)[:-3]
+                obj = getattr(importlib.import_module(moduleDirString + "." + objName), objName)
+                # Depends on object type
+                vars()[objName] = obj(__verbose__=__verbose__, name=objName)
+                objDict.update({"%s%s" % (objCode, objNum): vars()[objName]})
+                objNum += 1
+                passLoad = 1
+            except Exception as inst:
+                passLoad = 0
+                logging.exception(inst)
+        else:
+            passLoad = 0
+
+        # Print Status Line for this object
+        print(textCol + "\t%-56s|" % objFile, end="")
+        if passCompile == 1:
+            print(Fore.LIGHTGREEN_EX + '      PASS      ' + textCol + "|", end="")
+        else:
+            print(Fore.RED + '      FAIL      ' + textCol + "|", end="")
+        if passLoad == 1:
+            print(Fore.LIGHTGREEN_EX + '  PASS  ' + textCol + "|")
+        else:
+            print(Fore.RED + '  FAIL  ' + textCol + "|")
 
     if objType == 'sequence':
-        print(Fore.LIGHTGREEN_EX + "\tFinished Loading Sequence Files..."
+        print(textCol + "Finished Loading Sequence Files! " + "-" * 54
               + Style.RESET_ALL)
     elif objType == 'tools':
-        print(Fore.LIGHTCYAN_EX + "\tFinished Loading Tool Files..."
+        print(textCol + "Finished Loading Tool Files! " + "-" * 58
               + Style.RESET_ALL)
     elif objType == 'axes':
-        print(Fore.LIGHTYELLOW_EX + "\tFinished Loading Axes Files..."
+        print(textCol + "Finished Loading Axes Files! " + "-" * 58
               + Style.RESET_ALL)
     elif objType == 'user':
-        print(Fore.LIGHTMAGENTA_EX + "\tFinished Loading User Files..."
+        print(textCol + "Finished Loading User Files! " + "-" * 58
               + Style.RESET_ALL)
 
 
@@ -1070,7 +1093,8 @@ M1PrintSequence = ioMenu_1PrintSequence()
 
 
 __textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels'
-                / 'LICENSE.txt'}
+                           / 'LICENSE.txt'}
+
 
 #############################################################################
 ### Main METHOD

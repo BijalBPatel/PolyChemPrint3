@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Predefined print sequence for simple lines.
+[DESCRIPTION: Predefined print sequence for simple lines.]
 
-| First created on 13/11/2019 14:41:31
-| Revised:
-| Author: Bijal Patel
+| First created on [dd/mm/yyyy 24h:min:sec]
+| Revised: [DATE]
+| Author: [NAME]
 
 """
 from polychemprint3.axes import axes3DSpec
@@ -15,12 +15,12 @@ from polychemprint3.axes.nullAxes import nullAxes
 import logging
 
 
-class line(sequenceSpec):
-    """Implemented print sequence for single lines."""
+class pause(sequenceSpec):
+    """[ DESCRIPTION]"""
 
     ################### Construct/Destruct METHODS ###########################
     def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
-        """*Initializes gapLine object with parameters for this sequence*.
+        """*Initializes [SEQUENCE NAME] object with parameters for this sequence*.
 
         Parameters
         ----------
@@ -29,21 +29,17 @@ class line(sequenceSpec):
         """
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "line", "",
+            "name": seqParam("name", "pause", "",
                              "Change if modifying from default"),
             "description": seqParam("Sequence Description",
-                                    "Single Line in X/Y Direction", "", "line.py"),
+                                    "Pause execution", "", "pause.py"),
             "creationDate": seqParam("Creation Date",
-                                     "16/11/2019", "", "dd/mm/yyyy"),
+                                     "05/05/2020", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_1DCore", "", "default: PCP_Core"),
-            "printSpd": seqParam("Printing Speed", "60", "", ""),
-            "lineDir": seqParam("Line direction", "X", "", "Along X or Y"),
-            "length": seqParam("Line Length", "10", "mm", ""),
-            "toolOnVal": seqParam("Tool ON Value", "100", tool.units,
-                                  "Depends on tool loaded"),
-            "toolOffVal": seqParam("Tool OFF Value", "000", tool.units,
-                                   "Depends on tool loaded")}
+            "owner": seqParam("Owner", "PCP_CoreUtilities", "", "default: PCP_Core"),
+            "pauseTime": seqParam("pauseTime", "1", "seconds", "time to wait before next cmd sent"),
+            "doPrompt": seqParam("Prompt to Continue?", "N", "(Y/N)", "Will user be prompted to resume?")
+        }
 
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
@@ -61,23 +57,21 @@ class line(sequenceSpec):
         cmds = self.cmdList
         try:
 
-            # Pull values
-            printSpd = self.dictParams.get("printSpd").value
-            lineDir = self.dictParams.get("lineDir").value
-            length = self.dictParams.get("length").value
-            toolOnValue = self.dictParams.get("toolOnVal").value
+            # Pull values for brevity
+            pauseTime = self.dictParams.get("pauseTime").value
+            doPrompt = self.dictParams.get("doPrompt").value.upper()
 
-            cmds.append("tool.setValue(" + str(toolOnValue) + ")")
-            self.cmdList.append("tool.engage()")
+            # Step by Step appending commands to list for execution
 
-            # Print 1st line
-            self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " X" + str(length) + "\\n" + "\")"))
+            # 0 Do mandated pause regardless of prompt
+            self.cmdList.append("print(\"\\tpausing...\", end =\" \")")
+            self.cmdList.append("sleep(" + str(pauseTime) + ")")
+            self.cmdList.append("print(\" pause ended!\")")
 
-            if lineDir == "Y":  # need to rotate coordinates in cmdList
-                self.cmdList = [cmd.replace('X', 'Y') for cmd in self.cmdList]
+            # Prompt user to continue if needed
+            if doPrompt == "Y":
+                self.cmdList.append("input(\"Press any key to continue: \")")
 
-            self.cmdList.append("tool.disengage()")
             return True
 
         except KeyboardInterrupt:

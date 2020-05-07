@@ -6,40 +6,27 @@
 | Author: Bijal Patel
 
 """
+from polychemprint3.axes import axes3DSpec
 
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
 from polychemprint3.axes.nullAxes import nullAxes
-
 import logging
+
+from polychemprint3.tools.toolSpec import toolSpec
 
 
 class gapLine(sequenceSpec):
     """Implemented print sequence for gapLines."""
 
     ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes=nullAxes(), tool=nullTool(), **kwargs):
-        """*Initializes gapLine object with default values*.
+    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+        """*Initializes gapLine object with parameters for this sequence*.
 
         Parameters
         ----------
-        axes: PCP_Axes object
-            Axes object to send motion commands to
-        tool: PCP_Tool
-            Tool object to send dispense commands to
-        verbose: bool
-            level of detail to be printed to cmd line
-
-        generic seq params
-        ------------------
-        name: String
-            name of sequence, e.g., gapLine
-        creationDate
-            date sequence first defined, e.g., 13/11/2019 13:33:28
-        createdBy: String
-            who created this sequence
-        owner: String
-            who owns this shape (default: PCP_Core))
+        axes: axes3DSpec
+        tool: toolSpec
         """
 
         # Create Params dict
@@ -47,12 +34,12 @@ class gapLine(sequenceSpec):
             "name": seqParam("Sequence Name", "gapLine", "",
                              "Change if modifying from default"),
             "description": seqParam("Sequence Description",
-                                    "Prints lines in X-direction with a gap where tool raises", "", "gapLine.py"),
+                                    "Lines in X-direction with a gap where tool raises", "", "gapLine.py"),
             "creationDate": seqParam("Creation Date",
                                      "13/11/2019", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
             "owner": seqParam("Owner", "PCP_Electronics", "",
-                              "default: PCP_Core"),
+                              "default: PCP_1DCore"),
             "printSpd": seqParam("Printing Speed", "60", "mm/min", ""),
             "trvlSpd": seqParam("Travel Speed", "200", "mm/min", ""),
             "xSegLength": seqParam("x-seglength", "10", "mm", "Length of each X segment"),
@@ -68,42 +55,12 @@ class gapLine(sequenceSpec):
             "toolOffVal": seqParam("Tool OFF Value", "0", tool.units,
                                    "Depends on tool loaded")}
 
-        self.cmdList = []
-
         # Pass values to parent
-
-        super().__init__(nameString, descrip, dictParams ** kwargs)
+        super().__init__(axes, tool, self.dictParams, **kwargs)
 
     ################### Sequence Actions ###################################
-    def operateSeq(self, tool, axes):
-        """*Performs print sequence*.
-
-        Parameters
-        ----------
-        tool: PCP_ToolSpec object
-            tool to execute code with
-        axes: PCP_Axes object
-            axes to execute code with
-        Returns
-        -------
-        bool
-            Whether sequence successfully completed or not
-        """
-        try:
-            for line in self.cmdList:
-                eval(line)
-            return True
-
-        except KeyboardInterrupt:
-            print("\tTerminated by User....")
-            return False
-        except Exception as inst:
-            print("\tTerminated by Error....")
-            logging.exception(inst)
-            return False
-
     def genSequence(self):
-        """*Loads print sequence into a list into cmdList attribute*.
+        """*Generates the list of python commands to execute for this sequence (shape)*.
 
         Returns
         -------
@@ -112,8 +69,7 @@ class gapLine(sequenceSpec):
         """
         self.cmdList = []
         try:
-
-            # Pull values for brevity
+            # Pull values for brevity (all as strings)
             printSpd = self.dictParams.get("printSpd").value
             trvlSpd = self.dictParams.get("trvlSpd").value
             xSegLength = self.dictParams.get("xSegLength").value

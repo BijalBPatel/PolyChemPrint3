@@ -48,9 +48,9 @@ class ioMenuSpec(ioElementSpec, ABC):
 
     def ioMenu_printMenu(self):
         """*Prints formatted menu options from menuItems dict*."""
-        print("-" * 100)
+        print("-" * 150)
         print("###\t" + self.menuTitle)
-        print("-" * 100)
+        print("-" * 150)
         for key in sorted(self.menuItems):
             print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
 
