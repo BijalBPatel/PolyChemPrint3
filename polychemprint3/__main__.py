@@ -517,6 +517,12 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         """
         global __savedInp__
         global __lastInp__
+
+        # Push active axes and tool to all sequences
+        for seq in __seqDict__.values():
+            seq.axes = axes
+            seq.tool = tool
+
         # Menu Loop
         doQuitMenu = False
 

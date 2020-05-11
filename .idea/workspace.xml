@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="GROUP_BY_SEVERITY" value="true" />
+    <option name="FILTER_RESOLVED_ITEMS" value="false" />
+    <option name="SHOW_STRUCTURE" value="true" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:dev" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="General Cleaning/ Adding Recipe Menu">
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/bbpat.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/bbpat.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/polychemprint3/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/__main__.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1bm8HUgGGZ783ePQaxrsDW1Gj60" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="polychemprint3_pkg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/polychemprint3" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/polychemprint3/__main__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.__main__" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="" />
+      <created>1589225820558</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1589225820558</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Removed GCODE file menu">
+      <created>1589228063828</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1589228063828</updated>
+    </task>
+    <task id="LOCAL-00002" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589236002199</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1589236002199</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Removed GCODE file menu" />
+    <MESSAGE value="General Cleaning/ Adding Recipe Menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="General Cleaning/ Adding Recipe Menu" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="630" y="289" key="#Code_Cleanup_Inspections" timestamp="1589228647644">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="630" y="289" key="#Code_Cleanup_Inspections/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589228647644" />
+    <state x="453" y="255" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589226088270">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="453" y="255" key="#com.intellij.execution.impl.EditConfigurationsDialog/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589226088270" />
+    <state x="743" y="435" width="513" height="334" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1589228654871">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="743" y="435" width="513" height="334" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589228654871" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.bottom" timestamp="1589237341185">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state width="1859" height="1024" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589237341185" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.center" timestamp="1589237341185">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state width="1859" height="1024" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589237341185" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.left" timestamp="1589237341185">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state width="1859" height="1024" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589237341185" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.right" timestamp="1589237341185">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state width="1859" height="1024" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589237341185" />
+    <state x="500" y="245" key="SettingsEditor" timestamp="1589226045748">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="500" y="245" key="SettingsEditor/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589226045748" />
+    <state x="591" y="329" key="Vcs.Push.Dialog.v2" timestamp="1589236095245">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="591" y="329" key="Vcs.Push.Dialog.v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589236095245" />
+  </component>
+</project>
