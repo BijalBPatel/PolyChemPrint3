@@ -32,24 +32,23 @@ class ioMenu_0Main(ioMenuSpec):
         """*Initializes Main Menu Object*."""
         kwargs = {'name': 'Main',
                   'menuTitle': 'Main Menu', 'menuItems':
-                      {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
+                      {Fore.LIGHTRED_EX + "[q]":
+                           Fore.LIGHTRED_EX + "Quit",
                        Fore.LIGHTMAGENTA_EX + "[?]":
-                           Fore.LIGHTMAGENTA_EX + "List Commands",
+                           Fore.LIGHTMAGENTA_EX + "Repeat menu options",
                        Fore.WHITE + "[T] Test Code":
-                           Fore.WHITE + "Run Test Code",
-                       Fore.WHITE + "(2) GCode File Menu":
-                           Fore.WHITE + "Generate sequence from a GCODE file",
+                           Fore.WHITE + "Run test code",
                        Fore.WHITE + "(1) Hardware Control Menu":
-                           Fore.WHITE + "Directly control hardware",
+                           Fore.WHITE + "Send commands directly to hardware",
                        Fore.WHITE + "(0) Configuration/About":
                            Fore.WHITE
-                           + "Software setup, options, Tool/Axes",
-                       Fore.WHITE + "(4) Recipe Menu":
+                           + "Software setup, options, choose Tool/Axes",
+                       Fore.WHITE + "(3) Recipe Menu":
                            Fore.WHITE
-                           + "Build/Execute Multi-Sequence Programs",
-                       Fore.WHITE + "(3) Sequence Menu":
+                           + "Configure/Execute multi-sequence recipes",
+                       Fore.WHITE + "(2) Sequence Menu":
                            Fore.WHITE
-                           + "Print/Configure pre-defined commands"}}
+                           + "Configure/Execute predefined command sequences"}}
         super().__init__(**kwargs)
 
     def io_Operate(self):
@@ -70,21 +69,13 @@ class ioMenu_0Main(ioMenuSpec):
                 self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 self.ioMenu_printMenu()
                 choiceString = io_Prompt("Enter Command:", validate=True,
-                                         validResponse=["q",
-                                                        "?",
-                                                        "T",
-                                                        "0",
-                                                        "1",
-                                                        "2",
-                                                        "3",
-                                                        "4",
-                                                        "/",
-                                                        ".",
-                                                        ","]).lower()
+                                         validResponse=["q", "?", "T",
+                                                        "0", "1", "2", "3",
+                                                        "/", ".", ","
+                                                        ]).lower()
 
                 if not (choiceString in ["/", ".", ","]):
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
-
                 if choiceString in ["/", ".", ","]:
                     (choiceString) = io_savedCmdOps(choiceString)
                 elif choiceString == '?':
@@ -98,19 +89,16 @@ class ioMenu_0Main(ioMenuSpec):
                 elif choiceString == '1':
                     return 'M1HardwareMenu'
                 elif choiceString == '2':
-                    return 'M1PrintFile'
-                elif choiceString == '3':
                     return 'M1PrintSequence'
-                elif choiceString == '4':
+                elif choiceString == '3':
                     return 'M1PrintRecipe'
-
                 else:
                     print("Received: " + choiceString)
                     print(Fore.LIGHTRED_EX
-                          + "\tInvalid Choice, resetting menu"
+                          + "\tInvalid choice, resetting menu..."
                           + Style.RESET_ALL)
             except KeyboardInterrupt:
-                print("\n\tKeyboardInterrupt received, resetting menu")
+                print("\n\tKeyboardInterrupt received, resetting menu...")
 
 
 class ioMenu_1Configuration(ioMenuSpec):
@@ -451,6 +439,7 @@ class ioMenu_2AxesOrigin(ioMenuSpec):
         return 'M0MainMenu'
 
 
+# TODO Fold into sequence
 class ioMenu_2PrintFileOptions(ioMenuSpec):
     """Contains data and methods for implemented PrintFileOptions Menu."""
 
@@ -911,8 +900,7 @@ def io_MenuManager(initialMenuString):
             M0MainMenu.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
             menuFlag = M0MainMenu.io_Operate()
         elif menuFlag == 'M1ConfigurationMenu':
-            M1ConfigurationMenu.ioMenu_updateStoredCmds(__lastInp__,
-                                                        __savedInp__)
+            M1ConfigurationMenu.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
             menuFlag = M1ConfigurationMenu.io_Operate()
         elif menuFlag == 'M1HardwareMenu':
             M1HardwareMenu.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
@@ -1062,7 +1050,7 @@ def io_loadPCP(objType):
 
 # Program Details
 __version__ = 3.0
-__date__ = "2019/11/30"
+__date__ = "2020/05/11"
 __verbose__ = 1  # reflects how many status messages are shown
 __rootDir__ = Path(__file__).absolute().parent
 
@@ -1081,17 +1069,7 @@ __toolDict__ = {}
 __axesDict__ = {}
 __userDict__ = {}
 
-# Instantiated menus
-M0MainMenu = ioMenu_0Main()
-M1ConfigurationMenu = ioMenu_1Configuration()
-M1HardwareMenu = ioMenu_1Hardware()
-M1PrintFile = ioMenu_1PrintFile()
-M2AxesOrigin = ioMenu_2AxesOrigin()
-M2PrintFileOptions = ioMenu_2PrintFileOptions()
-M1PrintSequence = ioMenu_1PrintSequence()
 # Relative paths to text panels
-
-
 __textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels'
                            / 'LICENSE.txt'}
 
@@ -1124,10 +1102,8 @@ def main():
     while not doQuitProgram:
 
         try:
-
             # menuManagerSequence - loop that handles menu driving
-            menuFlag = io_MenuManager(M0MainMenu.io_Operate())
-
+            menuFlag = io_MenuManager("M0MainMenu")
             # if we get here, menumanager should have received quit message
             # Double check with user if they want to exit
             if menuFlag == 'quit':

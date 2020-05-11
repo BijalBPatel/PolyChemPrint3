@@ -2,15 +2,6 @@
   <dictionary name="bbpat">
     <words>
       <w>bijal</w>
-      <w>cmds</w>
-      <w>comms</w>
-      <w>descript</w>
-      <w>extruder</w>
-      <w>gcode</w>
-      <w>ncsa</w>
-      <w>nordson</w>
-      <w>ultimus</w>
-      <w>yyyy</w>
     </words>
   </dictionary>
 </component>
