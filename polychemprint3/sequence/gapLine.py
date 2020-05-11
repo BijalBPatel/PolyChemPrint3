@@ -2,108 +2,65 @@
 """Predefined print sequence for gapLines.
 
 | First created on 13/11/2019 14:41:31
-| Revised:
+| Revised: 5/3/20
 | Author: Bijal Patel
 
 """
+from polychemprint3.axes import axes3DSpec
 
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
 from polychemprint3.axes.nullAxes import nullAxes
-
 import logging
+
+from polychemprint3.tools.toolSpec import toolSpec
 
 
 class gapLine(sequenceSpec):
     """Implemented print sequence for gapLines."""
 
     ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes=nullAxes(), tool=nullTool(), **kwargs):
-        """*Initializes gapLine object with default values*.
+    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+        """*Initializes gapLine object with parameters for this sequence*.
 
         Parameters
         ----------
-        axes: PCP_Axes object
-            Axes object to send motion commands to
-        tool: PCP_Tool
-            Tool object to send dispense commands to
-        verbose: bool
-            level of detail to be printed to cmd line
-
-        generic seq params
-        ------------------
-        name: String
-            name of sequence, e.g., gapLine
-        creationDate
-            date sequence first defined, e.g., 13/11/2019 13:33:28
-        createdBy: String
-            who created this sequence
-        owner: String
-            who owns this shape (default: PCP_Core))
+        axes: axes3DSpec
+        tool: toolSpec
         """
 
         # Create Params dict
-
         self.dictParams = {
-            "name": seqParam("name", "gapLine", "",
+            "name": seqParam("Sequence Name", "gapLine", "",
                              "Change if modifying from default"),
+            "description": seqParam("Sequence Description",
+                                    "Lines in X-direction with a gap where tool raises", "", "gapLine.py"),
             "creationDate": seqParam("Creation Date",
                                      "13/11/2019", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
             "owner": seqParam("Owner", "PCP_Electronics", "",
-                              "default: PCP_Core"),
+                              "default: PCP_1DCore"),
             "printSpd": seqParam("Printing Speed", "60", "mm/min", ""),
             "trvlSpd": seqParam("Travel Speed", "200", "mm/min", ""),
-            "xLength": seqParam("X-Length", "10", "mm", "Total X Length"),
-            "yLength": seqParam("Y-Length", "10", "mm", "Total Y Length"),
-            "ySpacing": seqParam("Y-Spacing", "10", "mm", ""),
+            "xSegLength": seqParam("x-seglength", "10", "mm", "Length of each X segment"),
             "xGap": seqParam("X-Gap", "2", "mm", "Length of gap in X"),
-            "Z-hop height": seqParam("Z-hop", "0", "",
+            "numRows": seqParam("numRows", "3", "mm", "Number of lines to print"),
+            "ySpacing": seqParam("Y-Spacing", "3", "mm", "Spacing (in y) between lines"),
+            "Z-hop height": seqParam("Z-hop", "1", "",
                                      "Height to raise Z-axis for gap"),
             "toolOnVal": seqParam("Tool ON Value", "100", tool.units,
                                   "Depends on tool loaded"),
-            "toolTrvlVal": seqParam("Tool Travel Value", "2", tool.units,
+            "toolTrvlVal": seqParam("Tool Travel Value", "0", tool.units,
                                     "Depends on tool loaded"),
             "toolOffVal": seqParam("Tool OFF Value", "0", tool.units,
                                    "Depends on tool loaded")}
 
-        self.cmdList = []
-
         # Pass values to parent
-        nameString = self.dictParams.get("name").value
-        descrip = "Repeatedly prints lines in X with a gap [tool raised]"
-        super().__init__(nameString, descrip, **kwargs)
+        super().__init__(axes, tool, self.dictParams, **kwargs)
 
     ################### Sequence Actions ###################################
-    def operateSeq(self):
-        """*Performs print sequence*.
-
-        Parameters
-        ----------
-        tool: PCP_ToolSpec object
-            tool to execute code with
-        axes: PCP_Axes object
-            axes to execute code with
-        Returns
-        -------
-        bool
-            Whether sequence successfully completed or not
-        """
-        try:
-            for line in self.cmdList:
-                eval(line)
-            return True
-
-        except KeyboardInterrupt:
-            print("\tTerminated by User....")
-            return False
-        except Exception as inst:
-            print("\tTerminated by Error....")
-            logging.exception(inst)
-            return False
-
     def genSequence(self):
-        """*Loads print sequence into a list into cmdList attribute*.
+        """*Generates the list of python commands to execute for this sequence (shape)*.
 
         Returns
         -------
@@ -112,67 +69,72 @@ class gapLine(sequenceSpec):
         """
         self.cmdList = []
         try:
-
-            # Pull values for brevity
+            # Pull values for brevity (all as strings)
             printSpd = self.dictParams.get("printSpd").value
-            trvlSpd = self.dictParams.get("printSpd").value
-            xLength = self.dictParams.get("lineDir").value
-            ySpacing = self.dictParams.get("pitch").value
-            yLength = self.dictParams.get("length").value
-            xGap = self.dictParams.get("numLines").value
-            zHopHeight = self.dictParams.get("valInc").value
-            toolOnValue = self.dictParams.get("toolOnVal").value
-            toolOFFValue = self.dictParams.get("toolOnVal").value
-            toolTrvLValue = self.dictParams.get("toolOnVal").value
+            trvlSpd = self.dictParams.get("trvlSpd").value
+            xSegLength = self.dictParams.get("xSegLength").value
+            xGap = self.dictParams.get("xGap").value
+            ySpacing = self.dictParams.get("ySpacing").value
+            numRows = self.dictParams.get("numRows").value
+            zHop = self.dictParams.get("Z-hop height").value
+            toolOnVal = self.dictParams.get("toolOnVal").value
+            toolTrvlVal = self.dictParams.get("toolTrvlVal").value
+            toolOffVal = self.dictParams.get("toolOffVal").value
 
-            self.cmdList.append("tool.setValue(" + str(toolOnValue) + ")")
+            # Calculated Values
+            totalX = 2 * float(xSegLength) + float(xGap)
+
+            # Set relative positioning mode
+            self.cmdList.append("axes.setPosMode('relative')")
+
+            # Enter loop for each gap-line row
+            rowCount = 1
+
+            # 0 Engage tool with off value
+            self.cmdList.append("tool.setValue(" + str(toolOffVal) + ")")
             self.cmdList.append("tool.engage()")
 
-            count = 1
-            # Print 1st line
-            self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " X" + str(length) + "\n" + "\")"))
-            direct = 'forwardR'
-            # Write as if printing X lines
-            while (count < int(numLines)):
-                if (direct == 'right'):
-                    printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
-                    toolOnValue = eval(str(toolOnValue
-                                           + str(valOp) + str(valInc)))
-                    self.cmdList.append("tool.setValue("
-                                        + str(toolOnValue) + ")")
-                    self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                         + " X" + str(length) + "\n" + "\")"))
-                    direct = 'forwardR'
-                    count += 1
-                elif (direct == 'forwardR'):
-                    self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                         + " Y-" + str(pitch) + "\n" + "\")"))
-                    direct = 'left'
-                elif (direct == 'left'):
-                    printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
-                    toolOnValue = eval(str(toolOnValue)
-                                       + str(valOp) + str(valInc))
-                    self.cmdList.append("tool.setValue("
-                                        + str(toolOnValue) + ")")
-                    self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                         + " X-" + str(length) + "\n" + "\")"))
-                    direct = 'forwardR'
-                    count += 1
-                elif (direct == 'forwardL'):
-                    self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                         + " Y-" + str(pitch) + "\n" + "\")"))
-                    direct = 'right'
+            while rowCount <= int(numRows):
 
-            if lineDir == "Y":  # need to rotate coordinates in cmdList
-                # First map Y onto W
-                self.cmdList = [cmd.replace('Y', 'W') for cmd in self.cmdList]
-                # Then map X onto Y
-                self.cmdList = [cmd.replace('X', 'Y') for cmd in self.cmdList]
-                # Then map W onto X
-                self.cmdList = [cmd.replace('W', 'X') for cmd in self.cmdList]
+                # 1 Move LR while printing
+                self.cmdList.append("tool.setValue(" + str(toolOnVal) + ")")
+                self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
+                                     + " X" + str(xSegLength) + "\\n" + "\")"))
 
-            self.cmdList.append("tool.disengage()")
+                # 2 Lift/Stop Tool
+                self.cmdList.append("tool.setValue(" + str(toolTrvlVal) + ")")
+                self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                     + " Z" + str(zHop) + "\\n" + "\")"))
+
+                # 3 Move across gap and lower
+                self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                     + " X" + str(xGap) + "\\n" + "\")"))
+
+                self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                     + " Z-" + str(zHop) + "\\n" + "\")"))
+
+                # 4 Move LR while printing
+                self.cmdList.append("tool.setValue(" + str(toolOnVal) + ")")
+                self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
+                                     + " X" + str(xSegLength) + "\\n" + "\")"))
+
+                # Increment row count
+                rowCount += 1
+
+                # 5 Travel to next line start position [if not last line]
+                if rowCount != numRows:
+                    self.cmdList.append("tool.setValue(" + str(toolTrvlVal) + ")")
+                    self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                         + " Z" + str(zHop) + "\\n" + "\")"))
+                    self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                         + " Y-" + str(ySpacing) + "\\n" + "\")"))
+                    self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                         + " X-" + str(totalX) + "\\n" + "\")"))
+                    self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                         + " Z-" + str(zHop) + "\\n" + "\")"))
+
+                else:
+                    self.cmdList.append("tool.disengage()")
             return True
         except KeyboardInterrupt:
             print("\tgenSequence Terminated by User....")

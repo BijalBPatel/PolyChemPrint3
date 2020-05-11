@@ -177,7 +177,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         |   [-1, "Error: Tool activation state cannot be determined + Error]
         """
         try:
-            if self.dispenseStatus():
+            if self.dispenseStatus == 1:
                 return [1, "Tool On"]
             else:
                 return [0, "Tool Off"]
@@ -205,7 +205,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
 
         Returns
         -------
-        [1, "Connected Succesfully to Serial Device"]
+        [1, "Connected Successfully to Serial Device"]
         [0, 'Not all connection parameters set']
         [-1, "Error: Could not connect to serial device: + error text"]
         """
@@ -249,7 +249,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
 
         # Try initial handshake
         handShakeResponse = self.handShakeSerial()
-        if (handShakeResponse[0] == 1):
+        if handShakeResponse[0] == 1:
             return [1, linesIn]
         else:
             return [-2, handShakeResponse[1]]
@@ -312,7 +312,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
 
         Returns
         -------
-        [1, 'Text Sent + text'] if succesfull 2-way communication
+        [1, 'Text Sent + text'] if successful 2-way communication
         [0, 'Write Failed + Error'] if exception caught
         """
         if (self.checkIfSerialConnectParamsSet()):
@@ -333,7 +333,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
 
         Parameters
         ----------
-        cmdString, String
+        cmdString
             the string to send
 
         Returns
@@ -369,11 +369,11 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                     return [1, 'Command Sent: ' + cmdString + '\n Received: '
                             + rcvd]
                 else:
+                    self.__writeSerial__(chr(4)) # end transmission
                     return [0, "Unexpected input from Serial Device: "
-                            + self.name + ' : ' + rcvd]
+                            + self.name + ' : ' + received]
 
-            self.__writeSerial__(chr(4))
-            # end transmission
+
         except Exception as inst:
             return [0, 'Error on sending command to Serial Device: '
                     + self.name + ' : ' + inst.__str__()]
@@ -391,9 +391,9 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         tEnd = time() + self.commsTimeOut
 
         try:  # Reads input until timeout
-            while (time() < tEnd):
+            while time() < tEnd:
                 ins = self.ser.read()
-                if (ins != ""):
+                if ins != "":
                     inp += ins
             inp = inp.strip  # removes any newlines
 

@@ -7,8 +7,14 @@ Specifies modular pre-written motion and dispense sequences for common prints.
 | Author: Bijal Patel
 
 """
+import logging
+from time import sleep
 from abc import ABC, abstractmethod
+from polychemprint3.axes import axes3DSpec
+from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.utility.loggerSpec import loggerSpec
+from polychemprint3.tools.nullTool import nullTool
+from polychemprint3.axes.nullAxes import nullAxes
 
 
 class sequenceSpec(loggerSpec, ABC):
@@ -16,57 +22,67 @@ class sequenceSpec(loggerSpec, ABC):
 
     ################### Construct/Destruct METHODS ###########################
     @abstractmethod
-    def __init__(self, nameString, descrip, __verbose__=0, **kwargs):
+    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), dictParams: dict = None,
+                 __verbose__: bool = 0, **kwargs):
         """*Initializes sequence object*.
 
         Parameters
         ----------
-        axes: PCP_Axes object
-            Axes object to send motion commands to
-        tool: PCP_Tool
-            Tool object to send dispense commands to
-        verbose: bool
-            level of detail to be printed to cmd line
+        axes: axes3DSpec
+        tool: toolSpec
+        dictParams: dict
+        __verbose__: bool
+        kwargs
         """
-        self.nameString = nameString
-        self.descrip = descrip
+
+        # Pass in active axes/tool
+        self.axes = axes
+        self.tool = tool
+
+        # Provide default values to dictParams if initialized without
+        if dictParams is None:
+            dictParams = {"name": seqParam("Sequence Name", "default", "default", "default"),
+                          "description": seqParam("Sequence description", "default", "default", "default"),
+                          "owner": seqParam("PCP_Default", "default", "default", "default"),
+                          }
+
+        self.dictParams = dictParams
         self.verbose = __verbose__
+        # Unwrap parameter to get just the string name and description
+        self.nameString = self.dictParams.get("name").value
+        self.descriptString = self.dictParams.get("description").value
+        self.groupString = self.dictParams.get("owner").value
+        self.cmdList = []
         super().__init__(**kwargs)
 
     ################### Parameter Methods ###########################
-    def stringParams(self):
-        """*Turns paramList into a formatted string*.
-
-        Returns
-        -------
-        String
-            Formatted String containing table of param and current values
-        """
-        outString = ""
-        for param in self.paramList:
-            outString += "\t%-40s|  %-25s\n" % (self.name, self.value)
 
     ################### Sequence Actions ###################################
-    @abstractmethod
-    def operateSeq(self, tool, axes):
+    def operateSeq(self):
         """*Performs print sequence*.
-
-        Parameters
-        ----------
-        tool: PCP_ToolSpec object
-            tool to execute code with
-        axes: PCP_Axes object
-            axes to execute code with
-
         Returns
         -------
         bool
             Whether sequence successfully completed or not
         """
-        pass
+        axes = self.axes
+        tool = self.tool
+
+        try:
+            for line in self.cmdList:
+                eval(line)
+            return True
+
+        except KeyboardInterrupt:
+            print("\tTerminated by User....")
+            return False
+        except Exception as inst:
+            print("\tTerminated by Error....")
+            logging.exception(inst)
+            return False
 
     @abstractmethod
-    def genSequence(self, tool, axes):
+    def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
         Returns
@@ -101,7 +117,7 @@ class sequenceSpec(loggerSpec, ABC):
         super().loadLogSelf(logString)
 
 
-class seqParam():
+class seqParam:
     """Base Class for parameters used in sequences."""
 
     ################### Construct/Destruct METHODS ###########################
