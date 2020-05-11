@@ -28,7 +28,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="276432cd-46b5-4db7-bd23-9911ae14f6db" name="Default Changelist" comment="Manyupdates" />
+    <list default="true" id="276432cd-46b5-4db7-bd23-9911ae14f6db" name="Default Changelist" comment="Manyupdates">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,7 +75,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/polychemprint3/sequence" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
-    <property name="settings.editor.selected.configurable" value="com.leinardi.pycharm.pylint.PylintConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -161,7 +163,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588877484254</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Manyupdates">
+      <created>1589225133438</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1589225133438</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -193,6 +202,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="Manyupdates" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="886" y="436" key="#Notifications" timestamp="1589225235728">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="886" y="436" key="#Notifications/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589225235728" />
     <state x="735" y="390" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588706207681">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
@@ -263,13 +276,15 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state width="1820" height="404" key="GridCell.Tab.1.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543575" />
-    <state x="500" y="245" width="1268" height="710" key="SettingsEditor" timestamp="1588595810333">
+    <state x="500" y="245" width="1268" height="710" key="SettingsEditor" timestamp="1589225186885">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
+    <state x="500" y="245" key="SettingsEditor/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589225186885" />
     <state x="500" y="245" width="1268" height="710" key="SettingsEditor/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588595810333" />
-    <state x="383" y="229" key="Vcs.Push.Dialog.v2" timestamp="1588877504262">
-      <screen x="79" y="0" width="1421" height="1000" />
+    <state x="473" y="275" key="Vcs.Push.Dialog.v2" timestamp="1589225140088">
+      <screen x="79" y="0" width="1841" height="1200" />
     </state>
+    <state x="473" y="275" key="Vcs.Push.Dialog.v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589225140088" />
     <state x="383" y="229" key="Vcs.Push.Dialog.v2/79.0.1421.1000@79.0.1421.1000" timestamp="1588877504262" />
     <state x="129" y="152" key="VcsDiffUtil.ChangesDialog" timestamp="1588877623421">
       <screen x="79" y="0" width="1421" height="1000" />
