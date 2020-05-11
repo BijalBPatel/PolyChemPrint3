@@ -256,7 +256,7 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         try:
             readInput = self.sendCmd("M115\n")
             wrongVers = self.firmwareVers not in readInput
-            if (wrongVers):
+            if wrongVers:
                 return [-1, 'Hanshake Failed: Wrong Firmware Version']
             else:
                 return [1, 'Handshake Success']
@@ -281,7 +281,7 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         """
         try:
             self.ser.write(command.encode('utf-8'))
-            if (self.__verbose__):
+            if self.__verbose__:
                 print('\t\t\tCommand Sent:> ' + command.rstrip())
             return [1, 'Command Sent' + command]
         except Exception as inst:
@@ -301,18 +301,18 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         tEnd = time.time() + self.commsTimeOut
 
         # Reads input until timeout
-        while (time.time() < tEnd):
+        while time.time() < tEnd:
             print(Fore.LIGHTYELLOW_EX
                   + "\t\t\tWaiting on taz..." + Style.RESET_ALL)
             ins = self.ser.readline().decode('utf-8').rstrip()
-            if (ins != ""):
+            if ins != "":
                 if self.__verbose__:
                     print(textwrap.fill("Rcvd:< " + ins, width=60,
                                         initial_indent='\t\t\t',
                                         subsequent_indent='\t\t\t'))
                 inp += ins
                 tEnd += self.commsTimeOut
-        return (inp)
+        return inp
 
     #########################################################################
     ### Unique Methods
@@ -328,12 +328,12 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         notReady = True
         i = 0  # loop increments0
         allIn = ""
-        while (notReady):
+        while notReady:
             inp = self.readTime()  # read buffer
-            if ('ok' in inp):
+            if 'ok' in inp:
                 notReady = False
             else:
-                if (i % 10 == 0 and self.__verbose__):
+                if i % 10 == 0 and self.__verbose__:
                     print(Fore.LIGHTYELLOW_EX
                           + "\t\t\tWaiting for Axes to acknowledge "
                           + "last command")
