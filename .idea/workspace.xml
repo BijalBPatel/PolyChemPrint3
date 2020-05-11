@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="GROUP_BY_SEVERITY" value="true" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="276432cd-46b5-4db7-bd23-9911ae14f6db" name="Default Changelist" comment="Manyupdates" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/dev" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="hiddenUrls">
+      <set>
+        <option value="https://github.com/BijalBPatel/PolyChemPrint3.git" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1bMqlFXUs5okKAT35oD7m46GxF6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/polychemprint3/sequence" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
+    <property name="settings.editor.selected.configurable" value="com.leinardi.pycharm.pylint.PylintConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\bbpat\Box Sync\PhDBackups\BP PhD Research Backup\DiaoLab\3_ProjectFiles\2_Hardware_Software\2_Software_ActiveDevelopment\PolyChemPrintv3.0\polychemprint3_pkg\polychemprint3\sequence" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.__main__">
+    <configuration name="main.pl" type="PrologRunConfiguration" factoryName="Prolog" temporary="true">
+      <setting name="targetFile" value="$PROJECT_DIR$/../../PolyPrint/v2.0/v2.20/main.pl" />
+      <setting name="extraArgs" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="polychemprint3_pkg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/polychemprint3" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/polychemprint3/__main__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="setToolState" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="polychemprint3_pkg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/polychemprint3/sequence" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/polychemprint3/sequence/setToolState.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.__main__" />
+        <item itemvalue="Python.setToolState" />
+        <item itemvalue="Prolog.main.pl" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="276432cd-46b5-4db7-bd23-9911ae14f6db" name="Default Changelist" comment="" />
+      <created>1588452459046</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588452459046</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Manyupdates">
+      <created>1588703005147</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1588703005148</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Manyupdates">
+      <created>1588877484254</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1588877484254</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Manyupdates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Manyupdates" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="735" y="390" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588706207681">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="735" y="390" key="#com.intellij.fileTypes.FileTypeChooser/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588706207681" />
+    <state x="679" y="336" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1589224903519">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="679" y="336" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589224903519" />
+    <state x="743" y="435" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1588567864983">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="743" y="435" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588567864983" />
+    <state x="399" y="200" width="1200" height="800" key="DiffContextDialog" timestamp="1588460325734">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="399" y="200" width="1200" height="800" key="DiffContextDialog/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588460325734" />
+    <state x="724" y="284" key="FileChooserDialogImpl" timestamp="1588877764258">
+      <screen x="79" y="0" width="1421" height="1000" />
+    </state>
+    <state x="914" y="341" key="FileChooserDialogImpl/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588638551491" />
+    <state x="724" y="284" key="FileChooserDialogImpl/79.0.1421.1000@79.0.1421.1000" timestamp="1588877764258" />
+    <state x="914" y="341" key="FileChooserDialogImpl/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588595802391" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.bottom" timestamp="1588875476634">
+      <screen x="1999" y="0" width="1841" height="1080" />
+    </state>
+    <state width="927" height="1023" key="GridCell.Tab.0.bottom/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631672896" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@1999.0.1841.1080" timestamp="1588875476634" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588828677146" />
+    <state width="906" height="121" key="GridCell.Tab.0.bottom/79.0.1421.1000@79.0.1421.1000" timestamp="1588651153090" />
+    <state width="1820" height="330" key="GridCell.Tab.0.bottom/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596549127" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.center" timestamp="1588875476634">
+      <screen x="1999" y="0" width="1841" height="1080" />
+    </state>
+    <state width="927" height="1023" key="GridCell.Tab.0.center/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631672896" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@1999.0.1841.1080" timestamp="1588875476634" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588828677146" />
+    <state width="906" height="121" key="GridCell.Tab.0.center/79.0.1421.1000@79.0.1421.1000" timestamp="1588651153089" />
+    <state width="1820" height="330" key="GridCell.Tab.0.center/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596549127" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.left" timestamp="1588875476634">
+      <screen x="1999" y="0" width="1841" height="1080" />
+    </state>
+    <state width="927" height="1023" key="GridCell.Tab.0.left/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631672896" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@1999.0.1841.1080" timestamp="1588875476634" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588828677145" />
+    <state width="906" height="121" key="GridCell.Tab.0.left/79.0.1421.1000@79.0.1421.1000" timestamp="1588651153088" />
+    <state width="1820" height="330" key="GridCell.Tab.0.left/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596549126" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.right" timestamp="1588875476634">
+      <screen x="1999" y="0" width="1841" height="1080" />
+    </state>
+    <state width="927" height="1023" key="GridCell.Tab.0.right/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631672896" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@1999.0.1841.1080" timestamp="1588875476634" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588828677146" />
+    <state width="906" height="121" key="GridCell.Tab.0.right/79.0.1421.1000@79.0.1421.1000" timestamp="1588651153090" />
+    <state width="1820" height="330" key="GridCell.Tab.0.right/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596549127" />
+    <state width="1820" height="404" key="GridCell.Tab.1.bottom" timestamp="1588712543575">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state width="1820" height="404" key="GridCell.Tab.1.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543575" />
+    <state width="1820" height="404" key="GridCell.Tab.1.center" timestamp="1588712543575">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state width="1820" height="404" key="GridCell.Tab.1.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543575" />
+    <state width="1820" height="404" key="GridCell.Tab.1.left" timestamp="1588712543574">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state width="1820" height="404" key="GridCell.Tab.1.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543574" />
+    <state width="1820" height="404" key="GridCell.Tab.1.right" timestamp="1588712543575">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state width="1820" height="404" key="GridCell.Tab.1.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543575" />
+    <state x="500" y="245" width="1268" height="710" key="SettingsEditor" timestamp="1588595810333">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="500" y="245" width="1268" height="710" key="SettingsEditor/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588595810333" />
+    <state x="383" y="229" key="Vcs.Push.Dialog.v2" timestamp="1588877504262">
+      <screen x="79" y="0" width="1421" height="1000" />
+    </state>
+    <state x="383" y="229" key="Vcs.Push.Dialog.v2/79.0.1421.1000@79.0.1421.1000" timestamp="1588877504262" />
+    <state x="129" y="152" key="VcsDiffUtil.ChangesDialog" timestamp="1588877623421">
+      <screen x="79" y="0" width="1421" height="1000" />
+    </state>
+    <state x="129" y="152" key="VcsDiffUtil.ChangesDialog/79.0.1421.1000@79.0.1421.1000" timestamp="1588877623421" />
+    <state x="807" y="510" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588702985787">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="807" y="510" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588702985787" />
+    <state x="1808" y="-26" width="1381" height="799" maximized="true" key="dock-window-1" timestamp="1588651601935">
+      <screen x="79" y="0" width="1421" height="1000" />
+    </state>
+    <state x="94" y="0" width="723" height="1006" key="dock-window-1/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631629876" />
+    <state x="72" y="0" width="934" height="1207" key="dock-window-1/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588644047499" />
+    <state x="1808" y="-26" width="1381" height="799" maximized="true" key="dock-window-1/79.0.1421.1000@79.0.1421.1000" timestamp="1588651601935" />
+    <state x="72" y="0" width="934" height="1087" key="dock-window-1/79.0.1841.1080/1920.0.1920.1050@79.0.1841.1080" timestamp="1588606831431" />
+    <state x="1912" y="-8" width="945" height="1096" key="dock-window-1/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596670807" />
+    <state x="1913" y="0" width="943" height="1087" key="dock-window-2" timestamp="1588705112096">
+      <screen x="1999" y="0" width="1841" height="1080" />
+    </state>
+    <state x="1913" y="0" width="943" height="1087" key="dock-window-2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588705112096" />
+    <state x="708" y="178" width="583" height="843" key="find.popup" timestamp="1588596885178">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="708" y="178" width="583" height="843" key="find.popup/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596885178" />
+    <state x="358" y="261" key="git4idea.branch.GitSmartOperationDialog" timestamp="1588877314861">
+      <screen x="79" y="0" width="1421" height="1000" />
+    </state>
+    <state x="358" y="261" key="git4idea.branch.GitSmartOperationDialog/79.0.1421.1000@79.0.1421.1000" timestamp="1588877314861" />
+    <state x="440" y="313" key="git4idea.branch.GitSmartOperationDialog/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588452693355" />
+    <state x="662" y="265" width="672" height="678" key="search.everywhere.popup" timestamp="1588708277358">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="662" y="265" width="672" height="678" key="search.everywhere.popup/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588708277358" />
+  </component>
+</project>
