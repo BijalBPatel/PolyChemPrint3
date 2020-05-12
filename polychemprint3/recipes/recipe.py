@@ -126,15 +126,15 @@ class recipe(fileHandler, loggerSpec):
             return [False, "Sequence reordering failed"]
 
     ################### Recipe Actions ###################################
-    def operateRecipe(self):
+    def operateRecipe(self, axesIn, toolIn):
         """*Performs print sequence*.
         Returns
         -------
         bool
             Whether recipe successfully completed or not
         """
-        axes = self.axes
-        tool = self.tool
+        axes = axesIn
+        tool = toolIn
 
         try:
             for line in self.cmdList:

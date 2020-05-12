@@ -38,4 +38,4 @@ class loggerSpec(ABC):
             yaml string to be loaded back in
 
         """
-        self.__dict__ = yaml.load(yamlString)
+        self.__dict__ = yaml.load(yamlString,Loader=yaml.Loader)

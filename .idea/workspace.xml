@@ -31,7 +31,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="General Cleaning/ Adding Recipe Menu">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/bbpat.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/bbpat.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/polychemprint3/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/__main__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/polychemprint3/recipes/recipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/recipes/recipe.py" afterDir="false" />
@@ -140,7 +139,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589240973797</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589258520300</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1589258520300</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -184,22 +190,26 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state x="743" y="435" width="513" height="334" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589228654871" />
-    <state width="1859" height="1024" key="GridCell.Tab.0.bottom" timestamp="1589258500159">
+    <state width="1859" height="1024" key="GridCell.Tab.0.bottom" timestamp="1589296904702">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589258500159" />
-    <state width="1859" height="1024" key="GridCell.Tab.0.center" timestamp="1589258500158">
+    <state width="1859" height="1024" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589296904702" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.center" timestamp="1589296904699">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589258500158" />
-    <state width="1859" height="1024" key="GridCell.Tab.0.left" timestamp="1589258500158">
+    <state width="1859" height="1024" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589296904699" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.left" timestamp="1589296904697">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589258500158" />
-    <state width="1859" height="1024" key="GridCell.Tab.0.right" timestamp="1589258500159">
+    <state width="1859" height="1024" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589296904697" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.right" timestamp="1589296904700">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589258500159" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589296904700" />
+    <state x="425" y="219" key="RollbackChangesDialog" timestamp="1589292941720">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="425" y="219" key="RollbackChangesDialog/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589292941720" />
     <state x="500" y="245" key="SettingsEditor" timestamp="1589226045748">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>

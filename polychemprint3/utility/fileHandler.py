@@ -112,7 +112,7 @@ class fileHandler:
         Returns
         -------
             bool
-                True/False if writing passes/fails + errors
+                True/False if read passes/fails + errors
             [lines]
                 array of strings read in or ["Failed"]
         """
