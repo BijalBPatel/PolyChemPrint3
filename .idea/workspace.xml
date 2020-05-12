@@ -32,7 +32,11 @@
   <component name="ChangeListManager">
     <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="General Cleaning/ Adding Recipe Menu">
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/bbpat.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/bbpat.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/polychemprint3/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/__main__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/polychemprint3/recipes/recipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/recipes/recipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/polychemprint3/utility/fileHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/utility/fileHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/polychemprint3/utility/loggerSpec.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/utility/loggerSpec.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +58,7 @@
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.recipe">
     <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="polychemprint3_pkg" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -76,9 +80,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="recipe" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="polychemprint3_pkg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/polychemprint3/recipes" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/polychemprint3/recipes/recipe.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.__main__" />
+        <item itemvalue="Python.recipe" />
+        <item itemvalue="Python.recipe" />
+        <item itemvalue="Python.recipe" />
+        <item itemvalue="Python.recipe" />
       </list>
     </recent_temporary>
   </component>
@@ -107,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589236002199</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589240973797</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1589240973797</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -151,22 +184,22 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state x="743" y="435" width="513" height="334" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589228654871" />
-    <state width="1859" height="1024" key="GridCell.Tab.0.bottom" timestamp="1589237341185">
+    <state width="1859" height="1024" key="GridCell.Tab.0.bottom" timestamp="1589258500159">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589237341185" />
-    <state width="1859" height="1024" key="GridCell.Tab.0.center" timestamp="1589237341185">
+    <state width="1859" height="1024" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589258500159" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.center" timestamp="1589258500158">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589237341185" />
-    <state width="1859" height="1024" key="GridCell.Tab.0.left" timestamp="1589237341185">
+    <state width="1859" height="1024" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589258500158" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.left" timestamp="1589258500158">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589237341185" />
-    <state width="1859" height="1024" key="GridCell.Tab.0.right" timestamp="1589237341185">
+    <state width="1859" height="1024" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589258500158" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.right" timestamp="1589258500159">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589237341185" />
+    <state width="1859" height="1024" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589258500159" />
     <state x="500" y="245" key="SettingsEditor" timestamp="1589226045748">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>

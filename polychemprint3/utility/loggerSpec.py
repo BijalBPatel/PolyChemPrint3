@@ -16,7 +16,6 @@ class loggerSpec(ABC):
     @abstractmethod
     def __init__(self, **kwargs):
         pass
-        # kill extra args here
 
     ### Logging METHODS
 
@@ -28,7 +27,7 @@ class loggerSpec(ABC):
         String
             log in yaml string format
         """
-        return yaml.dumps(self.__dict__)
+        return yaml.dump(self.__dict__)
 
     def loadLogSelf(self, yamlString):
         """*loads yaml log back into dict*.

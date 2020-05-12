@@ -9,10 +9,14 @@
 #############################################################################
 ### Import Statements
 #############################################################################
+import copy
 import sys
+from datetime import datetime
+
 from polychemprint3.commandLineInterface.ioMenuSpec import ioMenuSpec
 from polychemprint3.commandLineInterface.ioTextPanel import ioTextPanel
 from polychemprint3.axes.nullAxes import nullAxes
+from polychemprint3.recipes.recipe import recipe, recipeStub
 from polychemprint3.tools.nullTool import nullTool
 import logging
 import os
@@ -21,10 +25,12 @@ import importlib
 from pathlib import Path
 from colorama import init, Fore, Style
 
-
 #############################################################################
 ### Menu Classes
 #############################################################################
+from polychemprint3.utility.fileHandler import fileHandler
+
+
 class ioMenu_0Main(ioMenuSpec):
     """Contains data and methods for implemented Main Menu."""
 
@@ -383,6 +389,7 @@ class ioMenu_1Hardware(ioMenuSpec):
             print("\t%-40s|  %-25s" % (key, storedCmds.get(key)))
         print(Style.RESET_ALL)
 
+
 class ioMenu_1PrintFile(ioMenuSpec):
     """Contains data and methods for implemented Print File Menu."""
 
@@ -573,12 +580,12 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                                 Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands",
                                 Fore.WHITE + "(0) Browse/Load Stored Recipes":
                                     Fore.WHITE + "Search through recipe folder for recipe to activate",
-                                Fore.WHITE + "(1) Modify and Save Active Recipe":
-                                    Fore.WHITE + "Enter recipe builder routine",
+                                Fore.WHITE + "(1) Modify/Save Active Recipe":
+                                    Fore.WHITE + "Remove/Reorder sequences, change parameters, and save to yaml file",
                                 Fore.WHITE + "(2) Build a New Recipe":
                                     Fore.WHITE + "Start a new recipe from scratch",
-                                Fore.WHITE + "(3) Clone/Modify Stored Recipe":
-                                    Fore.WHITE + "Start a new recipe based on a stored recipe",
+                                Fore.WHITE + "(3) Reuse a stored recipe":
+                                    Fore.WHITE + "Import sequences from a stored recipe to the active recipe",
                                 Fore.LIGHTYELLOW_EX + "[PRIME]":
                                     Fore.LIGHTYELLOW_EX + "Build active recipe into python code",
                                 Fore.LIGHTYELLOW_EX + "[VIEW]":
@@ -597,10 +604,9 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
         print("-" * 150)
         print("###\t" + self.menuTitle)
         print("-" * 150)
-        print("\tRecipes are longer chains of sequences stored as yaml files and only loaded into RAM when active")
-        print("\tChoose an option from the list below:")
-        # TODO DISPLAY ACTIVE RECIPE
-
+        print("\tRecipes are chains of sequences stored as yaml files and only loaded into RAM when active")
+        print(Fore.YELLOW + "\tActive Recipe: " + str(__activeRecipe__.name))
+        print(Fore.WHITE + "\tChoose an option from the list below:")
         print(Style.RESET_ALL)
         # Print std menu options
         for key in sorted(self.menuItems):
@@ -628,6 +634,8 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
         """
         global __savedInp__
         global __lastInp__
+        global __activeRecipe__  # pull global active recipe for modifying
+
         # Menu Loop
         doQuitMenu = False
 
@@ -635,15 +643,12 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
             try:
                 self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 self.ioMenu_printMenu()
-                # List of sequences as strings
-                stringList = []
-                for x in [*__seqDict__]:
-                    stringList.append(str(x))
 
                 choiceString = io_Prompt(
                     "Enter Command:", validate=True,
-                    validResponse=(["q", "?", "1", "/", ".", ","]
-                                   + stringList)).lower()
+                    validResponse=(["q", "?",
+                                    "0", "1", "2", "3",
+                                    "/", ".", ","]))
 
                 if choiceString in ["/", ".", ","]:
                     choiceString = io_savedCmdOps(choiceString)
@@ -654,10 +659,80 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                     pass
                 elif choiceString == 'q':
                     return 'M0MainMenu'
-                elif choiceString.upper() in stringList:
-                    # Instantiate Sequence menu
-                    seqMen = ioMenu_2SequenceOptions(choiceString.upper())
-                    seqMen.io_Operate()
+                elif choiceString == '0':  # Choose recipe from recipe stubs to activate
+                    # TODO BROWSERECIPES
+                    pass
+                elif choiceString == '1':  # Modify or save active recipe
+                    # First pull stub and active recipe
+                    activeStub = None
+                    for stub in __recipeStubList__:
+                        if stub.name == __activeRecipe__.name:
+                            activeStub = stub
+
+                    try:
+                        # Check if yaml file exists already (path is set)
+                        pathSet = activeStub.fullFilePath is not None
+                        if not pathSet:
+                            filePath = __rootDir__ / 'recipes' / (str(activeStub.name) + ".yaml")
+                            activeStub.fullFilePath = filePath
+                            __activeRecipe__.fullFilePath = filePath
+
+                        # Construct string to write
+                        outstring = "# Name: " + __activeRecipe__.name + "\n# Description: " \
+                                    + __activeRecipe__.description + "\n# Date Created: " \
+                                    + __activeRecipe__.dateCreated + "\n" + __activeRecipe__.writeLogSelf()
+                        __activeRecipe__.overWriteToFile(outstring)
+                        print("\tSuccessfully saved recipe to file at: \n\t" + str(__activeRecipe__.fullFilePath))
+
+                    except Exception as inst:
+                        logging.exception(inst)
+
+                    # if so, open file
+                    # if not, create, set paths, and open file
+
+                    # Generate yaml string and present to user
+
+                    # Save yaml string to file and close file
+
+                elif choiceString == '2':  # Create a new recipe and make active
+                    nameinvalid = True
+                    newName = None
+                    while nameinvalid:
+                        newName = io_Prompt("\t\tEnter new recipe name:")
+                        # Check that name is unique
+                        nameinvalid = False
+                        for recStub in __recipeStubList__:
+                            if newName.lower() == recStub.name.lower():
+                                nameinvalid = True
+                                print("\t\tError: Name already in use, try again.")
+                    newDescription = io_Prompt("\t\tEnter new recipe description:")
+                    newPath = None
+                    # Backup active recipe
+                    activeRecCopy = copy.copy(__activeRecipe__)
+                    dateString = datetime.now().strftime("%I:%M%p on %B %d, %Y")
+                    stubPassed = False
+                    try:
+                        newRecStub = recipeStub(name=newName, description=newDescription, dateCreated=dateString,
+                                                fullFilePath=newPath)
+                        __recipeStubList__.append(newRecStub)
+                        stubPassed = True
+                        __activeRecipe__ = recipe(name=newName, description=newDescription, dateCreated=dateString,
+                                                  fullFilePath=newPath)
+                        print("\t\tSuccessfully created new recipe!")
+                    except Exception as inst:
+                        print("\t\tError: Could not create new recipe, reverting to previous condition.")
+                        logging.exception(inst)
+                        if stubPassed:
+                            __recipeStubList__.pop()
+                        __activeRecipe__ = activeRecCopy
+
+                elif choiceString == '3':  # Import sequence from a stored recipe
+                    # TODO Clone Modify recipe
+                    pass
+                # elif choiceString.upper() in stringList:
+                #     # Instantiate Sequence menu
+                #     seqMen = ioMenu_2SequenceOptions(choiceString.upper())
+                #     seqMen.io_Operate()
                 else:
                     print("\tReceived: " + choiceString)
                     print(Fore.LIGHTRED_EX
@@ -923,7 +998,7 @@ def io_Prompt(promptString, validate=False,
 
 
 def io_savedCmdOps(inString):
-    """*Executes a block of test code from main menu*.
+    """*Handles processing saved/ repeat commands for the CLI*.
 
     Returns
     -------
@@ -1011,13 +1086,18 @@ def io_MenuManager(initialMenuString):
     return menuFlag
 
 
+#########################################################################
+### PCP Object Handling File IO METHODS
+#########################################################################
+
+
 def io_loadPCP(objType):
     """*Search for, instantiate, and load PCP objects into appropriate dict*.
 
     Parameters
     ----------
     objType : Object
-        Type of PCP object to load
+        Type of PCP object to load from python file
     """
     # Set type-specific values
     if objType == 'sequence':
@@ -1123,6 +1203,72 @@ def io_loadPCP(objType):
               + Style.RESET_ALL)
 
 
+def io_pollRecipes():
+    """*Finds all recipe yaml files and loads recipe stubs into the recipeList*.
+
+      Parameters
+      ----------
+
+      """
+    textCol = Fore.GREEN
+    recipeDir = __rootDir__ / 'recipes'
+    print(textCol + "Loading Recipe stub list from Recipes Folder..." + "-" * 40)
+    # Read through all files in folder and load all yaml to a list
+    filesInFolder = os.listdir(recipeDir)
+    recipeNames = []
+
+    # Search folder for possible recipe files
+    for name in filesInFolder:
+        if ".yaml" in name[-5:]:
+            recipeNames.append(name)
+
+    # For each of these, try to create a recipe stub by parsing first 3 lines and add to stublist
+    print("\tAttempting to load recipestubs...")
+    for name in recipeNames:
+        try:
+            fullpath = recipeDir / name
+            fileReader = fileHandler(fullpath)
+            recipeekList = fileReader.peekFile(3)[1]
+
+            newStub = recipeStub(name=recipeekList[0][8:].rstrip(),
+                                 description=recipeekList[1][15:].rstrip(),
+                                 dateCreated=recipeekList[2][16:].rstrip(),
+                                 fullFilePath=fullpath)
+
+            __recipeStubList__.append(newStub)
+            print("\tLoaded: " + newStub.name + ".yaml")
+        except Exception as inst:
+            logging.exception(inst)
+    print(textCol + "Finished Loading Recipe stub list from Recipes Folder!" + "-" * 33)
+    print(Style.RESET_ALL)
+
+
+def io_loadRecipe(rStub):
+    """*Attempts to load selected recipeStub into the active Recipe, pulling extra info from yaml file*.
+
+      Parameters
+      ----------
+
+      """
+    textCol = Fore.WHITE
+    objDir = __rootDir__ / 'recipes'
+    print(textCol + "Loading Recipe stub list from Recipes Folder..." + "-" * 46)
+    # TODO Write Loader
+
+
+def io_saveRecipe():
+    """*Attempts to save active recipe to a yaml file*.
+
+      Parameters
+      ----------
+
+      """
+    textCol = Fore.WHITE
+    objDir = __rootDir__ / 'recipes'
+    print(textCol + "Loading Recipe stub list from Recipes Folder..." + "-" * 46)
+    # TODO Write Saver
+
+
 #############################################################################
 ### Global attributes
 #############################################################################
@@ -1147,8 +1293,8 @@ __seqDict__ = {}
 __toolDict__ = {}
 __axesDict__ = {}
 __userDict__ = {}
-__recipeDict__ = {}
-__activeRecipe__ = None
+__recipeStubList__ = []
+__activeRecipe__ = recipe()
 
 # Relative paths
 __textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels' / 'LICENSE.txt'}
@@ -1173,6 +1319,7 @@ def main():
     io_loadPCP('tools')
     io_loadPCP('sequence')
     io_loadPCP('user')
+    io_pollRecipes()
     # Interface Start Sequencea
     io_StartText()
     # make software connections

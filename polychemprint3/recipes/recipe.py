@@ -10,23 +10,23 @@ Specifies modular recipe protocol to link series of sequences
 import logging
 from time import sleep
 from pathlib import Path
-from abc import ABC, abstractmethod
 from polychemprint3.axes import axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence import sequenceSpec
 from polychemprint3.utility.loggerSpec import loggerSpec
 from polychemprint3.tools.nullTool import nullTool
 from polychemprint3.axes.nullAxes import nullAxes
+from polychemprint3.utility.fileHandler import fileHandler
 
 
-class recipe(loggerSpec, ABC):
+class recipe(fileHandler, loggerSpec):
     """Class for recipes - a series of sequences joined together"""
 
     ################### Construct/Destruct METHODS ###########################
     def __init__(self,
-                 name="NoRecipeNameSet",
-                 description="NoRecipeDescriptionSet",
-                 path="NoRecipePathSet",
+                 name: str = "NoRecipeNameSet",
+                 description: str = "NoRecipeDescriptionSet",
+                 dateCreated: str = "NoDateSet",
                  axes: axes3DSpec = nullAxes(),
                  tool: toolSpec = nullTool(),
                  seqList: list = None,
@@ -38,6 +38,7 @@ class recipe(loggerSpec, ABC):
         ----------
         name: String
         description: String
+        dateCreated: String
         path: Path
         axes: axes3DSpec
         tool: toolSpec
@@ -46,9 +47,9 @@ class recipe(loggerSpec, ABC):
         """
 
         # Pass in active axes/tool, other params
+        self.dateCreated = dateCreated
         self.description = description
         self.name = name
-        self.path = path
         self.axes = axes
         self.tool = tool
         self.__verbose__ = __verbose__
@@ -115,7 +116,7 @@ class recipe(loggerSpec, ABC):
         try:
             seqTemp = self.seqList[currentIndex]
             del self.seqList[currentIndex]
-            self.seqList.insert(newIndex,seqTemp)
+            self.seqList.insert(newIndex, seqTemp)
             seqListBackup = None  # Wipes backup label
             return [True, "Sequence move successful"]
         except Exception as inst:
@@ -171,7 +172,6 @@ class recipe(loggerSpec, ABC):
             return False
 
     ####################### Logging METHODS ###############################
-    @abstractmethod
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.
 
@@ -182,7 +182,6 @@ class recipe(loggerSpec, ABC):
         """
         return super().writeLogSelf()
 
-    @abstractmethod
     def loadLogSelf(self, logString):
         """*loads log back into dict*.
 
@@ -193,3 +192,28 @@ class recipe(loggerSpec, ABC):
 
         """
         super().loadLogSelf(logString)
+
+
+class recipeStub(fileHandler):
+    """Class for recipe stubs, just the name, description, path info"""
+
+    ################### Construct/Destruct METHODS ###########################
+    def __init__(self,
+                 name: str = "NoRecipeNameSet",
+                 description: str = "NoRecipeDescriptionSet",
+                 dateCreated: str = "NoDateSet",
+                 **kwargs):
+        """*Initializes recipe object*.
+
+        Parameters
+        ----------
+        name: String
+        description: String
+        __verbose__: bool
+        """
+
+        # Pass in active axes/tool, other params
+        self.description = description
+        self.name = name
+        self.dateCreated = dateCreated
+        super().__init__(**kwargs)

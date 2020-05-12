@@ -13,13 +13,12 @@ import logging
 from itertools import islice
 
 
-class fileHandler(ABC):
-    """Abstract Base Class for objects that can read/write to file"""
+class fileHandler:
+    """Base Class for objects that can read/write to file"""
 
-    @abstractmethod
-    def __init__(self, fullFilePath, **kwargs):
+    def __init__(self, fullFilePath=None, **kwargs):
         self.fullFilePath = fullFilePath
-        # kill extra args here
+        super().__init__(**kwargs)
 
     ################### Helper Methods ###############################
     def testFileIO(self, modeString):
@@ -45,9 +44,10 @@ class fileHandler(ABC):
             print(Fore.LIGHTRED_EX + "Error Opening and Closing file\n"
                   + Style.RESET_ALL)
             logging.exception(inst)
-            return False            
+            return False
 
-    ################### File IO METHODS ###############################
+            ################### File IO METHODS ###############################
+
     def overWriteToFile(self, outString):
         """*Completely overwrites file with new content from outString*.
 
@@ -61,22 +61,20 @@ class fileHandler(ABC):
         bool
             True/False if writing passes/fails + errors
         """
-        if self.testFileIO("r+"):
-            try:
-                # Wipe file and open in writing mode
-                file = open(self.fullFilePath, "w")
 
-                # Write output to file
-                file.write(outString)
-                return True
-            except Exception as inst:
-                print(Fore.LIGHTRED_EX + "Error Overwriting to file\n"
-                      + Style.RESET_ALL)
-                logging.exception(inst)
-                return False
-            finally:
-                # Close file
-                file.close()
+        try:
+            # Wipe file and open in writing mode
+            file = open(self.fullFilePath, "w")
+
+            # Write output to file
+            file.write(outString)
+            file.close()
+            return True
+        except Exception as inst:
+            print(Fore.LIGHTRED_EX + "Error Overwriting to file\n"
+                  + Style.RESET_ALL)
+            logging.exception(inst)
+            return False
 
     def appendToFile(self, outString):
         """*Appends to file with new content from outString*.
@@ -158,7 +156,11 @@ class fileHandler(ABC):
                 file = open(self.fullFilePath, "r")
                 # Create generator
                 lines = islice(file, numLines)
-                return True, lines
+                outLines = []
+                for line in lines:
+                    outLines.append(line)
+                    
+                return True, outLines
             except Exception as inst:
                 print(Fore.LIGHTRED_EX + "Error reading from file\n"
                       + Style.RESET_ALL)
