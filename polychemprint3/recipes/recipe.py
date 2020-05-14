@@ -7,6 +7,7 @@ Specifies modular recipe protocol to link series of sequences
 | Author: Bijal Patel
 
 """
+import copy
 import logging
 from time import sleep
 from pathlib import Path
@@ -29,7 +30,7 @@ class recipe(fileHandler, loggerSpec):
                  dateCreated: str = "NoDateSet",
                  axes: axes3DSpec = nullAxes(),
                  tool: toolSpec = nullTool(),
-                 seqList: list = None,
+                 seqList=None,
                  __verbose__: bool = 0, **kwargs):
 
         """*Initializes recipe object*.
@@ -42,11 +43,13 @@ class recipe(fileHandler, loggerSpec):
         path: Path
         axes: axes3DSpec
         tool: toolSpec
-        dictParams: dict
+        seqList: list
         __verbose__: bool
         """
 
         # Pass in active axes/tool, other params
+        if seqList is None:
+            seqList = []
         self.dateCreated = dateCreated
         self.description = description
         self.name = name
@@ -67,10 +70,11 @@ class recipe(fileHandler, loggerSpec):
 
         """
         # Step 1 Back up sequence list
-        seqListBackup = self.seqList.copy()
+        seqListBackup = copy.copy(self.seqList)
 
         # Step 2 Attempt to add sequence, if fails revert seqList
         try:
+            print(self.seqList)
             self.seqList.insert(beforeIndex, newSeq)
             seqListBackup = None  # Wipes backup label
             return [1, "Add successful"]

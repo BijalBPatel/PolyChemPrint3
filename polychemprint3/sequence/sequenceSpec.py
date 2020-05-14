@@ -49,9 +49,6 @@ class sequenceSpec(loggerSpec, ABC):
         self.dictParams = dictParams
         self.verbose = __verbose__
         # Unwrap parameter to get just the string name and description
-        self.nameString = self.dictParams.get("name").value
-        self.descriptString = self.dictParams.get("description").value
-        self.groupString = self.dictParams.get("owner").value
         self.cmdList = []
         super().__init__(**kwargs)
 
