@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Soecifies user-specific preferences like directory and software preferences.
+""" user-specific preferences like directory and software preferences.
 
 | First created on Sat Oct 19 20:39:58 2019
 | Revised: 23/10/2019 14:06:59
 | Author: Bijal Patel
 
 """
-class userSpec:
-    def __init__(self,
-                 name="unset",
-                 creationDate="unset",
-                 homeDirectory="unset",
-                 programSettings="unset"):
+from polychemprint3.utility.fileHandler import fileHandler
+from polychemprint3.utility.loggerSpec import loggerSpec
+
+
+class user(loggerSpec):
+    def __init__(self, name="unset", creationDate="unset", homeDirectory="unset", programSettings="unset", **kwargs):
         """*Initializes User object*
 
         | *Parameters* All default to "unset"
@@ -27,6 +27,7 @@ class userSpec:
         self.creationDate = creationDate
         self.homeDirectory = homeDirectory
         self.programSettings = programSettings
+        super().__init__(**kwargs)
 
 
 

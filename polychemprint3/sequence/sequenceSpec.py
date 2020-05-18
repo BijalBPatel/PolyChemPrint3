@@ -53,9 +53,11 @@ class sequenceSpec(loggerSpec, ABC):
         super().__init__(**kwargs)
 
     ################### Parameter Methods ###########################
-
+    def updateParams(self):
+        pass
     ################### Sequence Actions ###################################
-    def operateSeq(self):
+
+    def operateSeq(self, **kwargs):
         """*Performs print sequence*.
         Returns
         -------

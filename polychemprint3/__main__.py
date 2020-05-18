@@ -204,6 +204,10 @@ class ioMenu_1Configuration(ioMenuSpec):
                         activ = axes.activate()
                         if deactiv == 1 and activ == 1:
                             print("\t\tAxes Changed and activated Successfully")
+                            for seq in __seqDict__.values():
+                                seq.tool = tool
+                                seq.axes = axes
+
                         else:
                             print("\t\tError loading Axes, old Axes restored")
                             axes = oldAxes
@@ -530,6 +534,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         for seq in __seqDict__.values():
             seq.axes = axes
             seq.tool = tool
+            seq.updateParams()
 
         # Menu Loop
         doQuitMenu = False
@@ -587,7 +592,7 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                                 Fore.WHITE + "(2) Build a New Recipe":
                                     Fore.WHITE + "Start a new recipe from scratch",
                                 # TODO Implement importing stored recipes and reusing
-                                #Fore.WHITE + "(3) Reuse a stored recipe":
+                                # Fore.WHITE + "(3) Reuse a stored recipe":
                                 #    Fore.WHITE + "Import sequences from a stored recipe to the active recipe",
                                 Fore.LIGHTYELLOW_EX + "[PRIME]":
                                     Fore.LIGHTYELLOW_EX + "Build active recipe into python code",
@@ -749,7 +754,9 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                     if not isPrimed:
                         print(Fore.YELLOW + "Error: must prime first" + Style.RESET_ALL)
                     else:
+                        logWriter = io_startLog()
                         __activeRecipe__.operateRecipe(axes, tool)
+                        io_endLog(logWriter)
                 elif choiceString.lower() == 'view':
                     for line in io_displayRecipe():
                         print("\t" + line)
@@ -914,10 +921,13 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                         for line in io_displayRecipe():
                             print("\t" + line)
                         newPos = io_Prompt("Enter index to be occupied by new sequence: ")
-                        try:
-                            __activeRecipe__.addSeq(int(newPos), copy.deepcopy(self.seq))
-                        except Exception as inst:
-                            logging.exception(inst)
+                        if newPos == 'q':
+                            pass
+                        else:
+                            try:
+                                __activeRecipe__.addSeq(int(newPos), copy.deepcopy(self.seq))
+                            except Exception as inst:
+                                logging.exception(inst)
                         print("\tNew state of Recipe: ")
                         for line in io_displayRecipe():
                             print("\t" + line)
@@ -961,7 +971,7 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
                      Fore.WHITE + "(3) Remove Sequence": Fore.WHITE + "Removes one or more sequences",
                      Fore.WHITE + "(4) Reorder Sequences": Fore.WHITE + "Change the order of sequence execution",
                      Fore.GREEN + "(SAVE) Save Recipe to File": Fore.GREEN + "Writes to yaml file in recipe folder",
-                     }
+                     }  # TODO: IMPLEMENT SEQUENCE IMPORT from existing recipes
         print(Style.RESET_ALL)
 
         kwargs = {'name': "RecipeEditMenu",
@@ -1069,7 +1079,7 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
                     print("\tSending to Sequence Menu...")
                     return "M1PrintSequence"
                 elif choiceString == '2':  # Edit Sequence
-                    if __activeRecipe__.seqList==[]:
+                    if __activeRecipe__.seqList == []:
                         print("Cannot edit an empty sequence list")
                     else:
                         indexList = []
@@ -1078,7 +1088,8 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
                             index = index + 1
                             indexList.append("S" + str(index))
 
-                        indexNo = io_Prompt("Enter Index (S#) for Sequence to modify:", validate=True, validResponse=indexList)
+                        indexNo = io_Prompt("Enter Index (S#) for Sequence to modify:", validate=True,
+                                            validResponse=indexList)
                         seqIndex = int(indexNo[1:])
                         seqMen = ioMenu_2SequenceOptions(__activeRecipe__.seqList[seqIndex])
                         seqMen.io_Operate()
@@ -1579,6 +1590,59 @@ def io_displayRecipe():
                                  str.center(seq.dictParams.get("description").value, 50)))
     outStrings.append(Fore.WHITE + "End Sequence List " + "-" * 25)
     return outStrings
+
+
+def io_startLog():
+    """*Creates a log file for the current recipe and writes pre-run parameters to it*.
+
+      Parameters
+      ----------
+
+      """
+    global __activeRecipe__
+    # Append parameter strings
+    try:
+        print("\tAttempting to write log to file...")
+        rootDir = Path(__file__).absolute().parent
+        logDir = rootDir / 'Logs'
+        now = datetime.now()
+        strDate = str(now.year) + str(now.month) + str(now.day) + "_" + str(now.hour) \
+                  + str(now.minute) + str(now.second)
+        strName = str(input("Enter Log File Name:"))
+        fileName = strDate + "_" + strName
+        fileWriter = fileHandler(fullFilePath=logDir / fileName + ".txt")
+        outString = "Print Name: " + strName + "\nStarted at: " + strDate + "\n" + __activeRecipe__.writeLogSelf()
+        fileWriter.overWriteToFile(outString)
+        return fileWriter
+    except Exception as inst:
+        print(Fore.RED + "\tError Writing Log File" + Style.RESET_ALL)
+        logging.exception(inst)
+
+
+def io_endLog(fileWriter: fileHandler):
+    """*Creates a log file for the current recipe and writes pre-run parameters to it*.
+
+      Parameters
+      ----------
+
+      """
+
+    # Append End status
+    try:
+        now = datetime.now()
+        strDate = str(now.year) + str(now.month) + str(now.day) + "_" \
+                  + str(now.hour) + str(now.minute) + str(now.second)
+        print("Recipe completed successfully at: " + strDate)
+        finalText = io_Prompt(" Enter any text you'd like to add to the log (q for nothing): ")
+        if finalText.lower() == 'q':
+            finalText = ''
+
+        print("\tAttempting to write log end to file...")
+        fileWriter.appendToFile(strDate + "\n")
+        fileWriter.appendToFile("Final Comment: " + finalText)
+    except Exception as inst:
+        print(Fore.RED + "\tError Writing Log File" + Style.RESET_ALL)
+        logging.exception(inst)
 
 
 #############################################################################

@@ -31,10 +31,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="General Cleaning/ Adding Recipe Menu">
+      <change afterPath="$PROJECT_DIR$/polychemprint3/sequence/runGCODEFile.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/polychemprint3/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/__main__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/polychemprint3/recipes/recipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/recipes/recipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/polychemprint3/sequence/basicMove.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/sequence/basicMove.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/polychemprint3/sequence/sequenceSpec.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/sequence/sequenceSpec.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/polychemprint3/user/userSpec.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/user/user.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,10 +55,16 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/polychemprint3/sequence" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
-  <component name="RunManager" selected="Python.recipe">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\bbpat\Box Sync\PhDBackups\BP PhD Research Backup\DiaoLab\3_ProjectFiles\2_Hardware_Software\2_Software_ActiveDevelopment\PolyChemPrintv3.0\polychemprint3_pkg\polychemprint3\sequence" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.__main__">
     <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="polychemprint3_pkg" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -155,7 +163,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589300582637</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589443716148</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1589443716148</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -200,25 +215,25 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state x="743" y="435" width="513" height="334" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589228654871" />
-    <state width="833" height="942" key="GridCell.Tab.0.bottom" timestamp="1589322170991">
-      <screen x="79" y="0" width="1421" height="1000" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.bottom" timestamp="1589581818889">
+      <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589315189789" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
     <state width="833" height="942" key="GridCell.Tab.0.bottom/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
-    <state width="833" height="942" key="GridCell.Tab.0.center" timestamp="1589322170991">
-      <screen x="79" y="0" width="1421" height="1000" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.center" timestamp="1589581818889">
+      <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589315189789" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
     <state width="833" height="942" key="GridCell.Tab.0.center/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
-    <state width="833" height="942" key="GridCell.Tab.0.left" timestamp="1589322170990">
-      <screen x="79" y="0" width="1421" height="1000" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.left" timestamp="1589581818889">
+      <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589315189789" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
     <state width="833" height="942" key="GridCell.Tab.0.left/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170990" />
-    <state width="833" height="942" key="GridCell.Tab.0.right" timestamp="1589322170991">
-      <screen x="79" y="0" width="1421" height="1000" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.right" timestamp="1589581818889">
+      <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1859" height="1024" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589315189789" />
+    <state width="1842" height="1144" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
     <state width="833" height="942" key="GridCell.Tab.0.right/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
     <state x="425" y="219" key="RollbackChangesDialog" timestamp="1589292941720">
       <screen x="79" y="0" width="1841" height="1200" />
@@ -232,20 +247,13 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state x="591" y="329" key="Vcs.Push.Dialog.v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589300592731" />
-    <state x="662" y="265" key="search.everywhere.popup" timestamp="1589301283524">
+    <state x="825" y="372" key="refactoring.ChangeSignatureDialog" timestamp="1589491059276">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state x="662" y="265" key="search.everywhere.popup/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589301283524" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/polychemprint3/__main__.py</url>
-          <line>743</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state x="825" y="372" key="refactoring.ChangeSignatureDialog/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589491059276" />
+    <state x="662" y="265" key="search.everywhere.popup" timestamp="1589490033843">
+      <screen x="79" y="0" width="1841" height="1200" />
+    </state>
+    <state x="662" y="265" key="search.everywhere.popup/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589490033843" />
   </component>
 </project>
