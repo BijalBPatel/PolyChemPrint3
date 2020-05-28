@@ -6,6 +6,7 @@
 /polychemprint3.egg-info
 /polychemprint3/__pycache__/
 /polychemprint3/.pylint.d
+/tests/
 *.pyc
 updatePyPI.bat
 
