@@ -1,5 +1,5 @@
-polychemprint3.data package
-===========================
+polychemprint3.data
+===================
 
 Subpackages
 -----------

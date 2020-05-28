@@ -1,5 +1,5 @@
-polychemprint3.utility package
-==============================
+polychemprint3.utility 
+======================
 
 Submodules
 ----------

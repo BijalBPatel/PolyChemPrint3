@@ -1,5 +1,5 @@
-polychemprint3.tools package
-============================
+polychemprint3.tools
+====================
 
 Submodules
 ----------

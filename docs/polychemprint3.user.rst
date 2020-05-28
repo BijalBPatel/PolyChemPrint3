@@ -1,5 +1,5 @@
-polychemprint3.user package
-===========================
+polychemprint3.user
+===================
 
 Submodules
 ----------

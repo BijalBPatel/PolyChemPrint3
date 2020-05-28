@@ -1,5 +1,5 @@
-polychemprint3.sequence package
-===============================
+polychemprint3.sequence
+=======================
 
 Submodules
 ----------

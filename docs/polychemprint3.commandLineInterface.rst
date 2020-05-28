@@ -1,5 +1,5 @@
-polychemprint3.commandLineInterface package
-===========================================
+polychemprint3.commandLineInterface
+===================================
 
 Submodules
 ----------
