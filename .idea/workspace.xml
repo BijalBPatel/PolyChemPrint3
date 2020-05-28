@@ -30,7 +30,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="Cleaning up github and merging all branches" />
+    <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="Cleaning up github and merging all branches">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -182,7 +184,14 @@
       <option name="project" value="LOCAL" />
       <updated>1590636752113</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Cleaning up github and merging all branches">
+      <created>1590637473330</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1590637473330</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -261,11 +270,11 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state x="500" y="245" key="SettingsEditor/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589226045748" />
-    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2" timestamp="1590636765875">
+    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2" timestamp="1590637570034">
       <screen x="-1858" y="82" width="1858" height="1080" />
     </state>
     <state x="591" y="329" key="Vcs.Push.Dialog.v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589300592731" />
-    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2/72.0.1848.1200/-1858.82.1858.1080@-1858.82.1858.1080" timestamp="1590636765875" />
+    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2/72.0.1848.1200/-1858.82.1858.1080@-1858.82.1858.1080" timestamp="1590637570034" />
     <state x="825" y="372" key="refactoring.ChangeSignatureDialog" timestamp="1589491059276">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
