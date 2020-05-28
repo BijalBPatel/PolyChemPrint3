@@ -25,15 +25,13 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:dev" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:beta" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="Adding Users">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/polychemprint3/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/__main__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/polychemprint3/user/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/user/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +186,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev" />
+                        <option value="beta" />
                       </list>
                     </value>
                   </entry>
@@ -252,10 +250,11 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state x="500" y="245" key="SettingsEditor/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589226045748" />
-    <state x="591" y="329" key="Vcs.Push.Dialog.v2" timestamp="1589300592731">
-      <screen x="79" y="0" width="1841" height="1200" />
+    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2" timestamp="1590636048548">
+      <screen x="-1858" y="82" width="1858" height="1080" />
     </state>
     <state x="591" y="329" key="Vcs.Push.Dialog.v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589300592731" />
+    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2/72.0.1848.1200/-1858.82.1858.1080@-1858.82.1858.1080" timestamp="1590636048548" />
     <state x="825" y="372" key="refactoring.ChangeSignatureDialog" timestamp="1589491059276">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
