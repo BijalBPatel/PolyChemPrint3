@@ -315,10 +315,10 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         [1, 'Text Sent + text'] if successful 2-way communication
         [0, 'Write Failed + Error'] if exception caught
         """
-        if (self.checkIfSerialConnectParamsSet()):
+        if self.checkIfSerialConnectParamsSet():
             try:
                 self.ser.write(text)
-                if (self.__verbose__):
+                if self.__verbose__:
                     print('\tCommand Sent to Extruder: ' + text)
                 return [1, 'Command Sent' + text]
             except Exception as inst:
@@ -388,10 +388,10 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         inp = ''  # input string
         ins = ''  # read in
-        tEnd = time() + self.commsTimeOut
+        tEnd = time.time() + self.commsTimeOut
 
         try:  # Reads input until timeout
-            while time() < tEnd:
+            while time.time() < tEnd:
                 ins = self.ser.read()
                 if ins != "":
                     inp += ins
@@ -400,7 +400,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             if self.__verbose__:
                 print('\tReceived from Serial Device: ' + self.name
                       + ' : ' + inp + '\n')
-            return (inp)
+            return inp
         except Exception as inst:
             return [0, 'Error on read from Serial Device: ' + self.name
                     + ' : ' + inst.__str__()]

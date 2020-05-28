@@ -2,6 +2,8 @@
 <project version="4">
   <component name="AnalysisUIOptions">
     <option name="GROUP_BY_SEVERITY" value="true" />
+    <option name="FILTER_RESOLVED_ITEMS" value="false" />
+    <option name="SHOW_STRUCTURE" value="true" />
   </component>
   <component name="BranchesTreeState">
     <expand>
@@ -23,13 +25,13 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:beta" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="276432cd-46b5-4db7-bd23-9911ae14f6db" name="Default Changelist" comment="Manyupdates">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="Adding Users">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,34 +39,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <favorite-branches>
-      <branch-storage>
-        <map>
-          <entry type="REMOTE">
-            <value>
-              <list>
-                <branch-info repo="$PROJECT_DIR$" source="origin/dev" />
-              </list>
-            </value>
-          </entry>
-        </map>
-      </branch-storage>
-    </favorite-branches>
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="hiddenUrls">
-      <set>
-        <option value="https://github.com/BijalBPatel/PolyChemPrint3.git" />
-      </set>
-    </option>
-  </component>
-  <component name="ProjectId" id="1bMqlFXUs5okKAT35oD7m46GxF6" />
+  <component name="ProjectId" id="1bm8HUgGGZ783ePQaxrsDW1Gj60" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -72,10 +50,9 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/polychemprint3/sequence" />
-    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -83,11 +60,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.__main__">
-    <configuration name="main.pl" type="PrologRunConfiguration" factoryName="Prolog" temporary="true">
-      <setting name="targetFile" value="$PROJECT_DIR$/../../PolyPrint/v2.0/v2.20/main.pl" />
-      <setting name="extraArgs" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="polychemprint3_pkg" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -109,7 +81,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="setToolState" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="recipe" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="polychemprint3_pkg" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -117,13 +89,13 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/polychemprint3/sequence" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/polychemprint3/recipes" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/polychemprint3/sequence/setToolState.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/polychemprint3/recipes/recipe.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
@@ -133,8 +105,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.__main__" />
-        <item itemvalue="Python.setToolState" />
-        <item itemvalue="Prolog.main.pl" />
+        <item itemvalue="Python.recipe" />
+        <item itemvalue="Python.recipe" />
+        <item itemvalue="Python.recipe" />
+        <item itemvalue="Python.recipe" />
       </list>
     </recent_temporary>
   </component>
@@ -143,34 +117,62 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="276432cd-46b5-4db7-bd23-9911ae14f6db" name="Default Changelist" comment="" />
-      <created>1588452459046</created>
+      <changelist id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="" />
+      <created>1589225820558</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1588452459046</updated>
+      <updated>1589225820558</updated>
     </task>
-    <task id="LOCAL-00001" summary="Manyupdates">
-      <created>1588703005147</created>
+    <task id="LOCAL-00001" summary="Removed GCODE file menu">
+      <created>1589228063828</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1588703005148</updated>
+      <updated>1589228063828</updated>
     </task>
-    <task id="LOCAL-00002" summary="Manyupdates">
-      <created>1588877484254</created>
+    <task id="LOCAL-00002" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589236002199</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1588877484254</updated>
+      <updated>1589236002199</updated>
     </task>
-    <task id="LOCAL-00003" summary="Manyupdates">
-      <created>1589225133438</created>
+    <task id="LOCAL-00003" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589240973797</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1589225133438</updated>
+      <updated>1589240973797</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589258520300</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1589258520300</updated>
+    </task>
+    <task id="LOCAL-00005" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589300582637</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1589300582637</updated>
+    </task>
+    <task id="LOCAL-00006" summary="General Cleaning/ Adding Recipe Menu">
+      <created>1589443716148</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1589443716148</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Adding Users">
+      <created>1589775897586</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1589775897586</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -184,7 +186,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="beta" />
                       </list>
                     </value>
                   </entry>
@@ -198,126 +200,68 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Manyupdates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Manyupdates" />
+    <MESSAGE value="Removed GCODE file menu" />
+    <MESSAGE value="General Cleaning/ Adding Recipe Menu" />
+    <MESSAGE value="Adding Users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding Users" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="886" y="436" key="#Notifications" timestamp="1589225235728">
+    <state x="630" y="289" key="#Code_Cleanup_Inspections" timestamp="1589228647644">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state x="886" y="436" key="#Notifications/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589225235728" />
-    <state x="735" y="390" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588706207681">
+    <state x="630" y="289" key="#Code_Cleanup_Inspections/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589228647644" />
+    <state x="453" y="255" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589226088270">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state x="735" y="390" key="#com.intellij.fileTypes.FileTypeChooser/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588706207681" />
-    <state x="679" y="336" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1589224903519">
+    <state x="453" y="255" key="#com.intellij.execution.impl.EditConfigurationsDialog/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589226088270" />
+    <state x="743" y="435" width="513" height="334" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1589228654871">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state x="679" y="336" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589224903519" />
-    <state x="743" y="435" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1588567864983">
+    <state x="743" y="435" width="513" height="334" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589228654871" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.bottom" timestamp="1589776264882">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state x="743" y="435" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588567864983" />
-    <state x="399" y="200" width="1200" height="800" key="DiffContextDialog" timestamp="1588460325734">
+    <state width="1842" height="1144" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
+    <state width="833" height="942" key="GridCell.Tab.0.bottom/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.bottom/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1589776264882" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.center" timestamp="1589776264882">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state x="399" y="200" width="1200" height="800" key="DiffContextDialog/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588460325734" />
-    <state x="724" y="284" key="FileChooserDialogImpl" timestamp="1588877764258">
-      <screen x="79" y="0" width="1421" height="1000" />
-    </state>
-    <state x="914" y="341" key="FileChooserDialogImpl/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588638551491" />
-    <state x="724" y="284" key="FileChooserDialogImpl/79.0.1421.1000@79.0.1421.1000" timestamp="1588877764258" />
-    <state x="914" y="341" key="FileChooserDialogImpl/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588595802391" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.bottom" timestamp="1588875476634">
-      <screen x="1999" y="0" width="1841" height="1080" />
-    </state>
-    <state width="927" height="1023" key="GridCell.Tab.0.bottom/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631672896" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@1999.0.1841.1080" timestamp="1588875476634" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588828677146" />
-    <state width="906" height="121" key="GridCell.Tab.0.bottom/79.0.1421.1000@79.0.1421.1000" timestamp="1588651153090" />
-    <state width="1820" height="330" key="GridCell.Tab.0.bottom/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596549127" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.center" timestamp="1588875476634">
-      <screen x="1999" y="0" width="1841" height="1080" />
-    </state>
-    <state width="927" height="1023" key="GridCell.Tab.0.center/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631672896" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@1999.0.1841.1080" timestamp="1588875476634" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588828677146" />
-    <state width="906" height="121" key="GridCell.Tab.0.center/79.0.1421.1000@79.0.1421.1000" timestamp="1588651153089" />
-    <state width="1820" height="330" key="GridCell.Tab.0.center/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596549127" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.left" timestamp="1588875476634">
-      <screen x="1999" y="0" width="1841" height="1080" />
-    </state>
-    <state width="927" height="1023" key="GridCell.Tab.0.left/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631672896" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@1999.0.1841.1080" timestamp="1588875476634" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588828677145" />
-    <state width="906" height="121" key="GridCell.Tab.0.left/79.0.1421.1000@79.0.1421.1000" timestamp="1588651153088" />
-    <state width="1820" height="330" key="GridCell.Tab.0.left/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596549126" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.right" timestamp="1588875476634">
-      <screen x="1999" y="0" width="1841" height="1080" />
-    </state>
-    <state width="927" height="1023" key="GridCell.Tab.0.right/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631672896" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@1999.0.1841.1080" timestamp="1588875476634" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588828677146" />
-    <state width="906" height="121" key="GridCell.Tab.0.right/79.0.1421.1000@79.0.1421.1000" timestamp="1588651153090" />
-    <state width="1820" height="330" key="GridCell.Tab.0.right/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596549127" />
-    <state width="1820" height="404" key="GridCell.Tab.1.bottom" timestamp="1588712543575">
+    <state width="1842" height="1144" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
+    <state width="833" height="942" key="GridCell.Tab.0.center/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.center/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1589776264882" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.left" timestamp="1589776264881">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1820" height="404" key="GridCell.Tab.1.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543575" />
-    <state width="1820" height="404" key="GridCell.Tab.1.center" timestamp="1588712543575">
+    <state width="1842" height="1144" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
+    <state width="833" height="942" key="GridCell.Tab.0.left/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170990" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.left/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1589776264881" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.right" timestamp="1589776264882">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1820" height="404" key="GridCell.Tab.1.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543575" />
-    <state width="1820" height="404" key="GridCell.Tab.1.left" timestamp="1588712543574">
+    <state width="1842" height="1144" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
+    <state width="833" height="942" key="GridCell.Tab.0.right/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.right/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1589776264882" />
+    <state x="425" y="219" key="RollbackChangesDialog" timestamp="1589292941720">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1820" height="404" key="GridCell.Tab.1.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543574" />
-    <state width="1820" height="404" key="GridCell.Tab.1.right" timestamp="1588712543575">
+    <state x="425" y="219" key="RollbackChangesDialog/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589292941720" />
+    <state x="500" y="245" key="SettingsEditor" timestamp="1589226045748">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state width="1820" height="404" key="GridCell.Tab.1.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588712543575" />
-    <state x="500" y="245" width="1268" height="710" key="SettingsEditor" timestamp="1589225186885">
+    <state x="500" y="245" key="SettingsEditor/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589226045748" />
+    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2" timestamp="1590636048548">
+      <screen x="-1858" y="82" width="1858" height="1080" />
+    </state>
+    <state x="591" y="329" key="Vcs.Push.Dialog.v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589300592731" />
+    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2/72.0.1848.1200/-1858.82.1858.1080@-1858.82.1858.1080" timestamp="1590636048548" />
+    <state x="825" y="372" key="refactoring.ChangeSignatureDialog" timestamp="1589491059276">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state x="500" y="245" key="SettingsEditor/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589225186885" />
-    <state x="500" y="245" width="1268" height="710" key="SettingsEditor/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588595810333" />
-    <state x="473" y="275" key="Vcs.Push.Dialog.v2" timestamp="1589225140088">
+    <state x="825" y="372" key="refactoring.ChangeSignatureDialog/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589491059276" />
+    <state x="662" y="265" key="search.everywhere.popup" timestamp="1589490033843">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
-    <state x="473" y="275" key="Vcs.Push.Dialog.v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589225140088" />
-    <state x="383" y="229" key="Vcs.Push.Dialog.v2/79.0.1421.1000@79.0.1421.1000" timestamp="1588877504262" />
-    <state x="129" y="152" key="VcsDiffUtil.ChangesDialog" timestamp="1588877623421">
-      <screen x="79" y="0" width="1421" height="1000" />
-    </state>
-    <state x="129" y="152" key="VcsDiffUtil.ChangesDialog/79.0.1421.1000@79.0.1421.1000" timestamp="1588877623421" />
-    <state x="807" y="510" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588702985787">
-      <screen x="79" y="0" width="1841" height="1200" />
-    </state>
-    <state x="807" y="510" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588702985787" />
-    <state x="1808" y="-26" width="1381" height="799" maximized="true" key="dock-window-1" timestamp="1588651601935">
-      <screen x="79" y="0" width="1421" height="1000" />
-    </state>
-    <state x="94" y="0" width="723" height="1006" key="dock-window-1/-2961.-305.1461.1000/1920.-317.1858.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588631629876" />
-    <state x="72" y="0" width="934" height="1207" key="dock-window-1/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588644047499" />
-    <state x="1808" y="-26" width="1381" height="799" maximized="true" key="dock-window-1/79.0.1421.1000@79.0.1421.1000" timestamp="1588651601935" />
-    <state x="72" y="0" width="934" height="1087" key="dock-window-1/79.0.1841.1080/1920.0.1920.1050@79.0.1841.1080" timestamp="1588606831431" />
-    <state x="1912" y="-8" width="945" height="1096" key="dock-window-1/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596670807" />
-    <state x="1913" y="0" width="943" height="1087" key="dock-window-2" timestamp="1588705112096">
-      <screen x="1999" y="0" width="1841" height="1080" />
-    </state>
-    <state x="1913" y="0" width="943" height="1087" key="dock-window-2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588705112096" />
-    <state x="708" y="178" width="583" height="843" key="find.popup" timestamp="1588596885178">
-      <screen x="79" y="0" width="1841" height="1200" />
-    </state>
-    <state x="708" y="178" width="583" height="843" key="find.popup/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588596885178" />
-    <state x="358" y="261" key="git4idea.branch.GitSmartOperationDialog" timestamp="1588877314861">
-      <screen x="79" y="0" width="1421" height="1000" />
-    </state>
-    <state x="358" y="261" key="git4idea.branch.GitSmartOperationDialog/79.0.1421.1000@79.0.1421.1000" timestamp="1588877314861" />
-    <state x="440" y="313" key="git4idea.branch.GitSmartOperationDialog/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1588452693355" />
-    <state x="662" y="265" width="672" height="678" key="search.everywhere.popup" timestamp="1588708277358">
-      <screen x="79" y="0" width="1841" height="1200" />
-    </state>
-    <state x="662" y="265" width="672" height="678" key="search.everywhere.popup/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1588708277358" />
+    <state x="662" y="265" key="search.everywhere.popup/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589490033843" />
   </component>
 </project>

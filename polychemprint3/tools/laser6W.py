@@ -45,6 +45,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         verbose: bool
             whether details should be printed to cmd line
         """
+
         self.dispenseStatus = 0  # off
         inputs = {"name": name,
                   "units": units,
@@ -67,7 +68,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         passed = False
         # Start Serial Device
         [status, message] = self.startSerial()
-        print("\t\t\t") 
+        print("\t\t\t")
         print(message)
         if status == 1:
             # Try initial handshake
@@ -117,7 +118,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         except Exception as inst:
             return [-1, 'Failed engaging dispense ' + inst.__str__()]
 
-    def disengage(self) :
+    def disengage(self):
         """*Toggles Dispense off*.
 
         Returns
@@ -142,7 +143,7 @@ class laser6W(serialDeviceSpec, toolSpec):
 
         Parameters
         ----------
-        val: String
+        value: String
             New value of pressure out of 100
 
         Returns
@@ -151,7 +152,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         [-1, "Error: value could not be set for LASER + error text"]
         """
         try:
-            return self.__writeSerial__(value+'\n')
+            return self.__writeSerial__(value + '\n')
         except Exception as inst:
             return [-1, "Error: Value could not be set for LASER"
                     + inst.__str__()]
@@ -168,7 +169,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         |   [-1, "Error: Tool activation state cannot be determined + Error]
         """
         try:
-            if self.dispenseStatus():
+            if self.dispenseStatus:
                 return [1, "Tool On"]
             else:
                 return [0, "Tool Off"]
@@ -216,7 +217,6 @@ class laser6W(serialDeviceSpec, toolSpec):
                                          )
                 # Use ser for writing
                 # Use sReader for buffered read
-
                 self.sReader = io.TextIOWrapper(io.BufferedReader(self.ser))
 
                 # Clear initial garbage text in output buffer
@@ -227,7 +227,7 @@ class laser6W(serialDeviceSpec, toolSpec):
                 linesIn = [lineIn]
 
                 # keep reading until empty
-                while lineIn != []:
+                while lineIn:
                     time.sleep(0.25)
                     lineIn = self.sReader.readlines()
                     linesIn.append(lineIn)
@@ -240,7 +240,7 @@ class laser6W(serialDeviceSpec, toolSpec):
 
         # Try initial handshake
         handShakeResponse = self.handShakeSerial()
-        if (handShakeResponse[0] == 1):
+        if handShakeResponse[0] == 1:
             return [1, linesIn]
         else:
             return [-2, handShakeResponse[1]]
@@ -263,6 +263,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         except Exception as inst:
             return [0, 'Error on closing Serial Device: ' + self.name
                     + ' : ' + inst.__str__()]
+
     ################### Communication METHODS ###############################
 
     def handShakeSerial(self):
@@ -292,13 +293,13 @@ class laser6W(serialDeviceSpec, toolSpec):
 
         Returns
         -------
-        [1, 'Text Sent + text'] if succesfull 2-way communication
+        [1, 'Text Sent + text'] if successful 2-way communication
         [0, 'Write Failed + Error'] if exception caught
         """
-        if (self.checkIfSerialConnectParamsSet()):
+        if self.checkIfSerialConnectParamsSet() == 1:
             try:
                 self.ser.write(text.encode('utf-8'))
-                if (self.__verbose__):
+                if self.__verbose__:
                     print('\tCommand Sent to LASER: ' + text)
                 return [1, 'Command Sent' + text]
             except Exception as inst:
@@ -318,19 +319,19 @@ class laser6W(serialDeviceSpec, toolSpec):
         """
         inp = ''  # input string
         ins = ''  # read in
-        tEnd = time() + self.commsTimeOut
+        tEnd = time.time() + self.commsTimeOut
 
         try:  # Reads input until timeout
-            while (time() < tEnd):
+            while time.time() < tEnd:
                 ins = self.ser.readline().decode('utf-8').rstrip()
-                if (ins != ""):
+                if ins != "":
                     inp += ins
             inp = inp.strip  # removes any newlines
 
             if self.__verbose__:
                 print('\tReceived from Serial Device: ' + self.name
-                      + ' : ' + inp + '\n')
-            return (inp)
+                      + ' : ' + str(inp) + '\n')
+            return inp
         except Exception as inst:
             return [0, 'Error on read from Serial Device: ' + self.name
                     + ' : ' + inst.__str__()]

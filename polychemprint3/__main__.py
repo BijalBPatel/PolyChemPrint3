@@ -9,10 +9,15 @@
 #############################################################################
 ### Import Statements
 #############################################################################
+import copy
 import sys
+from datetime import datetime
+
 from polychemprint3.commandLineInterface.ioMenuSpec import ioMenuSpec
 from polychemprint3.commandLineInterface.ioTextPanel import ioTextPanel
 from polychemprint3.axes.nullAxes import nullAxes
+from polychemprint3.recipes.recipe import recipe, recipeStub
+from polychemprint3.sequence.sequenceSpec import sequenceSpec
 from polychemprint3.tools.nullTool import nullTool
 import logging
 import os
@@ -21,10 +26,12 @@ import importlib
 from pathlib import Path
 from colorama import init, Fore, Style
 
-
 #############################################################################
 ### Menu Classes
 #############################################################################
+from polychemprint3.utility.fileHandler import fileHandler
+
+
 class ioMenu_0Main(ioMenuSpec):
     """Contains data and methods for implemented Main Menu."""
 
@@ -34,22 +41,20 @@ class ioMenu_0Main(ioMenuSpec):
                   'menuTitle': 'Main Menu', 'menuItems':
                       {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
                        Fore.LIGHTMAGENTA_EX + "[?]":
-                           Fore.LIGHTMAGENTA_EX + "List Commands",
+                           Fore.LIGHTMAGENTA_EX + "Repeat menu options",
                        Fore.WHITE + "[T] Test Code":
-                           Fore.WHITE + "Run Test Code",
-                       Fore.WHITE + "(2) GCode File Menu":
-                           Fore.WHITE + "Generate sequence from a GCODE file",
+                           Fore.WHITE + "Run test code",
                        Fore.WHITE + "(1) Hardware Control Menu":
-                           Fore.WHITE + "Directly control hardware",
+                           Fore.WHITE + "Send commands directly to hardware",
                        Fore.WHITE + "(0) Configuration/About":
                            Fore.WHITE
-                           + "Software setup, options, Tool/Axes",
-                       Fore.WHITE + "(4) Recipe Menu":
+                           + "Software setup, options, choose Tool/Axes",
+                       Fore.WHITE + "(3) Recipe Menu":
                            Fore.WHITE
-                           + "Build/Execute Multi-Sequence Programs",
-                       Fore.WHITE + "(3) Sequence Menu":
+                           + "Configure/Execute multi-sequence recipes",
+                       Fore.WHITE + "(2) Sequence Menu":
                            Fore.WHITE
-                           + "Print/Configure pre-defined commands"}}
+                           + "Configure/Execute predefined command sequences"}}
         super().__init__(**kwargs)
 
     def io_Operate(self):
@@ -70,24 +75,16 @@ class ioMenu_0Main(ioMenuSpec):
                 self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 self.ioMenu_printMenu()
                 choiceString = io_Prompt("Enter Command:", validate=True,
-                                         validResponse=["q",
-                                                        "?",
-                                                        "T",
-                                                        "0",
-                                                        "1",
-                                                        "2",
-                                                        "3",
-                                                        "4",
-                                                        "/",
-                                                        ".",
-                                                        ","]).lower()
-
-                if not (choiceString in ["/", ".", ","]):
-                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+                                         validResponse=["q", "?", "T",
+                                                        "0", "1", "2", "3",
+                                                        "/", ".", ","
+                                                        ]).lower()
 
                 if choiceString in ["/", ".", ","]:
-                    (choiceString) = io_savedCmdOps(choiceString)
-                elif choiceString == '?':
+                    choiceString = io_savedCmdOps(choiceString)
+                else:
+                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+                if choiceString == '?':
                     pass
                 elif choiceString == 'q':
                     return 'quit'
@@ -98,19 +95,16 @@ class ioMenu_0Main(ioMenuSpec):
                 elif choiceString == '1':
                     return 'M1HardwareMenu'
                 elif choiceString == '2':
-                    return 'M1PrintFile'
-                elif choiceString == '3':
                     return 'M1PrintSequence'
-                elif choiceString == '4':
+                elif choiceString == '3':
                     return 'M1PrintRecipe'
-
                 else:
                     print("Received: " + choiceString)
                     print(Fore.LIGHTRED_EX
-                          + "\tInvalid Choice, resetting menu"
+                          + "\tInvalid choice, resetting menu..."
                           + Style.RESET_ALL)
             except KeyboardInterrupt:
-                print("\n\tKeyboardInterrupt received, resetting menu")
+                print("\n\tKeyboardInterrupt received, resetting menu...")
 
 
 class ioMenu_1Configuration(ioMenuSpec):
@@ -120,8 +114,7 @@ class ioMenu_1Configuration(ioMenuSpec):
         """*Initializes Configuration Menu Object*."""
         kwargs = {'name': 'ConfigurationMenu',
                   'menuTitle': 'Configuration/About Menu',
-                  'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                    Fore.LIGHTRED_EX + "Quit",
+                  'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
                                     Fore.LIGHTMAGENTA_EX + "List Commands",
                                 Fore.WHITE + "(0) Info and License":
@@ -165,12 +158,12 @@ class ioMenu_1Configuration(ioMenuSpec):
                                                         "1", "2", "3", "/",
                                                         ".", ","]).lower()
 
-                if not (choiceString in ["/", ".", ","]):
+                if choiceString in ["/", ".", ","]:
+                    choiceString = io_savedCmdOps(choiceString)
+                else:
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
 
-                if choiceString in ["/", ".", ","]:
-                    (choiceString) = io_savedCmdOps(choiceString)
-                elif choiceString == '?':
+                if choiceString == '?':
                     pass
                 elif choiceString == 'q':
                     return 'M0MainMenu'
@@ -210,7 +203,11 @@ class ioMenu_1Configuration(ioMenuSpec):
                         axes = newAxes
                         activ = axes.activate()
                         if deactiv == 1 and activ == 1:
-                            print("\t\tAxes Changed and activated Succesfully")
+                            print("\t\tAxes Changed and activated Successfully")
+                            for seq in __seqDict__.values():
+                                seq.tool = tool
+                                seq.axes = axes
+
                         else:
                             print("\t\tError loading Axes, old Axes restored")
                             axes = oldAxes
@@ -258,31 +255,23 @@ class ioMenu_1Hardware(ioMenuSpec):
         """*Initializes Hardware Menu Object*."""
         kwargs = {'name': 'HardwareMenu',
                   'menuTitle': 'Hardware Menu',
-                  'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                    Fore.LIGHTRED_EX + "Quit",
-                                Fore.LIGHTMAGENTA_EX + "[?]":
-                                    Fore.LIGHTMAGENTA_EX + "List Commands",
+                  'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
+                                Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands",
                                 Fore.WHITE + "a,d;r,f;s,w;x,z":
-                                    Fore.WHITE
-                                    + "Jog -+ 1mm (X; Y; Z; Z-0.1,-.01)",
+                                    Fore.WHITE + "Jog -+ 1mm (X; Y; Z; Z-0.1,-.01)",
                                 Fore.WHITE + "(0) Clean Routine":
                                     Fore.WHITE + "Lift up 20 mm, lower on cmd",
                                 Fore.WHITE + "(1) Lift Tool":
                                     Fore.WHITE + "Lift up 20 mm",
                                 Fore.GREEN + "Ton":
-                                    Fore.WHITE + "Engage Tool Dispense",
+                                    Fore.GREEN + "Engage Tool Dispense",
                                 Fore.GREEN + "Toff":
-                                    Fore.WHITE + "Disengage Tool Dispense",
+                                    Fore.GREEN + "Disengage Tool Dispense",
                                 Fore.GREEN + "T[Value]":
-                                    Fore.WHITE + "Sets the tool value",
+                                    Fore.GREEN + "Sets the tool value",
                                 Fore.WHITE + "(1) Lift Tool":
                                     Fore.WHITE + "Lift up 20 mm",
-                                Fore.WHITE + "(3) Sequence Menu":
-                                    Fore.WHITE + "Switch to sequences menu",
-                                Fore.WHITE + "(2) GCode File Menu":
-                                    Fore.WHITE + "Switch to GCode File menu",
-                                Fore.WHITE + "(4) Recipe Menu":
-                                    Fore.WHITE + "Switch to Recipe menu"}}
+                                }}
         super().__init__(**kwargs)
 
     ### ioMenuSpec METHODS
@@ -317,12 +306,12 @@ class ioMenu_1Hardware(ioMenuSpec):
                                                         ".", ",", "a", "d",
                                                         "r", "f", "s", "w",
                                                         "x", "z"]).lower()
-
-                if not (choiceString in ["/", ".", ","]):
-                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 if choiceString in ["/", ".", ","]:
-                    (choiceString) = io_savedCmdOps(choiceString)
-                elif choiceString[:1].lower() == 't':  # Tool command
+                    choiceString = io_savedCmdOps(choiceString)
+                else:
+                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+
+                if choiceString[:1].lower() == 't':  # Tool command
                     if choiceString.lower() == 'ton':
                         print("Engaging Tool")
                         print(tool.engage()[1])
@@ -368,12 +357,6 @@ class ioMenu_1Hardware(ioMenuSpec):
                 elif choiceString == '1':  # Just Lift
                     print("\t\tRaising Tool by 20 mm...")
                     axes.move("G1 F2000 Z20\n")
-                elif choiceString == '2':  # Print File Menu
-                    return 'M1PrintFile'
-                elif choiceString == '3':  # Print File Menu
-                    return 'M1PrintSequence'
-                elif choiceString == '4':  # Print File Menu
-                    return 'M1PrintRecipe'
                 else:  # Send to axes
                     print("\tReceived: " + choiceString)
                     axes.move(choiceString.upper() + "\n")
@@ -381,6 +364,35 @@ class ioMenu_1Hardware(ioMenuSpec):
                 tool.disengage()
                 print("\n\tKeyboardInterrupt received, resetting menu")
                 print("\n\tTool Automatically Disengaged")
+
+    def ioMenu_printMenu(self):
+        """*Prints formatted menu options from menuItems dict*."""
+
+        print(Style.RESET_ALL)
+        print("-" * 150)
+        print("###\t" + self.menuTitle)
+        print("-" * 150)
+
+        print('\tFrom this menu you can directly send commands to the hardware. ' +
+              Fore.RED + 'Be careful! There is limited error-checking!')
+        print(Fore.WHITE + "\tChoose an execution option or directly enter a GCODE command for the axes:\n")
+
+        print(Style.RESET_ALL)
+        # Print std menu options
+        for key in sorted(self.menuItems):
+            print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
+        print(Style.RESET_ALL)
+
+        storedCmds = {Fore.LIGHTCYAN_EX
+                      + "[/] Repeat Last Command": self.lastCmd,
+                      Fore.LIGHTCYAN_EX
+                      + "[.] Repeat Saved Command": self.memCmd,
+                      Fore.LIGHTCYAN_EX
+                      + "[,] Store Saved Command": "Will Prompt for command"}
+
+        for key in storedCmds:
+            print("\t%-40s|  %-25s" % (key, storedCmds.get(key)))
+        print(Style.RESET_ALL)
 
 
 class ioMenu_1PrintFile(ioMenuSpec):
@@ -390,8 +402,7 @@ class ioMenu_1PrintFile(ioMenuSpec):
         """*Initializes PrintFile Menu Object*."""
         kwargs = {'name': 'PrintFileMenu',
                   'menuTitle': 'Print File Menu',
-                  'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                    Fore.LIGHTRED_EX + "Quit",
+                  'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
                                     Fore.LIGHTMAGENTA_EX + "List Commands",
                                 "STOP": "Emergency STOP",
@@ -415,42 +426,7 @@ class ioMenu_1PrintFile(ioMenuSpec):
         return 'M0MainMenu'
 
 
-class ioMenu_2AxesOrigin(ioMenuSpec):
-    """Contains data and methods for implemented AxesOrigin Menu."""
-
-    def __init__(self, **kwargs):
-        """*Initializes PrintFile Menu Object*.
-
-        Performs Menu operations - loops*.
-
-        Returns
-        -------
-            String
-                title of next menu to call
-        """
-        kwargs = {'name': 'AxesOriginSet',
-                  'menuTitle': 'Axes Origin Set Menu',
-                  'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                    Fore.LIGHTRED_EX + "Quit",
-                                Fore.LIGHTMAGENTA_EX + "[?]":
-                                    Fore.LIGHTMAGENTA_EX + "List Commands",
-                                "STOP": "Emergency STOP",
-                                "a,d;r,f;w,s;x,z": "Jog (X; Y; Z; Zsmall)",
-                                "Done": "Tip is at 0,0,0"}}
-        super().__init__(**kwargs)
-
-    def io_Operate(self):
-        """*Performs Menu operations - loops*.
-
-        Returns
-        -------
-            String
-                title of next menu to call
-        """
-        io_Prompt("This is filler, enter any key to go back to main menu")
-        return 'M0MainMenu'
-
-
+# TODO Fold into sequence
 class ioMenu_2PrintFileOptions(ioMenuSpec):
     """Contains data and methods for implemented PrintFileOptions Menu."""
 
@@ -458,8 +434,7 @@ class ioMenu_2PrintFileOptions(ioMenuSpec):
         """*Initializes PrintFileOptions Menu Object*."""
         kwargs = {'name': 'PrintFileOptionsMenu',
                   'menuTitle': 'Print File Options Menu',
-                  'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                    Fore.LIGHTRED_EX + "Quit",
+                  'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]":
                                     Fore.LIGHTMAGENTA_EX + "List Commands",
                                 "L": "Advanced Log Options",
@@ -496,13 +471,8 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         """*Initializes Print Sequence Menu Object*."""
         kwargs = {'name': 'PrintSequenceMenu',
                   'menuTitle': 'Print Sequence Menu',
-                  'menuItems': {Fore.LIGHTRED_EX + "[q]":
-                                    Fore.LIGHTRED_EX + "Quit",
-                                Fore.LIGHTMAGENTA_EX + "[?]":
-                                    Fore.LIGHTMAGENTA_EX + "List Commands",
-                                Fore.WHITE + "L": "Advanced Log Options",
-                                Fore.WHITE + "(1) hardware":
-                                    "Go to hardware menu"
+                  'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
+                                Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands"
                                 }}
         super().__init__(**kwargs)
 
@@ -522,12 +492,14 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         print("###\t" + self.menuTitle)
         print("-" * 150)
 
-        # Print sequences
-        print(Fore.LIGHTGREEN_EX + "\n\tLoaded Sequences:")
+        print('\tSequences are pre-programmed, parameterized print sequences stored ' +
+              'as python files and loaded to RAM when the program launches.')
+        print("\tChoose a sequence code to Edit/Execute:\n")
+
         for seqNum in __seqDict__:
-            seqName = __seqDict__.get(seqNum).nameString
-            seqGrp = __seqDict__.get(seqNum).groupString
-            seqDescription = __seqDict__.get(seqNum).descriptString
+            seqName = __seqDict__.get(seqNum).dictParams.get("name").value
+            seqGrp = __seqDict__.get(seqNum).dictParams.get("owner").value
+            seqDescription = __seqDict__.get(seqNum).dictParams.get("description").value
             print("\t(%s) %-15s| %-25s| %-55s" % (seqNum, seqName, seqGrp, seqDescription))
 
         print(Style.RESET_ALL)
@@ -557,6 +529,13 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         """
         global __savedInp__
         global __lastInp__
+
+        # Push active axes and tool to all sequences
+        for seq in __seqDict__.values():
+            seq.axes = axes
+            seq.tool = tool
+            seq.updateParams()
+
         # Menu Loop
         doQuitMenu = False
 
@@ -571,24 +550,220 @@ class ioMenu_1PrintSequence(ioMenuSpec):
 
                 choiceString = io_Prompt(
                     "Enter Command:", validate=True,
-                    validResponse=(["q", "?", "1", "/", ".", ","]
+                    validResponse=(["q", "?", "/", ".", ","]
                                    + stringList)).lower()
 
-                if not (choiceString in ["/", ".", ","]):
+                if choiceString in ["/", ".", ","]:
+                    choiceString = io_savedCmdOps(choiceString)
+                else:
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
 
-                if choiceString in ["/", ".", ","]:
-                    (choiceString) = io_savedCmdOps(choiceString)
-                elif choiceString == '?':
+                if choiceString == '?':
                     pass
                 elif choiceString == 'q':
                     return 'M0MainMenu'
-                elif choiceString == '1':
-                    return 'M1HardwareMenu'
                 elif choiceString.upper() in stringList:
                     # Instantiate Sequence menu
-                    seqMen = ioMenu_2SequenceOptions(choiceString.upper())
+                    seq = __seqDict__.get(choiceString.upper())
+                    seqMen = ioMenu_2SequenceOptions(seq)
                     seqMen.io_Operate()
+                else:
+                    print("\tReceived: " + choiceString)
+                    print(Fore.LIGHTRED_EX
+                          + "\tInvalid Choice, resetting menu"
+                          + Style.RESET_ALL)
+            except KeyboardInterrupt:
+                print("\n\tKeyboardInterrupt received, resetting menu")
+
+
+class ioMenu_1PrintRecipe(ioMenuSpec):
+    """Contains data and methods for implemented PrintRecipe Menu."""
+
+    def __init__(self, **kwargs):
+        """*Initializes Print Recipe Menu Object*."""
+        kwargs = {'name': 'PrintRecipeMenu',
+                  'menuTitle': 'Recipe Menu',
+                  'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
+                                Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands",
+                                Fore.WHITE + "(0) Browse/Load Stored Recipes":
+                                    Fore.WHITE + "Search through recipe folder for recipe to activate",
+                                Fore.WHITE + "(1) Modify/Save Active Recipe":
+                                    Fore.WHITE + "Remove/Reorder sequences, change parameters, and save to yaml file",
+                                Fore.WHITE + "(2) Build a New Recipe":
+                                    Fore.WHITE + "Start a new recipe from scratch",
+                                # TODO Implement importing stored recipes and reusing
+                                # Fore.WHITE + "(3) Reuse a stored recipe":
+                                #    Fore.WHITE + "Import sequences from a stored recipe to the active recipe",
+                                Fore.LIGHTYELLOW_EX + "[PRIME]":
+                                    Fore.LIGHTYELLOW_EX + "Build active recipe into python code",
+                                Fore.LIGHTYELLOW_EX + "[VIEW]":
+                                    Fore.LIGHTYELLOW_EX + "View active recipe details",
+                                Fore.LIGHTGREEN_EX + "[GO]":
+                                    Fore.LIGHTGREEN_EX + "Begin recipe execution"
+                                }
+                  }
+
+        super().__init__(**kwargs)
+
+    def ioMenu_printMenu(self):
+        """*Prints formatted menu options from menuItems dict*."""
+
+        print(Style.RESET_ALL)
+        print("-" * 150)
+        print("###\t" + self.menuTitle)
+        print("-" * 150)
+        print("\tRecipes are chains of sequences stored as yaml files and only loaded into RAM when active")
+        print(Fore.YELLOW + "\tActive Recipe: " + str(__activeRecipe__.name) + "| "
+              + str(__activeRecipe__.description) + "| " + str(__activeRecipe__.dateCreated))
+
+        print(Fore.WHITE + "\tChoose an option from the list below:")
+        print(Style.RESET_ALL, end="")
+        # Print std menu options
+        for key in sorted(self.menuItems):
+            print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
+        print(Style.RESET_ALL)
+
+        storedCmds = {Fore.LIGHTCYAN_EX
+                      + "[/] Repeat Last Command": self.lastCmd,
+                      Fore.LIGHTCYAN_EX
+                      + "[.] Repeat Saved Command": self.memCmd,
+                      Fore.LIGHTCYAN_EX
+                      + "[,] Store Saved Command": "Will Prompt for command"}
+
+        for key in storedCmds:
+            print("\t%-40s|  %-25s" % (key, storedCmds.get(key)))
+        print(Style.RESET_ALL)
+
+    def io_Operate(self):
+        """*Performs Menu operations - loops*.
+
+        Returns
+        -------
+            String
+                title of next menu to call
+        """
+        global __savedInp__
+        global __lastInp__
+        global __activeRecipe__  # pull global active recipe for modifying
+
+        # Menu Loop
+        doQuitMenu = False
+        isPrimed = False
+        while not doQuitMenu:
+            try:
+                self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+                self.ioMenu_printMenu()
+
+                choiceString = io_Prompt(
+                    "Enter Command:", validate=True,
+                    validResponse=(["q", "?",
+                                    "0", "1", "2", "3",
+                                    "/", ".", ",",
+                                    "go", "view", "Prime"]), caseSensitive=False)
+
+                if choiceString in ["/", ".", ","]:
+                    choiceString = io_savedCmdOps(choiceString)
+                else:
+                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+
+                if choiceString == '?':
+                    pass
+                elif choiceString == 'q':
+                    isPrimed = False
+                    return 'M0MainMenu'
+                elif choiceString == '0':  # Choose recipe from recipe stubs to activate
+                    isPrimed = False
+                    io_pollRecipes(silentMode=True)
+                    print("\t Refreshing Recipe Stub List...")
+                    # Print title line
+                    print("\t| Code | %25s | %25s | %50s |" % (str.center("Name", 25), str.center("Date Created", 25),
+                                                               str.center("Description", 50)))
+                    stubNum = 0
+                    validOptions = ["q"]
+                    for stub in __recipeStubList__:
+                        stubNum = stubNum + 1
+                        validOptions.append(str(stubNum))
+                        print("\t| %-4s | %-25s | %-25s | %-50s |" % ("(" + str(stubNum) + ")",
+                                                                      stub.name, stub.dateCreated, stub.description))
+
+                    inpString = io_Prompt("Choose a recipe to activate, or q to cancel: ", validate=True,
+                                          validResponse=validOptions, caseSensitive=False)
+
+                    # Activate or quit
+                    if inpString.lower() == 'q':
+                        print("\tCanceling... no change made to active sequence.")
+                    else:
+                        # Parse selection number
+                        stubNum = int(inpString)
+
+                        # Attempt to load new active recipe (with backup as an option)
+                        backupActive = copy.copy(__activeRecipe__)
+                        try:
+                            io_loadRecipe(__recipeStubList__[stubNum - 1])
+                        except Exception as inst:
+                            logging.exception(inst)
+                            __activeRecipe__ = backupActive
+                            print(Fore.RED + "\tError activating sequence - reverting to previous active sequence.")
+                elif choiceString == '1':  # Modify or save active recipe
+                    isPrimed = False
+                    # Check that there is an active recipe
+                    if __activeRecipe__.name.lower() == 'NoRecipeNameSet'.lower():
+                        print(Fore.RED + "\tError: Cannot edit/save an active recipe that is empty or has this name."
+                              + Style.RESET_ALL)
+                    else:
+                        return "M2RecipeOptions"
+
+                elif choiceString == '2':  # Create a new recipe and make active
+                    isPrimed = False
+                    nameinvalid = True
+                    newName = None
+                    while nameinvalid:
+                        newName = io_Prompt("\t\tEnter new recipe name:")
+                        # Check that name is unique
+                        nameinvalid = False
+                        for recStub in __recipeStubList__:
+                            if newName.lower() == recStub.name.lower():
+                                nameinvalid = True
+                                print("\t\tError: Name already in use, try again.")
+                    newDescription = io_Prompt("\t\tEnter new recipe description:")
+                    newPath = None
+                    # Backup active recipe
+                    activeRecCopy = copy.copy(__activeRecipe__)
+                    dateString = datetime.now().strftime("%I:%M%p on %B %d, %Y")
+                    stubPassed = False
+                    try:
+                        newRecStub = recipeStub(name=newName, description=newDescription, dateCreated=dateString,
+                                                fullFilePath=newPath)
+                        __recipeStubList__.append(newRecStub)
+                        stubPassed = True
+                        __activeRecipe__ = recipe(name=newName, description=newDescription, dateCreated=dateString,
+                                                  fullFilePath=newPath)
+                        print("\t\tSuccessfully created new recipe!")
+                    except Exception as inst:
+                        print("\t\tError: Could not create new recipe, reverting to previous condition.")
+                        logging.exception(inst)
+                        if stubPassed:
+                            __recipeStubList__.pop()
+                        __activeRecipe__ = activeRecCopy
+
+                elif choiceString == '3':  # Import sequence from a stored recipe
+                    isPrimed = False
+                    # TODO Clone Modify recipe
+                    pass
+                elif choiceString.lower() == 'go':
+                    if not isPrimed:
+                        print(Fore.YELLOW + "Error: must prime first" + Style.RESET_ALL)
+                    else:
+                        logWriter = io_startLog()
+                        __activeRecipe__.operateRecipe(axes, tool)
+                        io_endLog(logWriter)
+                elif choiceString.lower() == 'view':
+                    for line in io_displayRecipe():
+                        print("\t" + line)
+                elif choiceString.lower() == 'prime':
+                    __activeRecipe__.genRecipe()
+                    isPrimed = True
+                    pass
                 else:
                     print("\tReceived: " + choiceString)
                     print(Fore.LIGHTRED_EX
@@ -601,16 +776,15 @@ class ioMenu_1PrintSequence(ioMenuSpec):
 class ioMenu_2SequenceOptions(ioMenuSpec):
     """Contains data and methods for print sequence options Menu."""
 
-    def __init__(self, seqNum, **kwargs):
+    def __init__(self, seq: sequenceSpec, **kwargs):
         """*Initializes Print Sequence Options Menu Object*.
 
         Parameters
         ----------
-        seqNum: String
+        seq: Sequence
             Refers to particular sequence object being modified by menu item
         """
-        self.seqNum = seqNum
-        self.seq = __seqDict__.get(seqNum)
+        self.seq = seq
         self.paramsMenuDict = {}  # ParamID:  Param
 
         menuItems = {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
@@ -618,6 +792,8 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                          Fore.LIGHTYELLOW_EX + "Generate Print Commands",
                      Fore.LIGHTYELLOW_EX + "[VIEW]":
                          Fore.LIGHTYELLOW_EX + "View Print Commands",
+                     Fore.YELLOW + "[Add]":
+                         Fore.YELLOW + "Add/Insert sequence as configured into active recipe",
                      Fore.LIGHTGREEN_EX + "[GO]":
                          Fore.LIGHTGREEN_EX + "Engage Print Sequence"}
         print(Style.RESET_ALL)
@@ -635,6 +811,10 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         print("###\t" + self.menuTitle)
         print("-" * 150)
 
+        print('\tFrom this menu you can directly modify the sequence parameters stored in RAM. ' +
+              'Changes persist until the program is closed ')
+        print("\tChoose a parameter number to modify, or one of the execution options:\n")
+
         self.paramsMenuDict = {}  # reset params menu dict
         # First map params onto param number for menu
         paramNum = 1
@@ -648,12 +828,11 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         for pNum in self.paramsMenuDict:
             param = self.paramsMenuDict.get(pNum)
             paramStrings.append(
-                "\t(%-3s) %-20s| %-50s| %-7s| %-30s"
+                "\t(%-3s) %-25s| %-45s| %-20s| %-30s"
                 % (str(pNum), param.name, param.value, param.unit,
                    param.helpString))
 
         # Print param menu options
-        print("\tEnter Parameter number to modify:")
         for outString in paramStrings:
             print(outString)
 
@@ -702,15 +881,14 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     "Enter Command:",
                     validate=True,
                     validResponse=["q", "/", ".", ",",
-                                   "PRIME", "VIEW", "GO"]
-                                  + paramOptionList).lower()
-
-                if not (choiceString in ["/", ".", ","]):
-                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+                                   "PRIME", "VIEW", "GO", "ADD"] + paramOptionList).lower()
 
                 if choiceString in ["/", ".", ","]:
-                    (choiceString) = io_savedCmdOps(choiceString)
-                elif choiceString == 'q':
+                    choiceString = io_savedCmdOps(choiceString)
+                else:
+                    self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+
+                if choiceString == 'q':
                     return "M1PrintSequence"
                 elif choiceString.upper() == 'PRIME':
                     # Prime [generate commands]
@@ -735,6 +913,27 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                         print("\tExecuting Print! Ctrl + C to Cancel")
                         self.seq.operateSeq()
                         print("\tSequence Complete!")
+                elif choiceString.upper() == "ADD":  # attempt to add to active recipe
+                    if __activeRecipe__.name == 'NoRecipeNameSet':
+                        print(Fore.RED + "\tError: No active recipe created" + Style.RESET_ALL)
+                    else:
+                        print("\tCurrent state of Recipe: ")
+                        for line in io_displayRecipe():
+                            print("\t" + line)
+                        newPos = io_Prompt("Enter index to be occupied by new sequence: ")
+                        if newPos == 'q':
+                            pass
+                        else:
+                            try:
+                                __activeRecipe__.addSeq(int(newPos), copy.deepcopy(self.seq))
+                            except Exception as inst:
+                                logging.exception(inst)
+                        print("\tNew state of Recipe: ")
+                        for line in io_displayRecipe():
+                            print("\t" + line)
+
+
+
                 elif choiceString.upper() in paramOptionList:
                     isPrimed = False
                     # Modify corresponding parameter
@@ -747,6 +946,185 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     param.value = newVal
                     print("Value changed from %s to %s"
                           % (oldVal, param.value))
+                else:
+                    print("\tReceived: " + choiceString)
+                    print(Fore.LIGHTRED_EX
+                          + "\tInvalid Choice, resetting menu"
+                          + Style.RESET_ALL)
+            except KeyboardInterrupt:
+                print("\n\tKeyboardInterrupt received, resetting menu")
+                isPrimed = False
+
+
+class ioMenu_2RecipeOptions(ioMenuSpec):
+    """Contains data and methods for recipe edit options menu."""
+
+    def __init__(self, **kwargs):
+        """*Initializes recipe edit options Menu Object*.
+
+        """
+
+        menuItems = {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
+                     Fore.WHITE + "(0) Edit Recipe Parameters": Fore.WHITE + "Edit Name, Description, Update Date",
+                     Fore.WHITE + "(1) Add Sequence": Fore.WHITE + "Inserts sequence at specified position",
+                     Fore.WHITE + "(2) Edit Sequence": Fore.WHITE + "Edit a sequence that is already present",
+                     Fore.WHITE + "(3) Remove Sequence": Fore.WHITE + "Removes one or more sequences",
+                     Fore.WHITE + "(4) Reorder Sequences": Fore.WHITE + "Change the order of sequence execution",
+                     Fore.GREEN + "(SAVE) Save Recipe to File": Fore.GREEN + "Writes to yaml file in recipe folder",
+                     }  # TODO: IMPLEMENT SEQUENCE IMPORT from existing recipes
+        print(Style.RESET_ALL)
+
+        kwargs = {'name': "RecipeEditMenu",
+                  'menuTitle': "Modify/Save Active Recipe: ",
+                  'menuItems': menuItems}
+        super().__init__(**kwargs)
+
+    def ioMenu_printMenu(self):
+        """*Prints formatted menu options from menuItems dict*."""
+        print(Style.RESET_ALL)
+        print("-" * 150)
+        print("###\t" + self.menuTitle)
+        print("-" * 150)
+
+        print('\tFrom this menu you can modify the active recipe stored in RAM. ' +
+              'Changes persist until the program is closed, unless saved to file ')
+        print("\tChoose an edit/save operation:")
+        print(Style.RESET_ALL, end="")
+        # Print std menu options
+        for key in sorted(self.menuItems):
+            print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
+        print(Style.RESET_ALL)
+
+    def io_Operate(self):
+        """*Performs Menu operations - loops*.
+
+        Returns
+        -------
+            String
+                title of next menu to call
+        """
+        global __savedInp__
+        global __lastInp__
+        # Menu Loop
+        doQuitMenu = False
+        isPrimed = False
+
+        while not doQuitMenu:
+            try:
+                self.ioMenu_printMenu()
+
+                for line in io_displayRecipe():
+                    print("\t" + line)
+
+                choiceString = io_Prompt("Enter Command:", validate=True,
+                                         validResponse=["q", "SAVE", "0", "1", "2", "3", "4"])
+
+                if choiceString == 'q':
+                    return "M1PrintRecipe"
+                elif choiceString.upper() == 'SAVE':
+                    # First pull stub and active recipe
+                    activeStub = None
+                    for stub in __recipeStubList__:
+                        if stub.name == __activeRecipe__.name:
+                            activeStub = stub
+                    try:
+                        io_saveRecipe(activeStub)
+                    except Exception as inst:
+                        logging.exception(inst)
+                elif choiceString == '0':  # Edit Recipe Parameters
+                    inp = io_Prompt("Which parameter to edit? (P0-P2): ", validate=True,
+                                    validResponse=["P0", "P1", "P2"])
+                    if inp.lower() == 'p0':
+                        isValid = False
+                        newName = ''
+                        # Pull active stub
+                        activeStub = recipeStub()
+                        for stub in __recipeStubList__:
+                            if stub.name == __activeRecipe__.name:
+                                activeStub = stub
+
+                        while not isValid:
+                            isValid = True
+                            newName = io_Prompt("Enter new recipe name: ")
+                            # Validate against existing names
+                            for recStub in __recipeStubList__:
+                                if recStub.name.lower() == newName.lower():
+                                    isValid = False
+                                    print(Fore.RED + "Error, Name already in use" + Style.RESET_ALL)
+                        __activeRecipe__.name = newName
+                        activeStub.name = newName
+
+                    elif inp.lower() == 'p1':
+                        __activeRecipe__.description = io_Prompt("Enter new description: ")
+                    elif inp.lower() == 'p2':
+                        isValid = False
+                        newDate = ''
+                        while not isValid:
+                            isValid = True
+                            newDate = io_Prompt("Enter new creation date in form hh:mmPM on Month dd, yyyy "
+                                                "or enter \"NOW\" for current timestamp: ")
+                            # Check for Now
+                            if newDate.lower() == 'now':
+                                newDate = datetime.now().strftime("%I:%M%p on %B %d, %Y")
+                                isValid = True
+                                pass
+                            # Check if length matches (excluding month)
+                            elif (len(newDate[:11]) + len(newDate[-9:])) == 20:
+                                isValid = True
+
+                        __activeRecipe__.dateCreated = newDate
+                    else:
+                        print(Fore.RED + "\tError on input" + Style.RESET_ALL)
+                elif choiceString == '1':  # Add Sequence
+                    print("\tSending to Sequence Menu...")
+                    return "M1PrintSequence"
+                elif choiceString == '2':  # Edit Sequence
+                    if __activeRecipe__.seqList == []:
+                        print("Cannot edit an empty sequence list")
+                    else:
+                        indexList = []
+                        index = -1
+                        for seq in __activeRecipe__.seqList:
+                            index = index + 1
+                            indexList.append("S" + str(index))
+
+                        indexNo = io_Prompt("Enter Index (S#) for Sequence to modify:", validate=True,
+                                            validResponse=indexList)
+                        seqIndex = int(indexNo[1:])
+                        seqMen = ioMenu_2SequenceOptions(__activeRecipe__.seqList[seqIndex])
+                        seqMen.io_Operate()
+                elif choiceString == '3':  # Remove Sequence
+                    seqRem = io_Prompt("Enter index of sequence to remove, q to cancel: ")
+                    if seqRem == 'q':
+                        pass
+                    else:
+                        try:
+                            __activeRecipe__.deleteSeq(int(seqRem))
+                        except Exception as inst:
+                            logging.exception(inst)
+                elif choiceString == '4':  # Reorder Sequences
+                    doneReord = False
+                    while not doneReord:
+                        indexOld = io_Prompt("Enter index of sequence to move, q to finish: ")
+                        if indexOld == 'q':
+                            doneReord = True
+                        else:
+                            try:
+                                indexNew = io_Prompt("Enter index you would like the sequence to occupy, q to cancel: ")
+                                if indexNew == 'q':
+                                    pass
+                                else:
+                                    __activeRecipe__.reorderSeq(indexOld, indexNew)
+                                    print("Sequence moved!, new state:")
+                                    for line in io_displayRecipe():
+                                        print("\t" + line)
+                            except Exception as inst:
+                                logging.exception(inst)
+                    else:
+                        try:
+                            __activeRecipe__.deleteSeq(int(seqRem))
+                        except Exception as inst:
+                            logging.exception(inst)
                 else:
                     print("\tReceived: " + choiceString)
                     print(Fore.LIGHTRED_EX
@@ -804,7 +1182,7 @@ def io_TestCode():
 
 
 def io_Prompt(promptString, validate=False,
-              validResponse=[''], caseSensitive=False):
+              validResponse=None, caseSensitive=False):
     """*Prompts user for input and may validate against a list of options*.
 
     Parameters
@@ -823,6 +1201,8 @@ def io_Prompt(promptString, validate=False,
     String
         inputString from user
     """
+    if validResponse is None:
+        validResponse = ['']
     global __lastInp__
     inString = input("\t" + promptString + '> ').rstrip()
 
@@ -850,7 +1230,7 @@ def io_Prompt(promptString, validate=False,
 
 
 def io_savedCmdOps(inString):
-    """*Executes a block of test code from main menu*.
+    """*Handles processing saved/ repeat commands for the CLI*.
 
     Returns
     -------
@@ -873,7 +1253,7 @@ def io_savedCmdOps(inString):
             print("\tNo Valid Command to Repeat")
             __savedInp__ = ""
         else:
-            inString = __savedInp__
+            outString = __savedInp__
     elif inString == ',':
         __savedInp__ = io_Prompt("Enter Command to Save:")
 
@@ -900,9 +1280,10 @@ def io_MenuManager(initialMenuString):
     M1ConfigurationMenu = ioMenu_1Configuration()
     M1HardwareMenu = ioMenu_1Hardware()
     M1PrintFile = ioMenu_1PrintFile()
-    M2AxesOrigin = ioMenu_2AxesOrigin()
     M2PrintFileOptions = ioMenu_2PrintFileOptions()
     M1PrintSequence = ioMenu_1PrintSequence()
+    M1PrintRecipe = ioMenu_1PrintRecipe()
+    M2RecipeOptions = ioMenu_2RecipeOptions()
 
     menuFlag = initialMenuString
     while not menuFlag == 'quit':
@@ -911,8 +1292,7 @@ def io_MenuManager(initialMenuString):
             M0MainMenu.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
             menuFlag = M0MainMenu.io_Operate()
         elif menuFlag == 'M1ConfigurationMenu':
-            M1ConfigurationMenu.ioMenu_updateStoredCmds(__lastInp__,
-                                                        __savedInp__)
+            M1ConfigurationMenu.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
             menuFlag = M1ConfigurationMenu.io_Operate()
         elif menuFlag == 'M1HardwareMenu':
             M1HardwareMenu.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
@@ -920,9 +1300,6 @@ def io_MenuManager(initialMenuString):
         elif menuFlag == 'M1PrintFile':
             M1PrintFile.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
             menuFlag = M1PrintFile.io_Operate()
-        elif menuFlag == 'M2AxesOrigin':
-            M2AxesOrigin.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
-            menuFlag = M2AxesOrigin.io_Operate()
         elif menuFlag == 'M2PrintFileOptions':
             (M2PrintFileOptions.
              ioMenu_updateStoredCmds(__lastInp__, __savedInp__))
@@ -930,6 +1307,12 @@ def io_MenuManager(initialMenuString):
         elif menuFlag == 'M1PrintSequence':
             M1PrintSequence.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
             menuFlag = M1PrintSequence.io_Operate()
+        elif menuFlag == 'M1PrintRecipe':
+            M1PrintSequence.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+            menuFlag = M1PrintRecipe.io_Operate()
+        elif menuFlag == 'M2RecipeOptions':
+            M1PrintSequence.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
+            menuFlag = M2RecipeOptions.io_Operate()
         else:
             print(Fore.LIGHTRED_EX + "\tInternal CLI Error:"
                   + "Invalid flag returned from menu, resetting to main"
@@ -939,13 +1322,18 @@ def io_MenuManager(initialMenuString):
     return menuFlag
 
 
+#########################################################################
+### PCP Object Handling File IO METHODS
+#########################################################################
+
+
 def io_loadPCP(objType):
     """*Search for, instantiate, and load PCP objects into appropriate dict*.
 
     Parameters
     ----------
-    objDir : Path
-        Path object referring to directory where obj scripts are located
+    objType : Object
+        Type of PCP object to load from python file
     """
     # Set type-specific values
     if objType == 'sequence':
@@ -997,13 +1385,8 @@ def io_loadPCP(objType):
         if (".py" in name[-3:]) and ("Spec" not in name) and ("init" not in name):
             pcpObjFiles.append(name)
 
-    # For each file name, try to compile, if it works, try to load
-    objValidDict = {}
-
     objNum = 0
     for objFile in pcpObjFiles:
-        passCompile = 0
-        passLoad = 0
 
         # See if file will compile
         try:
@@ -1056,13 +1439,241 @@ def io_loadPCP(objType):
               + Style.RESET_ALL)
 
 
+def io_pollRecipes(silentMode=False):
+    """*Finds all recipe yaml files and loads recipe stubs into the recipeList*.
+
+      Parameters
+      ----------
+
+      """
+    global __recipeStubList__
+    __recipeStubList__ = []
+
+    textCol = Fore.GREEN
+    recipeDir = __rootDir__ / 'recipes'
+    if not silentMode:
+        print(textCol + "Loading Recipe stub list from Recipes Folder..." + "-" * 40)
+    # Read through all files in folder and load all yaml to a list
+    filesInFolder = os.listdir(recipeDir)
+    recipeNames = []
+
+    # Search folder for possible recipe files
+    for name in filesInFolder:
+        if ".yaml" in name[-5:]:
+            recipeNames.append(name)
+
+    # For each of these, try to create a recipe stub by parsing first 3 lines and add to stublist
+    if not silentMode:
+        print("\tAttempting to load recipestubs...")
+    for name in recipeNames:
+        try:
+            fullpath = recipeDir / name
+            fileReader = fileHandler(fullpath)
+            recipeekList = fileReader.peekFile(3)[1]
+
+            newStub = recipeStub(name=recipeekList[0][8:].rstrip(),
+                                 description=recipeekList[1][15:].rstrip(),
+                                 dateCreated=recipeekList[2][16:].rstrip(),
+                                 fullFilePath=fullpath)
+
+            __recipeStubList__.append(newStub)
+            if not silentMode:
+                print("\tLoaded: " + newStub.name + ".yaml")
+        except Exception as inst:
+            logging.exception(inst)
+    if not silentMode:
+        print(textCol + "Finished Loading Recipe stub list from Recipes Folder!" + "-" * 33)
+        print(Style.RESET_ALL, end="")
+
+
+def io_loadUsers():
+    """*Loads all user profiles into memory as objects*.
+
+      Parameters
+      ----------
+
+      """
+    print(Style.RESET_ALL, end="")
+    global __activeRecipe__
+
+    # Backup current recipe
+    backupActive = copy.copy(__activeRecipe__)
+    try:
+
+        print(Fore.GREEN + "\tNew recipe activated!" + Style.RESET_ALL)
+    except Exception as inst:
+        logging.exception(inst)
+        __activeRecipe__ = backupActive
+        print(Fore.RED + "\tError activating sequence - reverting to previous active sequence.")
+
+
+def io_loadRecipe(rStub: recipeStub):
+    """*Attempts to load selected recipeStub into the active Recipe, pulling extra info from yaml file*.
+
+      Parameters
+      ----------
+
+      """
+    print(Style.RESET_ALL, end="")
+    global __activeRecipe__
+
+    # Backup current recipe
+    backupActive = copy.copy(__activeRecipe__)
+    try:
+        print("\tAttempting to load full recipe from yaml file in recipe folder...")
+        # Get path from stub
+        fullpath = rStub.fullFilePath
+        newRecipe = recipe(fullFilePath=fullpath)
+        # Read in entire file and reject comment lines
+        fullText = newRecipe.readFullFile()[1]
+        # Remove comment lines
+        del fullText[0:3]
+        fullYaml = '\n'.join(fullText)
+        newRecipe.loadLogSelf(fullYaml)
+        newRecipe.fullFilePath = fullpath  # Overwrite stored file path with actual path
+        __activeRecipe__ = newRecipe
+        print(Fore.GREEN + "\tNew recipe activated!" + Style.RESET_ALL)
+    except Exception as inst:
+        logging.exception(inst)
+        __activeRecipe__ = backupActive
+        print(Fore.RED + "\tError activating sequence - reverting to previous active sequence.")
+
+
+def io_saveRecipe(activeStub: recipeStub):
+    """*Attempts to save active recipe to a yaml file*.
+
+      Parameters
+      ----------
+
+      """
+    global __activeRecipe__
+    try:
+        # Check if yaml file exists already (path is set)
+        pathSet = activeStub.fullFilePath is not None
+
+        if not pathSet:
+            filePath = __rootDir__ / 'recipes' / (str(activeStub.name) + ".yaml")
+            activeStub.fullFilePath = filePath
+            __activeRecipe__.fullFilePath = filePath
+
+        # Temporarily overwrite the cmd list
+        cmdHolder = __activeRecipe__.cmdList
+        pathHolder = __activeRecipe__.fullFilePath
+
+        __activeRecipe__.cmdList = []
+
+        # Construct string to write
+        outstring = "# Name: " + __activeRecipe__.name + "\n# Description: " \
+                    + __activeRecipe__.description + "\n# Date Created: " \
+                    + __activeRecipe__.dateCreated + "\n" + __activeRecipe__.writeLogSelf()
+        __activeRecipe__.overWriteToFile(outstring)
+
+        # Restore fullFilepath and cmd list
+        __activeRecipe__.cmdList = cmdHolder
+        __activeRecipe__.fullFilePath = pathHolder
+
+        print("\tSuccessfully saved recipe to file at: \n\t" + str(__activeRecipe__.fullFilePath))
+
+    except Exception as inst:
+        logging.exception(inst)
+
+
+def io_displayRecipe():
+    """*Prints recipe parameters and contents to screen*.
+
+      Parameters
+      ----------
+
+      """
+    global __activeRecipe__
+    # Append parameter strings
+    outStrings = [Fore.YELLOW + "(P0) Active Recipe Name: " + __activeRecipe__.name,
+                  Fore.YELLOW + "(P1) Description: " + __activeRecipe__.description,
+                  Fore.YELLOW + "(P2) Creation Date: " + __activeRecipe__.dateCreated,
+                  Fore.WHITE + "Begin Sequence List " + "-" * 25,
+                  Fore.WHITE + "\t| (%5s) | %20s | %10s | %50s |" % (str.center("Index", 5),
+                                                                     str.center("Sequence Name", 20),
+                                                                     str.center("Sequence Type", 10),
+                                                                     str.center("Description", 50))]
+
+    # Present sequences
+    if __activeRecipe__.seqList is None:
+        outStrings.append(Fore.WHITE + "\tNo Sequences to display")
+    else:
+        index = - 1
+        for seq in __activeRecipe__.seqList:
+            index = index + 1
+            outStrings.append(Fore.WHITE
+                              + "\t| (%5s) | %20s | %10s | %50s|"
+                              % (str.center("S" + str(index), 5),
+                                 str.center(seq.dictParams.get("name").value, 20),
+                                 str.center(seq.dictParams.get("owner").value, 10),
+                                 str.center(seq.dictParams.get("description").value, 50)))
+    outStrings.append(Fore.WHITE + "End Sequence List " + "-" * 25)
+    return outStrings
+
+
+def io_startLog():
+    """*Creates a log file for the current recipe and writes pre-run parameters to it*.
+
+      Parameters
+      ----------
+
+      """
+    global __activeRecipe__
+    # Append parameter strings
+    try:
+        print("\tAttempting to write log to file...")
+        rootDir = Path(__file__).absolute().parent
+        logDir = rootDir / 'Logs'
+        now = datetime.now()
+        strDate = str(now.year) + str(now.month) + str(now.day) + "_" + str(now.hour) \
+                  + str(now.minute) + str(now.second)
+        strName = str(input("Enter Log File Name:"))
+        fileName = strDate + "_" + strName
+        fileWriter = fileHandler(fullFilePath=logDir / fileName + ".txt")
+        outString = "Print Name: " + strName + "\nStarted at: " + strDate + "\n" + __activeRecipe__.writeLogSelf()
+        fileWriter.overWriteToFile(outString)
+        return fileWriter
+    except Exception as inst:
+        print(Fore.RED + "\tError Writing Log File" + Style.RESET_ALL)
+        logging.exception(inst)
+
+
+def io_endLog(fileWriter: fileHandler):
+    """*Creates a log file for the current recipe and writes pre-run parameters to it*.
+
+      Parameters
+      ----------
+
+      """
+
+    # Append End status
+    try:
+        now = datetime.now()
+        strDate = str(now.year) + str(now.month) + str(now.day) + "_" \
+                  + str(now.hour) + str(now.minute) + str(now.second)
+        print("Recipe completed successfully at: " + strDate)
+        finalText = io_Prompt(" Enter any text you'd like to add to the log (q for nothing): ")
+        if finalText.lower() == 'q':
+            finalText = ''
+
+        print("\tAttempting to write log end to file...")
+        fileWriter.appendToFile(strDate + "\n")
+        fileWriter.appendToFile("Final Comment: " + finalText)
+    except Exception as inst:
+        print(Fore.RED + "\tError Writing Log File" + Style.RESET_ALL)
+        logging.exception(inst)
+
+
 #############################################################################
 ### Global attributes
 #############################################################################
 
+
 # Program Details
 __version__ = 3.0
-__date__ = "2019/11/30"
+__date__ = "2020/05/11"
 __verbose__ = 1  # reflects how many status messages are shown
 __rootDir__ = Path(__file__).absolute().parent
 
@@ -1080,20 +1691,11 @@ __seqDict__ = {}
 __toolDict__ = {}
 __axesDict__ = {}
 __userDict__ = {}
+__recipeStubList__ = []
+__activeRecipe__ = recipe()
 
-# Instantiated menus
-M0MainMenu = ioMenu_0Main()
-M1ConfigurationMenu = ioMenu_1Configuration()
-M1HardwareMenu = ioMenu_1Hardware()
-M1PrintFile = ioMenu_1PrintFile()
-M2AxesOrigin = ioMenu_2AxesOrigin()
-M2PrintFileOptions = ioMenu_2PrintFileOptions()
-M1PrintSequence = ioMenu_1PrintSequence()
-# Relative paths to text panels
-
-
-__textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels'
-                           / 'LICENSE.txt'}
+# Relative paths
+__textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels' / 'LICENSE.txt'}
 
 
 #############################################################################
@@ -1115,6 +1717,7 @@ def main():
     io_loadPCP('tools')
     io_loadPCP('sequence')
     io_loadPCP('user')
+    io_pollRecipes()
     # Interface Start Sequencea
     io_StartText()
     # make software connections
@@ -1124,10 +1727,8 @@ def main():
     while not doQuitProgram:
 
         try:
-
             # menuManagerSequence - loop that handles menu driving
-            menuFlag = io_MenuManager(M0MainMenu.io_Operate())
-
+            menuFlag = io_MenuManager("M0MainMenu")
             # if we get here, menumanager should have received quit message
             # Double check with user if they want to exit
             if menuFlag == 'quit':

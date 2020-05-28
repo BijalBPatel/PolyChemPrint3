@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Parameterized code for moving axes in X,Y,Z at a set rate
+Parameterized code for reading in a gcode file and reprocessing for PCP3
 
-| First created on [dd/mm/yyyy 24h:min:sec]
-| Revised: [DATE]
+| First created on 05/14/2020 18:16:00
+| Revised:
 | Author: Bijal Patel
 
 """
@@ -15,8 +15,8 @@ from polychemprint3.axes.nullAxes import nullAxes
 import logging
 
 
-class basicMove(sequenceSpec):
-    """[ DESCRIPTION]"""
+class runGCODEFile(sequenceSpec):
+    """Sequence template for assimilating GCODE motion commands and tool triggers into PCP Recipe framework"""
 
     ################### Construct/Destruct METHODS ###########################
     def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
@@ -29,7 +29,7 @@ class basicMove(sequenceSpec):
         """
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "basicMove", "",
+            "name": seqParam("name", "GCodeSequence", "",
                              "Change if modifying from default"),
             "description": seqParam("Sequence Description",
                                     "Move Axes (relative or abs)", "", "basicMove.py"),
@@ -39,9 +39,9 @@ class basicMove(sequenceSpec):
             "owner": seqParam("Owner", "PCP_CoreUtilities", "", "default: PCP_Core"),
             "posMode": seqParam("Positioning Mode", "relative", "absolute/relative",
                                 "Versus current position or absolute origin"),
-            "feedRate": seqParam("Axes Speed", "60", "mm/min",  ""),
+            "feedRate": seqParam("Axes Speed", "60", "mm/min", ""),
             "xMove": seqParam("X movement", "5", "mm",
-                                "distance/location to move in X"),
+                              "distance/location to move in X"),
             "yMove": seqParam("Y movement", "5", "mm",
                               "distance/location to move in Y"),
             "zMove": seqParam("Z movement", "5", "mm",

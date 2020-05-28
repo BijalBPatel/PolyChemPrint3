@@ -134,7 +134,7 @@ class nullTool(toolSpec, serialDeviceSpec):
 
         Parameters
         ----------
-        pressureVal: String
+        newVal: String
             New value to set
 
         Returns
@@ -162,7 +162,7 @@ class nullTool(toolSpec, serialDeviceSpec):
         |   [-1, "Error: Tool activation state cannot be determined + Error]
         """
         try:
-            if self.dispenseStatus():
+            if self.dispenseStatus:
                 print("\t\tNull Tool Says: Dispense On")
                 return [1, "Tool On"]
             else:
@@ -193,7 +193,7 @@ class nullTool(toolSpec, serialDeviceSpec):
         -------
         [1, "Connected Succesfully to Serial Device"]
         """
-        return [1, "Connected Succesfully to Serial Device"]
+        return [1, "Connected successfully to Serial Device"]
 
     def stopSerial(self):
         """*Terminates communication*.
