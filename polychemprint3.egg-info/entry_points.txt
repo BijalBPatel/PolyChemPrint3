@@ -1,3 +1,0 @@
-[console_scripts]
-polychemprint3 = polychemprint3:main
-
