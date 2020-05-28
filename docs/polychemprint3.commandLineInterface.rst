@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    polychemprint3.commandLineInterface.ioElementSpec
    polychemprint3.commandLineInterface.ioMenuSpec

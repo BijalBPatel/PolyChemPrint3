@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    polychemprint3.tools.laser6W
    polychemprint3.tools.nullTool

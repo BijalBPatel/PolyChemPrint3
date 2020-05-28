@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    polychemprint3.utility.fileHandler
    polychemprint3.utility.loggerSpec

@@ -1,14 +1,16 @@
-$SPHINX_APIDOC_OPTIONS=members,undoc-members,private-members,special-members,inherited-members,show-inheritance
+polychemprint3 package
 ======================
 
 Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    polychemprint3.axes
    polychemprint3.commandLineInterface
    polychemprint3.data
+   polychemprint3.recipes
    polychemprint3.sequence
    polychemprint3.tools
    polychemprint3.user

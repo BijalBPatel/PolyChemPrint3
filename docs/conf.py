@@ -22,7 +22,7 @@ copyright = '2019, Bijal Patel'
 author = 'Bijal Patel'
 
 # The full version, including alpha/beta/rc tags
-release = '3.0'
+release = '1.0'
 
 
 # -- General configuration ---------------------------------------------------

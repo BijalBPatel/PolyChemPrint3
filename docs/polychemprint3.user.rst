@@ -5,8 +5,9 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
-   polychemprint3.user.userSpec
+   polychemprint3.user.user
 
 Module contents
 ---------------
