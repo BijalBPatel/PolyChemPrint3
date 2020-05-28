@@ -1486,6 +1486,27 @@ def io_pollRecipes(silentMode=False):
         print(Style.RESET_ALL, end="")
 
 
+def io_loadUsers():
+    """*Loads all user profiles into memory as objects*.
+
+      Parameters
+      ----------
+
+      """
+    print(Style.RESET_ALL, end="")
+    global __activeRecipe__
+
+    # Backup current recipe
+    backupActive = copy.copy(__activeRecipe__)
+    try:
+
+        print(Fore.GREEN + "\tNew recipe activated!" + Style.RESET_ALL)
+    except Exception as inst:
+        logging.exception(inst)
+        __activeRecipe__ = backupActive
+        print(Fore.RED + "\tError activating sequence - reverting to previous active sequence.")
+
+
 def io_loadRecipe(rStub: recipeStub):
     """*Attempts to load selected recipeStub into the active Recipe, pulling extra info from yaml file*.
 

@@ -30,13 +30,10 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="General Cleaning/ Adding Recipe Menu">
-      <change afterPath="$PROJECT_DIR$/polychemprint3/sequence/runGCODEFile.py" afterDir="false" />
+    <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="Adding Users">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/polychemprint3/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/__main__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/polychemprint3/sequence/basicMove.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/sequence/basicMove.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/polychemprint3/sequence/sequenceSpec.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/sequence/sequenceSpec.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/polychemprint3/user/userSpec.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/user/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/polychemprint3/user/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/polychemprint3/user/user.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +167,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589443716148</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Adding Users">
+      <created>1589775897586</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1589775897586</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -200,7 +204,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Removed GCODE file menu" />
     <MESSAGE value="General Cleaning/ Adding Recipe Menu" />
-    <option name="LAST_COMMIT_MESSAGE" value="General Cleaning/ Adding Recipe Menu" />
+    <MESSAGE value="Adding Users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding Users" />
   </component>
   <component name="WindowStateProjectService">
     <state x="630" y="289" key="#Code_Cleanup_Inspections" timestamp="1589228647644">
@@ -215,26 +220,30 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state x="743" y="435" width="513" height="334" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589228654871" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.bottom" timestamp="1589581818889">
+    <state width="1842" height="1023" key="GridCell.Tab.0.bottom" timestamp="1589776264882">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state width="1842" height="1144" key="GridCell.Tab.0.bottom/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
     <state width="833" height="942" key="GridCell.Tab.0.bottom/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.center" timestamp="1589581818889">
+    <state width="1842" height="1023" key="GridCell.Tab.0.bottom/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1589776264882" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.center" timestamp="1589776264882">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state width="1842" height="1144" key="GridCell.Tab.0.center/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
     <state width="833" height="942" key="GridCell.Tab.0.center/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.left" timestamp="1589581818889">
+    <state width="1842" height="1023" key="GridCell.Tab.0.center/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1589776264882" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.left" timestamp="1589776264881">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state width="1842" height="1144" key="GridCell.Tab.0.left/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
     <state width="833" height="942" key="GridCell.Tab.0.left/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170990" />
-    <state width="1842" height="1144" key="GridCell.Tab.0.right" timestamp="1589581818889">
+    <state width="1842" height="1023" key="GridCell.Tab.0.left/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1589776264881" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.right" timestamp="1589776264882">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state width="1842" height="1144" key="GridCell.Tab.0.right/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589581818889" />
     <state width="833" height="942" key="GridCell.Tab.0.right/79.0.1421.1000@79.0.1421.1000" timestamp="1589322170991" />
+    <state width="1842" height="1023" key="GridCell.Tab.0.right/79.0.1841.1200/1920.0.1858.1080@79.0.1841.1200" timestamp="1589776264882" />
     <state x="425" y="219" key="RollbackChangesDialog" timestamp="1589292941720">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
