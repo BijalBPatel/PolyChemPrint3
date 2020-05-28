@@ -25,20 +25,23 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:beta" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:dev" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="Adding Users">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-    </list>
+    <list default="true" id="bb6f9635-9652-49ec-9e1b-9a758229fb13" name="Default Changelist" comment="Cleaning up github and merging all branches" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1bm8HUgGGZ783ePQaxrsDW1Gj60" />
@@ -172,7 +175,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589775897586</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Cleaning up github and merging all branches">
+      <created>1590636752113</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1590636752113</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -186,7 +196,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="beta" />
+                        <option value="dev" />
                       </list>
                     </value>
                   </entry>
@@ -203,7 +213,8 @@
     <MESSAGE value="Removed GCODE file menu" />
     <MESSAGE value="General Cleaning/ Adding Recipe Menu" />
     <MESSAGE value="Adding Users" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding Users" />
+    <MESSAGE value="Cleaning up github and merging all branches" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleaning up github and merging all branches" />
   </component>
   <component name="WindowStateProjectService">
     <state x="630" y="289" key="#Code_Cleanup_Inspections" timestamp="1589228647644">
@@ -250,11 +261,11 @@
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
     <state x="500" y="245" key="SettingsEditor/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589226045748" />
-    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2" timestamp="1590636048548">
+    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2" timestamp="1590636765875">
       <screen x="-1858" y="82" width="1858" height="1080" />
     </state>
     <state x="591" y="329" key="Vcs.Push.Dialog.v2/1999.0.1841.1080/79.0.1841.1200@79.0.1841.1200" timestamp="1589300592731" />
-    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2/72.0.1848.1200/-1858.82.1858.1080@-1858.82.1858.1080" timestamp="1590636048548" />
+    <state x="-1341" y="378" key="Vcs.Push.Dialog.v2/72.0.1848.1200/-1858.82.1858.1080@-1858.82.1858.1080" timestamp="1590636765875" />
     <state x="825" y="372" key="refactoring.ChangeSignatureDialog" timestamp="1589491059276">
       <screen x="79" y="0" width="1841" height="1200" />
     </state>
