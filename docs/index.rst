@@ -27,7 +27,7 @@ For more information, visit the project homepage at https://publish.illinois.edu
    userguide_logging
    
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Software Guide
 
    polychemprint3

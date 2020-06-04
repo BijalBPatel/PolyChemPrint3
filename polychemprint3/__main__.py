@@ -585,11 +585,11 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                   'menuTitle': 'Recipe Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands",
-                                Fore.WHITE + "(0) Browse/Load Stored Recipes":
+                                Fore.WHITE + "(1) Browse/Load Stored Recipes":
                                     Fore.WHITE + "Search through recipe folder for recipe to activate",
-                                Fore.WHITE + "(1) Modify/Save Active Recipe":
+                                Fore.WHITE + "(2) Modify/Save Active Recipe":
                                     Fore.WHITE + "Remove/Reorder sequences, change parameters, and save to yaml file",
-                                Fore.WHITE + "(2) Build a New Recipe":
+                                Fore.WHITE + "(3) Build a New Recipe":
                                     Fore.WHITE + "Start a new recipe from scratch",
                                 # TODO Implement importing stored recipes and reusing
                                 # Fore.WHITE + "(3) Reuse a stored recipe":
@@ -657,9 +657,9 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                 choiceString = io_Prompt(
                     "Enter Command:", validate=True,
                     validResponse=(["q", "?",
-                                    "0", "1", "2", "3",
+                                    "1", "2", "3",
                                     "/", ".", ",",
-                                    "go", "view", "Prime"]), caseSensitive=False)
+                                    "go", "view", "prime"]), caseSensitive=False)
 
                 if choiceString in ["/", ".", ","]:
                     choiceString = io_savedCmdOps(choiceString)
@@ -671,7 +671,7 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                 elif choiceString == 'q':
                     isPrimed = False
                     return 'M0MainMenu'
-                elif choiceString == '0':  # Choose recipe from recipe stubs to activate
+                elif choiceString == '1':  # Choose recipe from recipe stubs to activate
                     isPrimed = False
                     io_pollRecipes(silentMode=True)
                     print("\t Refreshing Recipe Stub List...")
@@ -704,7 +704,7 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                             logging.exception(inst)
                             __activeRecipe__ = backupActive
                             print(Fore.RED + "\tError activating sequence - reverting to previous active sequence.")
-                elif choiceString == '1':  # Modify or save active recipe
+                elif choiceString == '2':  # Modify or save active recipe
                     isPrimed = False
                     # Check that there is an active recipe
                     if __activeRecipe__.name.lower() == 'NoRecipeNameSet'.lower():
@@ -712,8 +712,7 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                               + Style.RESET_ALL)
                     else:
                         return "M2RecipeOptions"
-
-                elif choiceString == '2':  # Create a new recipe and make active
+                elif choiceString == '3':  # Create a new recipe and make active
                     isPrimed = False
                     nameinvalid = True
                     newName = None
@@ -745,14 +744,13 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                         if stubPassed:
                             __recipeStubList__.pop()
                         __activeRecipe__ = activeRecCopy
-
-                elif choiceString == '3':  # Import sequence from a stored recipe
+                elif choiceString == '4':  # Import sequence from a stored recipe
                     isPrimed = False
                     # TODO Clone Modify recipe
                     pass
                 elif choiceString.lower() == 'go':
                     if not isPrimed:
-                        print(Fore.YELLOW + "Error: must prime first" + Style.RESET_ALL)
+                        print(Fore.YELLOW + "\tError: must prime first" + Style.RESET_ALL)
                     else:
                         logWriter = io_startLog()
                         __activeRecipe__.operateRecipe(axes, tool)
@@ -1045,14 +1043,17 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
 
                         while not isValid:
                             isValid = True
-                            newName = io_Prompt("Enter new recipe name: ")
+                            newName = io_Prompt("Enter new recipe name, q to cancel: ")
                             # Validate against existing names
                             for recStub in __recipeStubList__:
                                 if recStub.name.lower() == newName.lower():
                                     isValid = False
-                                    print(Fore.RED + "Error, Name already in use" + Style.RESET_ALL)
-                        __activeRecipe__.name = newName
-                        activeStub.name = newName
+                                    print(Fore.RED + "\tError, Name already in use" + Style.RESET_ALL)
+                        if newName.lower() == 'q':
+                            print("\tCancelling rename....")
+                        else:
+                            __activeRecipe__.name = newName
+                            activeStub.name = newName
 
                     elif inp.lower() == 'p1':
                         __activeRecipe__.description = io_Prompt("Enter new description: ")
@@ -1094,37 +1095,54 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
                         seqMen = ioMenu_2SequenceOptions(__activeRecipe__.seqList[seqIndex])
                         seqMen.io_Operate()
                 elif choiceString == '3':  # Remove Sequence
-                    seqRem = io_Prompt("Enter index of sequence to remove, q to cancel: ")
+                    # Create list of sequence possibilities
+                    numSeq = len(__activeRecipe__.seqList)
+                    i = 0
+                    validSeqIndex = ["q"]
+                    while i < numSeq:
+                        validSeqIndex.append("S"+str(i))
+                        i = i + 1
+                    seqRem = io_Prompt("Enter index of sequence to remove (S#), q to cancel: ",
+                                       validate=True, validResponse=validSeqIndex)
                     if seqRem == 'q':
                         pass
                     else:
                         try:
+                            seqRem = seqRem[1:]
                             __activeRecipe__.deleteSeq(int(seqRem))
                         except Exception as inst:
                             logging.exception(inst)
                 elif choiceString == '4':  # Reorder Sequences
+                    # Create list of sequence possibilities
+                    numSeq = len(__activeRecipe__.seqList)
+                    i = 0
+                    validSeqIndex = ["q"]
+                    while i < numSeq:
+                        validSeqIndex.append("S" + str(i))
+                        i = i + 1
+
                     doneReord = False
                     while not doneReord:
-                        indexOld = io_Prompt("Enter index of sequence to move, q to finish: ")
+                        indexOld = io_Prompt("Enter index of sequence to move (S#), q to finish: ",
+                                             validate=True,
+                                             validResponse=validSeqIndex)
                         if indexOld == 'q':
                             doneReord = True
                         else:
                             try:
-                                indexNew = io_Prompt("Enter index you would like the sequence to occupy, q to cancel: ")
+                                indexNew = io_Prompt("Enter index you would like the sequence to occupy (S#), "
+                                                     "q to cancel: ",
+                                                     validate=True,
+                                                     validResponse=validSeqIndex)
                                 if indexNew == 'q':
                                     pass
                                 else:
-                                    __activeRecipe__.reorderSeq(indexOld, indexNew)
-                                    print("Sequence moved!, new state:")
+                                    __activeRecipe__.reorderSeq(indexOld[1:], indexNew[1:])
+                                    print("\tNew state:")
                                     for line in io_displayRecipe():
                                         print("\t" + line)
                             except Exception as inst:
                                 logging.exception(inst)
-                    else:
-                        try:
-                            __activeRecipe__.deleteSeq(int(seqRem))
-                        except Exception as inst:
-                            logging.exception(inst)
                 else:
                     print("\tReceived: " + choiceString)
                     print(Fore.LIGHTRED_EX
@@ -1156,10 +1174,10 @@ def io_setupConsole():
 
 def io_StartText():
     """*Displays start screen*."""
-    print(("#" * 150) + "\n" + ("#" * 150))
+    print(("=" * 150) + "\n" + ("=" * 150))
     print("\tPolyChemPrint3 - Version:" + str(__version__)
           + "\tRevised: " + __date__)
-    print(("#" * 150) + "\n" + ("#" * 150))
+    print(("=" * 150) + "\n" + ("=" * 150))
 
 
 def io_preloadText():
@@ -1209,8 +1227,9 @@ def io_Prompt(promptString, validate=False,
     if validate:
 
         if not caseSensitive:
-            validString = (inString.upper() in validResponse
-                           or inString.lower() in validResponse)
+            # Convert all valid responses to lowercase
+            validResponse = [item.lower() for item in validResponse]
+            validString = inString.lower() in validResponse
         else:
             validString = inString in validResponse
 
@@ -1337,7 +1356,7 @@ def io_loadPCP(objType):
     """
     # Set type-specific values
     if objType == 'sequence':
-        textCol = Fore.BLUE
+        textCol = Fore.WHITE
         objDict = __seqDict__
         objCode = 'S'
         moduleDirString = "polychemprint3.sequence"
@@ -1547,33 +1566,43 @@ def io_saveRecipe(activeStub: recipeStub):
 
       """
     global __activeRecipe__
-    try:
-        # Check if yaml file exists already (path is set)
-        pathSet = activeStub.fullFilePath is not None
 
-        if not pathSet:
-            filePath = __rootDir__ / 'recipes' / (str(activeStub.name) + ".yaml")
-            activeStub.fullFilePath = filePath
+
+
+    try:
+        filePath = __rootDir__ / 'recipes' / (str(__activeRecipe__.name) + ".yaml")
+
+        # First check if file already exists and whether user wants to overwrite
+        fileExists = os.path.exists(filePath)
+        doSave = True
+        if fileExists:
+            doSaveInp = io_Prompt(Fore.YELLOW + "\tA recipe with this filename already exists, do you want to overwrite "
+                                             "it? (Y/N) If not, try renaming this recipe first: ",
+                               validate=True,
+                               validResponse=["Y", "N"])
+            if doSaveInp.lower() == 'n':
+                doSave=False
+
+        if doSave:
+
             __activeRecipe__.fullFilePath = filePath
 
-        # Temporarily overwrite the cmd list
-        cmdHolder = __activeRecipe__.cmdList
-        pathHolder = __activeRecipe__.fullFilePath
+            # Temporarily overwrite the cmd list
+            cmdHolder = __activeRecipe__.cmdList
+            __activeRecipe__.cmdList = []
 
-        __activeRecipe__.cmdList = []
+            # Construct string to write
+            outstring = "# Name: " + __activeRecipe__.name + "\n# Description: " \
+                        + __activeRecipe__.description + "\n# Date Created: " \
+                        + __activeRecipe__.dateCreated + "\n" + __activeRecipe__.writeLogSelf()
+            __activeRecipe__.overWriteToFile(outstring)
 
-        # Construct string to write
-        outstring = "# Name: " + __activeRecipe__.name + "\n# Description: " \
-                    + __activeRecipe__.description + "\n# Date Created: " \
-                    + __activeRecipe__.dateCreated + "\n" + __activeRecipe__.writeLogSelf()
-        __activeRecipe__.overWriteToFile(outstring)
+            # Restore fullFilepath and cmd list
+            __activeRecipe__.cmdList = cmdHolder
 
-        # Restore fullFilepath and cmd list
-        __activeRecipe__.cmdList = cmdHolder
-        __activeRecipe__.fullFilePath = pathHolder
-
-        print("\tSuccessfully saved recipe to file at: \n\t" + str(__activeRecipe__.fullFilePath))
-
+            print("\tSuccessfully saved recipe to file at: \n\t" + str(__activeRecipe__.fullFilePath))
+        else:
+            print("\t\tCancelling save operation...")
     except Exception as inst:
         logging.exception(inst)
 
@@ -1590,10 +1619,11 @@ def io_displayRecipe():
     outStrings = [Fore.YELLOW + "(P0) Active Recipe Name: " + __activeRecipe__.name,
                   Fore.YELLOW + "(P1) Description: " + __activeRecipe__.description,
                   Fore.YELLOW + "(P2) Creation Date: " + __activeRecipe__.dateCreated,
-                  Fore.WHITE + "Begin Sequence List " + "-" * 25,
-                  Fore.WHITE + "\t| (%5s) | %20s | %10s | %50s |" % (str.center("Index", 5),
+                  Fore.WHITE + "Full Path: " + str(__activeRecipe__.fullFilePath),
+                  Fore.WHITE + "Begin Sequence List " + "-" * 100,
+                  Fore.WHITE + "\t|  %5s  | %20s | %25s | %50s |" % (str.center("Index", 5),
                                                                      str.center("Sequence Name", 20),
-                                                                     str.center("Sequence Type", 10),
+                                                                     str.center("Sequence Type", 25),
                                                                      str.center("Description", 50))]
 
     # Present sequences
@@ -1604,12 +1634,12 @@ def io_displayRecipe():
         for seq in __activeRecipe__.seqList:
             index = index + 1
             outStrings.append(Fore.WHITE
-                              + "\t| (%5s) | %20s | %10s | %50s|"
+                              + "\t| (%5s) | %20s | %25s | %50s|"
                               % (str.center("S" + str(index), 5),
                                  str.center(seq.dictParams.get("name").value, 20),
-                                 str.center(seq.dictParams.get("owner").value, 10),
+                                 str.center(seq.dictParams.get("owner").value, 25),
                                  str.center(seq.dictParams.get("description").value, 50)))
-    outStrings.append(Fore.WHITE + "End Sequence List " + "-" * 25)
+    outStrings.append(Fore.WHITE + "End Sequence List " + "-" * 100)
     return outStrings
 
 
@@ -1629,10 +1659,11 @@ def io_startLog():
         now = datetime.now()
         strDate = str(now.year) + str(now.month) + str(now.day) + "_" + str(now.hour) \
                   + str(now.minute) + str(now.second)
-        strName = str(input("Enter Log File Name:"))
+        strName = str(input("\tEnter Log File Name:"))
         fileName = strDate + "_" + strName
-        fileWriter = fileHandler(fullFilePath=logDir / fileName + ".txt")
-        outString = "Print Name: " + strName + "\nStarted at: " + strDate + "\n" + __activeRecipe__.writeLogSelf()
+        fileWriter = fileHandler(fullFilePath= str(logDir / fileName) + ".txt")
+        outString = "-"*50 + "\n" + "Log File Name: " + strName + "\nStarted at: " + strDate + "\n" + "-"*50 + "\n" \
+                    + __activeRecipe__.writeLogSelf()
         fileWriter.overWriteToFile(outString)
         return fileWriter
     except Exception as inst:
@@ -1658,9 +1689,9 @@ def io_endLog(fileWriter: fileHandler):
         if finalText.lower() == 'q':
             finalText = ''
 
-        print("\tAttempting to write log end to file...")
-        fileWriter.appendToFile(strDate + "\n")
+        fileWriter.appendToFile("-"*50 + "Finished at: " + strDate + "\n")
         fileWriter.appendToFile("Final Comment: " + finalText)
+        print("\tWriting log end to file...")
     except Exception as inst:
         print(Fore.RED + "\tError Writing Log File" + Style.RESET_ALL)
         logging.exception(inst)

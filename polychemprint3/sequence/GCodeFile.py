@@ -15,12 +15,12 @@ from polychemprint3.axes.nullAxes import nullAxes
 import logging
 
 
-class runGCODEFile(sequenceSpec):
-    """Sequence template for assimilating GCODE motion commands and tool triggers into PCP Recipe framework"""
+class GCodeFile(sequenceSpec):
+    """Sequence template for importing GCODE motion commands and tool triggers into PCP Recipe framework"""
 
     ################### Construct/Destruct METHODS ###########################
     def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
-        """*Initializes [SEQUENCE NAME] object with parameters for this sequence*.
+        """*Initializes GCodeFile object with parameters for this sequence*.
 
         Parameters
         ----------
@@ -32,20 +32,27 @@ class runGCODEFile(sequenceSpec):
             "name": seqParam("name", "GCodeSequence", "",
                              "Change if modifying from default"),
             "description": seqParam("Sequence Description",
-                                    "Move Axes (relative or abs)", "", "basicMove.py"),
+                                    "Imported from GCodeFile", "", ""),
             "creationDate": seqParam("Creation Date",
-                                     "05/05/2020", "", "dd/mm/yyyy"),
+                                     "05/28/2020", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
             "owner": seqParam("Owner", "PCP_CoreUtilities", "", "default: PCP_Core"),
-            "posMode": seqParam("Positioning Mode", "relative", "absolute/relative",
-                                "Versus current position or absolute origin"),
-            "feedRate": seqParam("Axes Speed", "60", "mm/min", ""),
-            "xMove": seqParam("X movement", "5", "mm",
-                              "distance/location to move in X"),
-            "yMove": seqParam("Y movement", "5", "mm",
-                              "distance/location to move in Y"),
-            "zMove": seqParam("Z movement", "5", "mm",
-                              "distance/location to move in Z"),
+            "filePath": seqParam("GCodeFile", "PathUnset", "",
+                                 "Full File Path to target GCode File"),
+            "feedRate": seqParam("Printing Speed", "Default", "mm/min",
+                                 "Leave as \"Default\" to use the feedrates from the original GCode file"),
+            "trvRate": seqParam("Travel Speed", "Default", "mm/min",
+                                "Leave as \"Default\" to use the travel speed from the original GCode file"),
+            "is1DMode": seqParam("1D Mode", "False", "True/False",
+                                 "Deletes all but the first layer if True"),
+            "Zhop": seqParam("Z hop height", "Default", "mm",
+                             "Leave as default to use the original GCode Z-hop height (within layers)"),
+            "Ton": seqParam("Tool on Value", "5", "",
+                            "Tool value when dispensing"),
+            "Toff": seqParam("Tool off Value", "5", "",
+                             "Tool value when not dispensing"),
+            "Ttrv": seqParam("Tool travel Value", "5", "",
+                             "Tool value during travel moves"),
         }
 
         # Pass values to parent

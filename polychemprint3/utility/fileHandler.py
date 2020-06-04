@@ -92,7 +92,7 @@ class fileHandler:
         if self.testFileIO("r+"):
             try:
                 # Wipe file and open in writing mode
-                file = open(self.fullFilePath, "w")
+                file = open(self.fullFilePath, "a")
 
                 # Write output to file
                 file.write(outString)

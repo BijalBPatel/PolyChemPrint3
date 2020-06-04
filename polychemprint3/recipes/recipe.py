@@ -74,7 +74,6 @@ class recipe(fileHandler, loggerSpec):
 
         # Step 2 Attempt to add sequence, if fails revert seqList
         try:
-            print(self.seqList)
             self.seqList.insert(beforeIndex, newSeq)
             seqListBackup = None  # Wipes backup label
             return [1, "Add successful"]
@@ -118,9 +117,9 @@ class recipe(fileHandler, loggerSpec):
 
         # Step 2 Attempt to move sequence, if fails revert seqList
         try:
-            seqTemp = self.seqList[currentIndex]
-            del self.seqList[currentIndex]
-            self.seqList.insert(newIndex, seqTemp)
+            seqTemp = self.seqList[int(currentIndex)]
+            del self.seqList[int(currentIndex)]
+            self.seqList.insert(int(newIndex), seqTemp)
             seqListBackup = None  # Wipes backup label
             return [True, "Sequence move successful"]
         except Exception as inst:
@@ -163,8 +162,8 @@ class recipe(fileHandler, loggerSpec):
         """
         try:
             for seq in self.seqList:
-                seqCmds = seq.genSequence()
-                self.cmdList = self.cmdList + seqCmds
+                seq.genSequence()
+                self.cmdList = self.cmdList + seq.cmdList
             return True
 
         except KeyboardInterrupt:

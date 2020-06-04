@@ -38,7 +38,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='polychemprint3',  # Required
-    version='3.0.1a70',  # Required
+    version='3.0.1a80',  # Required
     description='FOSS additive manufacturing control software targeted at research Users (Polymer/Paste/BioPrinting) ',
     long_description=long_description,  # Optional
     long_description_content_type='text/x-rst',  # Optional (see note above)
