@@ -1,7 +1,7 @@
 pyserial
 colorama
 pyyaml
-tkinter
+Tkinter
 psutil
 babel
 pywin32
