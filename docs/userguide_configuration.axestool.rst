@@ -8,6 +8,6 @@ Command **2** and **3** in **Configure/About Menu** change the axes and tool tha
 Right now, the program is loaded with two axes: lulzbotTaz6_BP and nullAxes. To select the desired axes, simply type in the corresponding commands (boxed in yellow) on the left of axes names, in this case **A0** or **A1**. 
 Tools are hardware that does not control movement. For example, in laser cutting, the amount of energy emitted need to be controlled, so laser will be tool in this case. The change tool procedure works the same way as change axes: type **3** in command and select the desired tool using commands show on the left of tool name (boxed in yellow). 
 
-.. image:: /images/tool.png
+.. image:: _static/images/tool.png
 
 
