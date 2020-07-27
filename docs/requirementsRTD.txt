@@ -3,6 +3,5 @@ colorama
 pyyaml
 psutil
 babel
-pywin32
 pillow
 tkfilebrowser
