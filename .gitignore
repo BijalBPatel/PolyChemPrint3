@@ -1,7 +1,6 @@
 # Added by BP
 /.idea/
 /docs/_build
-/docs/_static
 /docs/_templates
 /polychemprint3.egg-info
 /polychemprint3/__pycache__/
