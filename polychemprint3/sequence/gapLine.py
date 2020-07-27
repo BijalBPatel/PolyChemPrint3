@@ -85,7 +85,7 @@ class gapLine(sequenceSpec):
             totalX = 2 * float(xSegLength) + float(xGap)
 
             # Set relative positioning mode
-            self.cmdList.append("axes.setPosMode('relative')")
+            self.cmdList.append("axes.setPosMode(\"relative\")")
 
             # Enter loop for each gap-line row
             rowCount = 1

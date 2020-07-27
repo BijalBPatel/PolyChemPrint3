@@ -12,7 +12,11 @@
 import copy
 import sys
 from datetime import datetime
-
+try:
+    import tkinter as tk
+except ImportError:
+    import Tkinter as tk
+from tkfilebrowser import askopendirname, askopenfilenames, asksaveasfilename
 from polychemprint3.commandLineInterface.ioMenuSpec import ioMenuSpec
 from polychemprint3.commandLineInterface.ioTextPanel import ioTextPanel
 from polychemprint3.axes.nullAxes import nullAxes
@@ -492,7 +496,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         print("###\t" + self.menuTitle)
         print("-" * 150)
 
-        print('\tSequences are pre-programmed, parameterized print sequences stored ' +
+        print('\tSequences are pre-programmed, parameterized print routines stored ' +
               'as python files and loaded to RAM when the program launches.')
         print("\tChoose a sequence code to Edit/Execute:\n")
 
@@ -500,7 +504,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
             seqName = __seqDict__.get(seqNum).dictParams.get("name").value
             seqGrp = __seqDict__.get(seqNum).dictParams.get("owner").value
             seqDescription = __seqDict__.get(seqNum).dictParams.get("description").value
-            print("\t(%s) %-15s| %-25s| %-55s" % (seqNum, seqName, seqGrp, seqDescription))
+            print("\t(%s) %-30s| %-25s| %-55s" % (seqNum, seqName, seqGrp, seqDescription))
 
         print(Style.RESET_ALL)
         # Print std menu options
@@ -930,8 +934,6 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                         for line in io_displayRecipe():
                             print("\t" + line)
 
-
-
                 elif choiceString.upper() in paramOptionList:
                     isPrimed = False
                     # Modify corresponding parameter
@@ -939,10 +941,16 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     param = self.paramsMenuDict.get(paramNum)
                     print("\tModifying parameter %s: %s"
                           % (paramNum, param.name))
-                    newVal = io_Prompt("Enter new value")
+                    newVal = io_Prompt("Enter new value (type File to choose a file):")
+                    if newVal.lower() == "file":
+                        print("\tChoose a file with the GUI window:")
+                        tkWindow = tk.Tk()
+                        newVal = askopenfilenames(parent=tkWindow, initialdir='/', initialfile='tmp',
+                                                     filetypes=[("GCode Files", "*.gcode|*.txt"),
+                                                                ("All files", "*")])[0]
                     oldVal = param.value
                     param.value = newVal
-                    print("Value changed from %s to %s"
+                    print("\tValue changed from %s to %s"
                           % (oldVal, param.value))
                 else:
                     print("\tReceived: " + choiceString)
@@ -1100,7 +1108,7 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
                     i = 0
                     validSeqIndex = ["q"]
                     while i < numSeq:
-                        validSeqIndex.append("S"+str(i))
+                        validSeqIndex.append("S" + str(i))
                         i = i + 1
                     seqRem = io_Prompt("Enter index of sequence to remove (S#), q to cancel: ",
                                        validate=True, validResponse=validSeqIndex)
@@ -1567,8 +1575,6 @@ def io_saveRecipe(activeStub: recipeStub):
       """
     global __activeRecipe__
 
-
-
     try:
         filePath = __rootDir__ / 'recipes' / (str(__activeRecipe__.name) + ".yaml")
 
@@ -1576,12 +1582,13 @@ def io_saveRecipe(activeStub: recipeStub):
         fileExists = os.path.exists(filePath)
         doSave = True
         if fileExists:
-            doSaveInp = io_Prompt(Fore.YELLOW + "\tA recipe with this filename already exists, do you want to overwrite "
-                                             "it? (Y/N) If not, try renaming this recipe first: ",
-                               validate=True,
-                               validResponse=["Y", "N"])
+            doSaveInp = io_Prompt(
+                Fore.YELLOW + "\tA recipe with this filename already exists, do you want to overwrite "
+                              "it? (Y/N) If not, try renaming this recipe first: ",
+                validate=True,
+                validResponse=["Y", "N"])
             if doSaveInp.lower() == 'n':
-                doSave=False
+                doSave = False
 
         if doSave:
 
@@ -1661,8 +1668,8 @@ def io_startLog():
                   + str(now.minute) + str(now.second)
         strName = str(input("\tEnter Log File Name:"))
         fileName = strDate + "_" + strName
-        fileWriter = fileHandler(fullFilePath= str(logDir / fileName) + ".txt")
-        outString = "-"*50 + "\n" + "Log File Name: " + strName + "\nStarted at: " + strDate + "\n" + "-"*50 + "\n" \
+        fileWriter = fileHandler(fullFilePath=str(logDir / fileName) + ".txt")
+        outString = "-" * 50 + "\n" + "Log File Name: " + strName + "\nStarted at: " + strDate + "\n" + "-" * 50 + "\n" \
                     + __activeRecipe__.writeLogSelf()
         fileWriter.overWriteToFile(outString)
         return fileWriter
@@ -1689,7 +1696,7 @@ def io_endLog(fileWriter: fileHandler):
         if finalText.lower() == 'q':
             finalText = ''
 
-        fileWriter.appendToFile("-"*50 + "Finished at: " + strDate + "\n")
+        fileWriter.appendToFile("-" * 50 + "Finished at: " + strDate + "\n")
         fileWriter.appendToFile("Final Comment: " + finalText)
         print("\tWriting log end to file...")
     except Exception as inst:

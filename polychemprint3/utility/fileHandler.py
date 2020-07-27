@@ -14,10 +14,13 @@ from itertools import islice
 
 
 class fileHandler:
-    """Base Class for objects that can read/write to file"""
+    """Class for objects that can read/write to file"""
 
     def __init__(self, fullFilePath=None, **kwargs):
-        self.fullFilePath = fullFilePath
+        if fullFilePath is None:
+            self.fullFilePath = ""
+        else:
+            self.fullFilePath = fullFilePath
         super().__init__(**kwargs)
 
     ################### Helper Methods ###############################
@@ -64,7 +67,7 @@ class fileHandler:
 
         try:
             # Wipe file and open in writing mode
-            file = open(self.fullFilePath, "w")
+            file = open(self.fullFilePath, "w+")
 
             # Write output to file
             file.write(outString)
@@ -102,9 +105,6 @@ class fileHandler:
                       + Style.RESET_ALL)
                 logging.exception(inst)
                 return False
-            finally:
-                # Close file
-                file.close()
 
     def readFullFile(self):
         """*Reads the entire file into memory as a list of strings*.

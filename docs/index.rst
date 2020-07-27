@@ -19,12 +19,15 @@ For more information, visit the project homepage at https://publish.illinois.edu
    userguide_overview
    userguide_install
    userguide_navigation
+   userguide_configuration
    userguide_connectHardware
+   userguide_HardwareDirectControl
    userguide_sequences
    userguide_GCode
    userguide_recipes
    userguide_userprofiles
    userguide_logging
+   
    
 .. toctree::
    :maxdepth: 1

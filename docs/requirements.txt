@@ -1,4 +1,12 @@
 pyserial
 colorama
 pyyaml
-
+pyserial
+colorama
+pyyaml
+tkinter
+psutil
+babel
+pywin32
+pillow
+tkfilebrowser
