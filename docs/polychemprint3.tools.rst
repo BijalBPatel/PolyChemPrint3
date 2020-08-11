@@ -1,9 +1,6 @@
 polychemprint3.tools
 ====================
 
-Submodules
-----------
-
 .. toctree::
    :maxdepth: 4
 
@@ -11,11 +8,3 @@ Submodules
    polychemprint3.tools.nullTool
    polychemprint3.tools.toolSpec
    polychemprint3.tools.ultimusExtruder
-
-Module contents
----------------
-
-.. automodule:: polychemprint3.tools
-   :members:
-   :undoc-members:
-   :show-inheritance:

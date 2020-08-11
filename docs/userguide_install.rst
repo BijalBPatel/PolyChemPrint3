@@ -20,7 +20,7 @@ After successfully installing Anaconda, open Anaconda Navigator and launch anaco
 
 .. image:: /images/AnacondaBoxRed.png
 
-Installation PCP3 from PyPi via pip
+Installing PCP3 from PyPi via pip
 ###################################
 
 After opening the appropriate terminal window (Anaconda Prompt/Terminal/Command Prompt), enter:
@@ -45,10 +45,49 @@ into the terminal window and the program should launch
 Run from Source (from Github)
 #############################
 
-TODO
+All source code (for PCP3 and this manual) is posted on github at https://github.com/BijalBPatel/PolyChemPrint3 . 
+Three branches are maintained: 
 
+- Master: The main stable release
+- Beta: A test release which may have new features we are testing. This is the version we run in our lab.
+- Dev: Testing release for new and semi/not working features.
+
+If you are new to github, there are many quick tutorials online - such as this_.
+
+.. _this: https://guides.github.com/activities/hello-world/
 
 Setting up new Hardware
 #######################
 
-TODO
+PCP3 as written uses pySerial to communicate with hardware devices. To add a new tool, begin by cloning and renaming one of the existing tool.py files in the polychemprint3/tools directory. We will then go line by line and replace comment text and parameters such as device address, baudrate, etc with the values that correspond to your particular hardware. Here we highlight key parameters to change:
+
+1. In the __init__ method, set the devAddress, baudRate, commsTimeOut, and other parameters to reflect your hardware.
+2. Next, go through each of the methods (activate, deactivate, engage, disengage, setValue, startSerial, etc), and write the necessary code to complete the communication loop with your hardware. If your device has a simple arduino based controller, these methods may be very simple (see Laser6W.py). If the device uses a special packet-based protocol, this can be more challenging, but see ultimusExtruder.py for a good example of this. 
+3. No matter what, make sure the methods specified in the toolSpec.py abstract base class are filled out in your new code file.
+4. Once the tool.py file is complete, restart PCP3 and check that it properly is loaded [the starting load text will indiciate "PASS" for both conditions.
+
+Modifying Marlin Firmware
+#########################
+
+If you are using a consumer 3D printer for your motion axes, there is a high likelihood you will need to modify the stock Marlin firmware to work with PCP3. Our main goal is to force the command acknowledge statement "ok ...." to only be sent from the printer AFTER all motion steps are complete. If you are running on Linux, you may also need to change the firmware baudrate for compatibility. Here is how:
+
+1. Download the Marlin firmware source files either from your printer manufacturer's webpage, or from the main `Marlin Firmware webpage`_
+2. If you are getting firmware from the Marlin site, see if you can find the configuration files for your printer in the `MarlinFirmware Github folder`_ that corresponds to your printer.
+3. Dowload arduinoIDE and from Tools -> Boards -> Board Manager install the RAMBo board files.
+4. Open all of your Firmware files in arduino IDE by running the Marlin.ino file in the Marlin folder.
+5. If necessary, in the conditionals.h file, set the baudrate to your desired value.
+6. Navigate to the Marlin_main.cpp file and find the "process_next_command()" method. At the very end of this method (see image), add the following statement:   
+
+	.. code-block:: cpp
+
+		stepper.synchronize(); //PAUSES UNTIL MOTION COMPLETE BEFORE SENDING OK
+
+	.. image :: /images/marlinfw.png
+
+7. Compile as hex and export
+8. Use a program such as cura to load your new firmware onto your printer. 
+
+Note: Be sure to save the old firmware, you will need it to go back to normal FDM 3D printing.
+
+.. _Marlin Firmware webpage: https://marlinfw.org/meta/download/
+.. _MarlinFirmware Github folder: https://github.com/MarlinFirmware/Configurations/tree/release-1.1.9

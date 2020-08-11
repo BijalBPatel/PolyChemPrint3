@@ -33,30 +33,12 @@ Note: If you use this software/code, please cite the `original paper`_ listed on
    userguide_configuration
    userguide_HardwareDirectControl
    userguide_sequences
-   userguide_GCode
    userguide_recipes
-   userguide_userprofiles
-   userguide_logging
    
    
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Software Guide
 
-   polychemprint3
-   polychemprint3.commandLineInterface
-   polychemprint3.data
-   polychemprint3.axes
-   polychemprint3.tools
-   polychemprint3.recipes
-   polychemprint3.sequence
-   polychemprint3.user
-   polychemprint3.utility
-   
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   software_overview
+   modules   

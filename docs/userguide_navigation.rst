@@ -1,13 +1,17 @@
-The Main Menu and Navigation 
-============================
+Main Menu and Navigation 
+========================
 
 PCP3 has a (hopefully) straightforward command-line interface (CLI) based on a series of menus and submenus. The Main Menu is the 'root' of the decision tree, from here you can navigate between the main functions of the program: configuration, manual control, sequences, and recipes. It should appear after the initial loading sequence and is a good place to start learning how to navigate the CLI.
 
-Here is a screenshot of the main menu in version 3.0:
-.. image:: /images/main.png
+.. image:: /images/menuMap.png
+
 
 Reading Menus
 #############
+
+Here is a screenshot of the main menu in version 3.0:
+
+.. image:: /images/main.png
 
 As you can see, there are 2 columns separated by a vertical bar ("|"). On the left, is a command string (enclosed in brackets "[]" or parentheses "()") and short name for the command. At right, there is an optional detailed description.
 For some commands, such as those near the end of the list (in teal) ("/", "."), the text on the right is initially blank and will be filled in based on the saved command in memory. 

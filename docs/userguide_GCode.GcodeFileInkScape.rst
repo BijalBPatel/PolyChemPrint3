@@ -11,6 +11,4 @@ This sequence allows locally stored Gcode file obtained through InkScape softwar
 
 **P7** controls moving speed of axes in x and y direction when printing and **P8** represents the speed of axes when tool is not print but sequence is still running. **P9** is the speed of axes when traveling in z direction. The unit regarding speed is in mm/min. **P10, Z hop height**, controls the distance axes moves in positive z direction when two lines are crossed. Axes need to be move up to avoid collision of material, thus called hop height. The unit is in mm.
 
-**Tool ON**, **Tool OFF**, **PRIME**, **VIEW**, and **GO** commands have been described in user guide **6.1.1** and **6.1.2**. Please see them for more information
-
 
