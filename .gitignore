@@ -6,6 +6,7 @@
 /polychemprint3/.pylint.d
 /tests/
 *.pyc
+**/__pycache__
 updatePyPI.bat
 
 # From github template for python
