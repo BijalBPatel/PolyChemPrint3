@@ -1,0 +1,196 @@
+--------------------------------------------------
+Log File Name: sdadsa dsada
+Started at: 2020616_01957
+--------------------------------------------------
+__verbose__: 0
+axes: !!python/object:polychemprint3.axes.nullAxes.nullAxes
+  __verbose__: 0
+  name: nullAxes
+  posMode: relative
+cmdList:
+- axes.setPosMode("absolute")
+- tool.engage()
+- axes.move("G21 ")
+- axes.move("G00 F61 Z2 ")
+- axes.move("G00 F61 X25.482422 Y46.160160 ")
+- axes.move("G01 F62 Z0.000000 ")
+- axes.move("G03 F60 X19.316273 Y43.424848 Z0.000000 I0.479738 J-9.399219 ")
+- axes.move("G03 X16.906250 Y37.078120 Z0.000000 I5.828296 J-5.844099 ")
+- axes.move("G03 X17.617176 Y34.312826 Z0.000000 I7.517591 J0.458657 ")
+- axes.move("G03 X19.224609 Y32.076170 Z0.000000 I6.921343 J3.278268 ")
+- axes.move("G01 X23.037109 Y34.947270 Z0.000000 ")
+- axes.move("G02 X22.299893 Y35.713539 Z0.000000 I1.840252 J2.508247 ")
+- axes.move("G02 X21.919922 Y36.724610 Z0.000000 I1.922869 J1.299568 ")
+- axes.move("G02 X22.737376 Y39.229590 Z0.000000 I3.068742 J0.384443 ")
+- axes.move("G02 X25.076172 Y40.386720 Z0.000000 I2.726030 J-2.567707 ")
+- axes.move("G02 X28.346179 Y39.262046 Z0.000000 I0.424378 J-4.082250 ")
+- axes.move("G02 X29.824219 Y36.167970 Z0.000000 I-3.383070 J-3.516160 ")
+- axes.move("G02 X28.334998 Y32.007075 Z0.000000 I-5.277158 J-0.458209 ")
+- axes.move("G02 X24.357422 Y30.160160 Z0.000000 I-4.426839 J4.327208 ")
+- axes.move("G02 X21.501849 Y30.603938 Z0.000000 I-0.466326 J6.408591 ")
+- axes.move("G02 X19.224609 Y32.076170 Z0.000000 I2.629513 J6.564641 ")
+- axes.move("G01 X12.898438 Y27.308590 Z0.000000 ")
+- axes.move("G03 X17.877180 Y23.862424 Z0.000000 I10.772260 J10.243366 ")
+- axes.move("G03 X23.835938 Y22.761720 Z0.000000 I5.467459 J12.919084 ")
+- axes.move("G03 X32.790216 Y26.599004 Z0.000000 I-0.471944 J13.467295 ")
+- axes.move("G03 X36.394531 Y35.707030 Z0.000000 I-8.415507 J8.597445 ")
+- axes.move("G03 X33.135487 Y43.188984 Z0.000000 I-11.321990 J-0.480938 ")
+- axes.move("G03 X25.482422 Y46.160160 Z0.000000 I-7.141422 J-7.052803 ")
+- axes.move("G01 X25.482422 Y46.160160 Z0.000000 ")
+- axes.move("G00 F61 Z2 ")
+- axes.move("G00 F61 Z2 ")
+- axes.move("G00 F61 X23.037109 Y34.947270 ")
+- axes.move("G01 F62 Z0.000000 ")
+- axes.move("G03 F60 X23.774948 Y34.544514 Z0.000000 I1.870308 J2.549130 ")
+- axes.move("G03 X24.658203 Y34.449220 Z0.000000 I0.621569 J1.620176 ")
+- axes.move("G03 X25.851222 Y35.096800 Z0.000000 I-0.301841 J1.978798 ")
+- axes.move("G03 X26.218750 Y36.421880 Z0.000000 I-1.163647 J1.036262 ")
+- axes.move("G03 X25.763668 Y37.207710 Z0.000000 I-1.343697 J-0.253462 ")
+- axes.move("G03 X24.867188 Y37.423830 Z0.000000 I-0.660530 J-0.772532 ")
+- axes.move("G03 X24.391819 Y37.122965 Z0.000000 I0.201617 J-0.844534 ")
+- axes.move("G03 X24.285156 Y36.558590 Z0.000000 I0.475943 J-0.382216 ")
+- axes.move("G01 X24.466792 Y36.302707 Z0.000000 ")
+- axes.move("G01 X24.787109 Y36.265620 Z0.000000 ")
+- axes.move("G01 X23.037109 Y34.947270 Z0.000000 ")
+- axes.move("G00 F61 Z2 ")
+- axes.move("G00 F61 X0.0000 Y0.0000 ")
+- tool.disengage()
+- axes.setPosMode("relative")
+dateCreated: 12:18AM on June 16, 2020
+description: asdsadas
+fullFilePath: ''
+name: Test 2
+seqList:
+- !!python/object:polychemprint3.sequence.GCodeFileInkscape.GCodeFileInkscape
+  axes: !!python/object:polychemprint3.axes.nullAxes.nullAxes
+    __verbose__: 0
+    name: nullAxes
+    posMode: relative
+  cmdList:
+  - axes.setPosMode("absolute")
+  - tool.engage()
+  - axes.move("G21 ")
+  - axes.move("G00 F61 Z2 ")
+  - axes.move("G00 F61 X25.482422 Y46.160160 ")
+  - axes.move("G01 F62 Z0.000000 ")
+  - axes.move("G03 F60 X19.316273 Y43.424848 Z0.000000 I0.479738 J-9.399219 ")
+  - axes.move("G03 X16.906250 Y37.078120 Z0.000000 I5.828296 J-5.844099 ")
+  - axes.move("G03 X17.617176 Y34.312826 Z0.000000 I7.517591 J0.458657 ")
+  - axes.move("G03 X19.224609 Y32.076170 Z0.000000 I6.921343 J3.278268 ")
+  - axes.move("G01 X23.037109 Y34.947270 Z0.000000 ")
+  - axes.move("G02 X22.299893 Y35.713539 Z0.000000 I1.840252 J2.508247 ")
+  - axes.move("G02 X21.919922 Y36.724610 Z0.000000 I1.922869 J1.299568 ")
+  - axes.move("G02 X22.737376 Y39.229590 Z0.000000 I3.068742 J0.384443 ")
+  - axes.move("G02 X25.076172 Y40.386720 Z0.000000 I2.726030 J-2.567707 ")
+  - axes.move("G02 X28.346179 Y39.262046 Z0.000000 I0.424378 J-4.082250 ")
+  - axes.move("G02 X29.824219 Y36.167970 Z0.000000 I-3.383070 J-3.516160 ")
+  - axes.move("G02 X28.334998 Y32.007075 Z0.000000 I-5.277158 J-0.458209 ")
+  - axes.move("G02 X24.357422 Y30.160160 Z0.000000 I-4.426839 J4.327208 ")
+  - axes.move("G02 X21.501849 Y30.603938 Z0.000000 I-0.466326 J6.408591 ")
+  - axes.move("G02 X19.224609 Y32.076170 Z0.000000 I2.629513 J6.564641 ")
+  - axes.move("G01 X12.898438 Y27.308590 Z0.000000 ")
+  - axes.move("G03 X17.877180 Y23.862424 Z0.000000 I10.772260 J10.243366 ")
+  - axes.move("G03 X23.835938 Y22.761720 Z0.000000 I5.467459 J12.919084 ")
+  - axes.move("G03 X32.790216 Y26.599004 Z0.000000 I-0.471944 J13.467295 ")
+  - axes.move("G03 X36.394531 Y35.707030 Z0.000000 I-8.415507 J8.597445 ")
+  - axes.move("G03 X33.135487 Y43.188984 Z0.000000 I-11.321990 J-0.480938 ")
+  - axes.move("G03 X25.482422 Y46.160160 Z0.000000 I-7.141422 J-7.052803 ")
+  - axes.move("G01 X25.482422 Y46.160160 Z0.000000 ")
+  - axes.move("G00 F61 Z2 ")
+  - axes.move("G00 F61 Z2 ")
+  - axes.move("G00 F61 X23.037109 Y34.947270 ")
+  - axes.move("G01 F62 Z0.000000 ")
+  - axes.move("G03 F60 X23.774948 Y34.544514 Z0.000000 I1.870308 J2.549130 ")
+  - axes.move("G03 X24.658203 Y34.449220 Z0.000000 I0.621569 J1.620176 ")
+  - axes.move("G03 X25.851222 Y35.096800 Z0.000000 I-0.301841 J1.978798 ")
+  - axes.move("G03 X26.218750 Y36.421880 Z0.000000 I-1.163647 J1.036262 ")
+  - axes.move("G03 X25.763668 Y37.207710 Z0.000000 I-1.343697 J-0.253462 ")
+  - axes.move("G03 X24.867188 Y37.423830 Z0.000000 I-0.660530 J-0.772532 ")
+  - axes.move("G03 X24.391819 Y37.122965 Z0.000000 I0.201617 J-0.844534 ")
+  - axes.move("G03 X24.285156 Y36.558590 Z0.000000 I0.475943 J-0.382216 ")
+  - axes.move("G01 X24.466792 Y36.302707 Z0.000000 ")
+  - axes.move("G01 X24.787109 Y36.265620 Z0.000000 ")
+  - axes.move("G01 X23.037109 Y34.947270 Z0.000000 ")
+  - axes.move("G00 F61 Z2 ")
+  - axes.move("G00 F61 X0.0000 Y0.0000 ")
+  - tool.disengage()
+  - axes.setPosMode("relative")
+  dictParams:
+    Toff: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: Tool value when not dispensing
+      name: Tool off Value
+      unit: ''
+      value: '5'
+    Ton: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: Tool value when dispensing
+      name: Tool on Value
+      unit: ''
+      value: '5'
+    Ttrv: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: Tool value during travel moves
+      name: Tool travel Value
+      unit: ''
+      value: '5'
+    Zhop: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: ''
+      name: Z hop height
+      unit: mm
+      value: '2'
+    createdBy: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: ''
+      name: Created By
+      unit: ''
+      value: Bijal Patel
+    creationDate: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: dd/mm/yyyy
+      name: Creation Date
+      unit: ''
+      value: 06\16\2020
+    description: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: ''
+      name: Sequence Description
+      unit: ''
+      value: Imported from GCodeFile
+    feedRate: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: ''
+      name: Printing Speed
+      unit: mm/min
+      value: '60'
+    filePath: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: Full File Path to target GCode File
+      name: GCodeFilePath
+      unit: ''
+      value: C:\Users\bbpat\Desktop\GreenLayer.gcode
+    name: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: Change if modifying from default
+      name: name
+      unit: ''
+      value: GCodeFileInkscape
+    owner: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: 'default: PCP_Core'
+      name: Owner
+      unit: ''
+      value: PCP_CoreUtilities
+    trvRate: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: ''
+      name: Travel Speed
+      unit: mm/min
+      value: '61'
+    zRate: !!python/object:polychemprint3.sequence.sequenceSpec.seqParam
+      helpString: ''
+      name: Z Movement Speed
+      unit: mm/min
+      value: '62'
+  tool: !!python/object:polychemprint3.tools.nullTool.nullTool
+    __verbose__: 0
+    dispenseStatus: 0
+    name: nullTool
+    units: 'null'
+  verbose: 1
+tool: !!python/object:polychemprint3.tools.nullTool.nullTool
+  __verbose__: 0
+  dispenseStatus: 0
+  name: nullTool
+  units: 'null'
+--------------------------------------------------Finished at: 2020616_0200
+Final Comment: dsad
