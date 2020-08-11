@@ -1387,14 +1387,6 @@ def io_loadPCP(objType):
         objDir = __rootDir__ / 'axes'
         print(textCol
               + "Loading axes from axes Folder " + "-" * 57)
-    elif objType == 'user':
-        textCol = Fore.LIGHTMAGENTA_EX
-        objCode = 'U'
-        objDict = __userDict__
-        moduleDirString = "polychemprint3.user"
-        objDir = __rootDir__ / 'user'
-        print(textCol
-              + "Loading user profiles from user Folder " + "-" * 48)
     else:
         textCol = Fore.WHITE
         objType = 'invalid'
@@ -1461,9 +1453,6 @@ def io_loadPCP(objType):
     elif objType == 'axes':
         print(textCol + "Finished Loading Axes Files! " + "-" * 58
               + Style.RESET_ALL)
-    elif objType == 'user':
-        print(textCol + "Finished Loading User Files! " + "-" * 58
-              + Style.RESET_ALL)
 
 
 def io_pollRecipes(silentMode=False):
@@ -1511,28 +1500,6 @@ def io_pollRecipes(silentMode=False):
     if not silentMode:
         print(textCol + "Finished Loading Recipe stub list from Recipes Folder!" + "-" * 33)
         print(Style.RESET_ALL, end="")
-
-
-def io_loadUsers():
-    """*Loads all user profiles into memory as objects*.
-
-      Parameters
-      ----------
-
-      """
-    print(Style.RESET_ALL, end="")
-    global __activeRecipe__
-
-    # Backup current recipe
-    backupActive = copy.copy(__activeRecipe__)
-    try:
-
-        print(Fore.GREEN + "\tNew recipe activated!" + Style.RESET_ALL)
-    except Exception as inst:
-        logging.exception(inst)
-        __activeRecipe__ = backupActive
-        print(Fore.RED + "\tError activating sequence - reverting to previous active sequence.")
-
 
 def io_loadRecipe(rStub: recipeStub):
     """*Attempts to load selected recipeStub into the active Recipe, pulling extra info from yaml file*.
@@ -1728,7 +1695,6 @@ tool = nullTool()
 __seqDict__ = {}
 __toolDict__ = {}
 __axesDict__ = {}
-__userDict__ = {}
 __recipeStubList__ = []
 __activeRecipe__ = recipe()
 
@@ -1754,7 +1720,6 @@ def main():
     io_loadPCP('axes')
     io_loadPCP('tools')
     io_loadPCP('sequence')
-    io_loadPCP('user')
     io_pollRecipes()
     # Interface Start Sequencea
     io_StartText()

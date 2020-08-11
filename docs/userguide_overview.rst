@@ -1,4 +1,12 @@
 Program Overview
 ================
 
-The polychemprint3 is a software that allow users to gain direct controllability over hardware (typical 3D printers and pressure dispensers) by sending movements and dispensing pressure commands. Combination of singular command allows hardware to move following specific 2D and 3D patterns such as rectangle, triangle, cube, and etc. Such series of commands are called “sequences”. Polychemprint3 also can convert G-code file into movement commands, thus allow hardware to create much complex shapes. Instead of generating on shape at a time, multiple 2D or 3D shapes can be creating all together through “recipe”, a multi-sequence list build by users themselves.  
+PolyChemPrint3 (PCP3) is a command-line interface (CLI) Windows/Linux program that handles communication between the user and additive manufacturing(AM) hardware. In some ways, PCP3 offers overlapping functionality with 3D printer control software such as pronterface_ and 3D slicing programs such as slic3r_ or Cura_, but optimized for AM research with unconventional, non-FDM toolheads such as pneumatic (melt) extruders, LASERs, syringe pumps, etc.
+
+.. _pronterface: https://publish.illinois.edu/polychemprint3
+.. _slic3r: https://slic3r.org/
+.. _Cura: https://ultimaker.com/software/ultimaker-cura
+
+At the most basic level, users can directly send commands to the motion axes and toolhead to execute GCode move sequences and simple tool on/off/ power set commands. The next level up is to use parameterized, hardcoded 'sequences' to execute specific 2D and 3D patterns such as meanderlines, cuboids, electrode patterns, etc. For more complex 2D/3D patterns, GCode files created by slicers such as GCodeTools in Inkscape and Cura/ Slic3r can be imported as sequences. Finally, any combination of sequences can be chained together into 'Recipes', offering a 'code-free' way to build-up complex patterns. Automatic data-logging exports print parameters to text files to optimize parameter screening. 
+
+Note: Even if you have identical hardware to the original developers, the software will need some initial setup - so pay careful attention to the "Installation and Setup" section. Best of luck!

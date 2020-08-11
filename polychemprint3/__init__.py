@@ -7,12 +7,11 @@ sys.path.insert(0, os.path.dirname(
 import polychemprint3
 
 from polychemprint3 import __main__
-from polychemprint3 import tools, sequence, axes, commandLineInterface, user, utility
+from polychemprint3 import tools, sequence, axes, commandLineInterface, utility
 from polychemprint3.tools import *
 from polychemprint3.sequence import *
 from polychemprint3.axes import *
 from polychemprint3.commandLineInterface import *
-from polychemprint3.user import *
 from polychemprint3.utility import *
 
 def main():

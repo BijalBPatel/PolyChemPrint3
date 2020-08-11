@@ -6,21 +6,31 @@
 Welcome to PolyChemPrint3's User Guide and Software Documentation!
 ==================================================================
 
-PolyChemPrint3 is an open source benchtop additive manufacturing software. This readthedocs page contains two sections: a 'user guide' for instructions on setting up and operating the program, and a 'software guide' intended as a programming aid that contains the organized python docstrings for the modules, classes, and methods of this object-oriented program.
+PolyChemPrint3 is an `open source`_ benchtop additive manufacturing software developed at the University of Illinois by Bijal Patel and Dr. Ying Diao. For more information, please visit the `project homepage`_ and `Diao Research Group homepage`_.
 
+.. _open source: https://github.com/BijalBPatel/PolyChemPrint3/blob/master/LICENSE.txt
+.. _project homepage: https://publish.illinois.edu/polychemprint3
+.. _Diao Research Group homepage: http://diao.scs.illinois.edu/Diao_Lab/Home.html
 
-For more information, visit the project homepage at https://publish.illinois.edu/polychemprint3.
+This readthedocs.io page contains: 
+	A 'user guide' with instructions on setting up and operating the program. 
+	
+	A 'software guide' intended as a programming aid that contains the organized python docstrings for the modules, classes, and methods of this object-oriented program.
+	
+Note: If you use this software/code, please cite the `original paper`_ listed on the project homepage! It really helps!
+
+.. _original paper: https://publish.illinois.edu/polychemprint3/
+
 
 .. toctree::
    :maxdepth: 2
    :numbered:
    :caption: User Guide
-	
+   
    userguide_overview
    userguide_install
    userguide_navigation
    userguide_configuration
-   userguide_connectHardware
    userguide_HardwareDirectControl
    userguide_sequences
    userguide_GCode
