@@ -76,7 +76,9 @@ class laser6W(serialDeviceSpec, toolSpec):
             print("\t\t\t" + message)
             if status == 1:
                 passed = True
-
+            # Turn on Laser at minimum Power
+            self.__writeSerial__("on\n")
+            self.__writeSerial__("2" + '\n')
         return passed
 
     def deactivate(self):
@@ -91,6 +93,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         passed = False
         # Stop Serial Device
         [status, message] = self.stopSerial()
+        self.__writeSerial__("off\n")
         print("\t\t\t" + message)
         if status == 1:
             passed = True
@@ -110,7 +113,8 @@ class laser6W(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 0:
-                self.__writeSerial__("on\n")
+                self.__writeSerial__("2" + '\n')
+                # Laser is always on now
                 self.dispenseStatus = 1
                 return [1, "Dispense On"]
             else:
@@ -129,7 +133,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 1:
-                self.__writeSerial__("off\n")
+                self.__writeSerial__("2" + '\n')
                 self.dispenseStatus = 0
                 return [1, "Dispense Off"]
 
@@ -255,10 +259,10 @@ class laser6W(serialDeviceSpec, toolSpec):
         """
         try:
             self.ser.write(chr(4))  # End of transmission code
-            print("Closing UltimusV...\n")
+            print("Closing Laser...\n")
             time.sleep(3)
             self.ser.close()
-            print("Closed UltimusV!\n")
+            print("Closed Laser!\n")
             return [1, "Terminated successfully"]
         except Exception as inst:
             return [0, 'Error on closing Serial Device: ' + self.name
