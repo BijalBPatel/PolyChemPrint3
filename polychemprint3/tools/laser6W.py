@@ -23,7 +23,7 @@ class laser6W(serialDeviceSpec, toolSpec):
     def __init__(self,
                  name="BlueLASER6W",
                  units="percent",
-                 devAddress="/dev/ttyACM1",
+                 devAddress="/dev/ttyACM2",
                  baudRate=115200,
                  commsTimeOut=0.1,
                  __verbose__=1,
@@ -47,6 +47,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         """
 
         self.dispenseStatus = 0  # off
+        self.internalVal = "2"
         inputs = {"name": name,
                   "units": units,
                   "devAddress": devAddress,
@@ -67,16 +68,22 @@ class laser6W(serialDeviceSpec, toolSpec):
         """
         passed = False
         # Start Serial Device
+        print("\t\t\tEstablishing Serial Connection to Laser6W...")
         [status, message] = self.startSerial()
-        print("\t\t\t")
         print(message)
-        if status == 1:
-            # Try initial handshake
-            [status, message] = self.handShakeSerial()
-            print("\t\t\t" + message)
-            if status == 1:
-                passed = True
 
+        # If serial port started successfully
+        if status == 1:
+            time.sleep(5)
+            print("\t\t\tCaution: Turning Laser On...")
+            self.__writeSerial__("on\n")
+            time.sleep(5)
+            print("\t\t\tSetting Laser to minimum power. A faint beam should appear for a second.")
+            self.internalVal = "2"
+            self.engage()
+            time.sleep(1)
+            self.disengage()
+            passed = True
         return passed
 
     def deactivate(self):
@@ -88,13 +95,15 @@ class laser6W(serialDeviceSpec, toolSpec):
             True if deactivated
             False if not deactivated
         """
+        print("\t\t\tSetting laser to minimum power and turning off.")
+        self.disengage()
+        self.__writeSerial__("off\n")
         passed = False
         # Stop Serial Device
         [status, message] = self.stopSerial()
         print("\t\t\t" + message)
         if status == 1:
             passed = True
-
         return passed
         pass
 
@@ -110,7 +119,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 0:
-                self.__writeSerial__("on\n")
+                self.__writeSerial__(self.internalVal + "\n")
                 self.dispenseStatus = 1
                 return [1, "Dispense On"]
             else:
@@ -129,7 +138,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 1:
-                self.__writeSerial__("off\n")
+                self.__writeSerial__("1\n")
                 self.dispenseStatus = 0
                 return [1, "Dispense Off"]
 
@@ -152,7 +161,8 @@ class laser6W(serialDeviceSpec, toolSpec):
         [-1, "Error: value could not be set for LASER + error text"]
         """
         try:
-            return self.__writeSerial__(value + '\n')
+            self.internalVal = str(value)
+            return self.__writeSerial__(self.internalVal + '\n')
         except Exception as inst:
             return [-1, "Error: Value could not be set for LASER"
                     + inst.__str__()]
@@ -201,7 +211,9 @@ class laser6W(serialDeviceSpec, toolSpec):
         [0, 'Not all connection parameters set']
         [-1, "Error: Could not connect to serial device: + error text"]
         """
-        if self.checkIfSerialConnectParamsSet():
+        if not self.checkIfSerialConnectParamsSet():
+            return [0, '\t\t\tNot all connection parameters set - see laser6W.py']
+        else:
             # Try to connect, catch errors and return to user
             try:
                 self.ser = serial.Serial(port=self.devAddress,
@@ -223,27 +235,20 @@ class laser6W(serialDeviceSpec, toolSpec):
                 self.ser.reset_output_buffer()
 
                 time.sleep(0.25)
-                lineIn = self.sReader.readlines()
+                lineIn = self.sReader.readline()
                 linesIn = [lineIn]
 
                 # keep reading until empty
                 while lineIn:
                     time.sleep(0.25)
-                    lineIn = self.sReader.readlines()
+                    lineIn = self.sReader.readline()
                     linesIn.append(lineIn)
+                # Convert lines in to a string
+                linesIn = " ".join(linesIn)
+                return [1, "\t\t\tSerial Connection to Laser6W established successfully! \n\t\t\t\tRead in: [" + linesIn + "]"]
 
             except Exception as inst:
-                return [-1, 'Failed Creating pySerial... ' + inst.__str__()]
-
-        else:  # Not all params were set
-            return [0, 'Not all connection parameters set']
-
-        # Try initial handshake
-        handShakeResponse = self.handShakeSerial()
-        if handShakeResponse[0] == 1:
-            return [1, linesIn]
-        else:
-            return [-2, handShakeResponse[1]]
+                return [-1, '\t\t\tFailed Creating pySerial... ' + inst]
 
     def stopSerial(self):
         """*Terminates communication*.
@@ -254,14 +259,12 @@ class laser6W(serialDeviceSpec, toolSpec):
         [-1, "Error: Tool could not be stopped + error text"]
         """
         try:
-            self.ser.write(chr(4))  # End of transmission code
-            print("Closing UltimusV...\n")
-            time.sleep(3)
+            print("\t\t\tClosing Laser6W Serial Port...")
+            time.sleep(1)
             self.ser.close()
-            print("Closed UltimusV!\n")
-            return [1, "Terminated successfully"]
+            return [1, "Closed Laser6W Serial Port Successfully."]
         except Exception as inst:
-            return [0, 'Error on closing Serial Device: ' + self.name
+            return [0, 'Error on closing serial device: ' + self.name
                     + ' : ' + inst.__str__()]
 
     ################### Communication METHODS ###############################
@@ -300,8 +303,8 @@ class laser6W(serialDeviceSpec, toolSpec):
             try:
                 self.ser.write(text.encode('utf-8'))
                 if self.__verbose__:
-                    print('\tCommand Sent to LASER: ' + text)
-                return [1, 'Command Sent' + text]
+                    print('\t\t\t\tCommand Sent to LASER: ' + repr(text))
+                return [1, 'Command Sent: ' + repr(text)]
             except Exception as inst:
                 return [0, 'Error on write to Serial Device: '
                         + self.name + ' : ' + inst.__str__()]

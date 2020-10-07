@@ -237,8 +237,12 @@ class ioMenu_1Configuration(ioMenuSpec):
                         oldtool.deactivate()
                         print("\t\tActivating new Tool...")
                         tool = newtool
-                        tool.activate()
-                        print("\t\tTool Changed and activated Succesfully")
+                        if tool.activate():
+                            print("\t\tTool Changed and activated succesfully!")
+                        else:
+                            print("\t\tError loading new tool, old tool restored")
+                            tool = oldtool
+
                     except Exception as inst:
                         print("\t\tError loading new tool, old tool restored")
                         logging.exception(inst)

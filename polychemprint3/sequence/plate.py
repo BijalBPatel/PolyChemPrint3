@@ -76,10 +76,15 @@ class plate(sequenceSpec):
             valOp = self.dictParams.get("valOp").value
             spdInc = self.dictParams.get("spdInc").value
             spdOp = self.dictParams.get("spdOp").value
+
+            # Relative Positioning
+            cmds.append("axes.setPosMode(\"relative\")")
+
             cmds.append("tool.setValue(" + str(toolOnValue) + ")")
             cmds.append("tool.engage()")
 
             count = 1
+
             # Print 1st line
             cmds.append(("axes.move(\"G1 F" + str(printSpd)
                          + " X" + str(length) + "\\n" + "\")"))
@@ -88,8 +93,8 @@ class plate(sequenceSpec):
             while count < int(numLines):
                 if direct == 'right':
                     printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
-                    toolOnValue = eval(str(toolOnValue
-                                           + str(valOp) + str(valInc)))
+                    toolOnValue = eval(str(toolOnValue)
+                                           + str(valOp) + str(valInc))
                     cmds.append("tool.setValue("
                                 + str(toolOnValue) + ")")
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
@@ -108,7 +113,7 @@ class plate(sequenceSpec):
                                 + str(toolOnValue) + ")")
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
                                  + " X-" + str(length) + "\\n" + "\")"))
-                    direct = 'forwardR'
+                    direct = 'forwardL'
                     count += 1
                 elif direct == 'forwardL':
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
