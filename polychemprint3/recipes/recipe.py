@@ -161,6 +161,8 @@ class recipe(fileHandler, loggerSpec):
             whether successfully reached the end or not
         """
         try:
+            # Dump existing command list
+            self.cmdList = []
             for seq in self.seqList:
                 seq.genSequence()
                 self.cmdList = self.cmdList + seq.cmdList

@@ -74,7 +74,7 @@ class basicMove(sequenceSpec):
             # Step by Step appending commands to list for execution
 
             # 0 Set positioning mode
-            cmds.append("axes.setPosMode(" + posMode + ")")
+            cmds.append("axes.setPosMode(\"" + posMode +  "\")")
 
             # 1 Move at feed rate in X Y and Z
             cmds.append(("axes.move(\"G1 F" + str(feedRate)

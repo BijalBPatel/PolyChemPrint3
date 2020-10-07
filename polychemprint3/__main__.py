@@ -207,7 +207,7 @@ class ioMenu_1Configuration(ioMenuSpec):
                         axes = newAxes
                         activ = axes.activate()
                         if deactiv == 1 and activ == 1:
-                            print("\t\tAxes Changed and activated Successfully")
+                            print("\t\tAxes Changed and Activated Successfully!")
                             for seq in __seqDict__.values():
                                 seq.tool = tool
                                 seq.axes = axes
@@ -508,7 +508,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
             seqName = __seqDict__.get(seqNum).dictParams.get("name").value
             seqGrp = __seqDict__.get(seqNum).dictParams.get("owner").value
             seqDescription = __seqDict__.get(seqNum).dictParams.get("description").value
-            print("\t(%s) %-30s| %-25s| %-55s" % (seqNum, seqName, seqGrp, seqDescription))
+            print("\t(%-3s) %-35s| %-25s| %-55s" % (seqNum, seqName, seqGrp, seqDescription))
 
         print(Style.RESET_ALL)
         # Print std menu options
@@ -595,9 +595,9 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                                 Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands",
                                 Fore.WHITE + "(1) Browse/Load Stored Recipes":
                                     Fore.WHITE + "Search through recipe folder for recipe to activate",
-                                Fore.WHITE + "(2) Modify/Save Active Recipe":
+                                Fore.WHITE + "(2) Add to/Modify/Save Active Recipe":
                                     Fore.WHITE + "Remove/Reorder sequences, change parameters, and save to yaml file",
-                                Fore.WHITE + "(3) Build a New Recipe":
+                                Fore.WHITE + "(3) Create a New Recipe":
                                     Fore.WHITE + "Start a new recipe from scratch",
                                 # TODO Implement importing stored recipes and reusing
                                 # Fore.WHITE + "(3) Reuse a stored recipe":
@@ -725,14 +725,14 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                     nameinvalid = True
                     newName = None
                     while nameinvalid:
-                        newName = io_Prompt("\t\tEnter new recipe name:")
+                        newName = io_Prompt("\tEnter new recipe name:")
                         # Check that name is unique
                         nameinvalid = False
                         for recStub in __recipeStubList__:
                             if newName.lower() == recStub.name.lower():
                                 nameinvalid = True
                                 print("\t\tError: Name already in use, try again.")
-                    newDescription = io_Prompt("\t\tEnter new recipe description:")
+                    newDescription = io_Prompt("\tEnter new recipe description:")
                     newPath = None
                     # Backup active recipe
                     activeRecCopy = copy.copy(__activeRecipe__)
@@ -745,7 +745,7 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
                         stubPassed = True
                         __activeRecipe__ = recipe(name=newName, description=newDescription, dateCreated=dateString,
                                                   fullFilePath=newPath)
-                        print("\t\tSuccessfully created new recipe!")
+                        print("\tSuccessfully created new recipe!")
                     except Exception as inst:
                         print("\t\tError: Could not create new recipe, reverting to previous condition.")
                         logging.exception(inst)
@@ -985,7 +985,7 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
         print(Style.RESET_ALL)
 
         kwargs = {'name': "RecipeEditMenu",
-                  'menuTitle': "Modify/Save Active Recipe: ",
+                  'menuTitle': "Add to/Modify/Save Active Recipe: ",
                   'menuItems': menuItems}
         super().__init__(**kwargs)
 
@@ -1197,7 +1197,7 @@ def io_preloadText():
     print("#" * 150)
     print("\tStarting PolyChemPrint3 Load Sequence...")
     print("#" * 150)
-    print("Step:" + " " * 55 + "| Syntax Checked | Loaded |")
+    print("Step:" + " " * 59 + "| Syntax Checked | Loaded |")
 
 
 #########################################################################
