@@ -321,11 +321,11 @@ class ioMenu_1Hardware(ioMenuSpec):
 
                 if choiceString[:1].lower() == 't':  # Tool command
                     if choiceString.lower() == 'ton':
-                        print("Engaging Tool")
+                        print("\tEngaging Tool")
                         print(tool.engage()[1])
 
                     elif choiceString.lower() == 'toff':
-                        print("Disengaging Tool")
+                        print("\tDisengaging Tool")
                         print(tool.disengage()[1])
                     else:
                         tool.setValue(choiceString[1:])
