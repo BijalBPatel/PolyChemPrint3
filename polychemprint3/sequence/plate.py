@@ -80,7 +80,7 @@ class plate(sequenceSpec):
             # Relative Positioning
             cmds.append("axes.setPosMode(\"relative\")")
 
-            cmds.append("tool.setValue(" + str(toolOnValue) + ")")
+            cmds.append("tool.setValue(\"" + str(toolOnValue) + "\")")
             cmds.append("tool.engage()")
 
             count = 1
@@ -95,8 +95,8 @@ class plate(sequenceSpec):
                     printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
                     toolOnValue = eval(str(toolOnValue)
                                            + str(valOp) + str(valInc))
-                    cmds.append("tool.setValue("
-                                + str(toolOnValue) + ")")
+                    cmds.append("tool.setValue(\""
+                                + str(toolOnValue) + "\")")
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
                                  + " X" + str(length) + "\\n" + "\")"))
                     direct = 'forwardR'
@@ -109,8 +109,8 @@ class plate(sequenceSpec):
                     printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
                     toolOnValue = eval(str(toolOnValue)
                                        + str(valOp) + str(valInc))
-                    cmds.append("tool.setValue("
-                                + str(toolOnValue) + ")")
+                    cmds.append("tool.setValue(\""
+                                + str(toolOnValue) + "\")")
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
                                  + " X-" + str(length) + "\\n" + "\")"))
                     direct = 'forwardL'

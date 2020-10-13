@@ -116,7 +116,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 0:
-                self.writeSerialCommand("DS  ")
+                self.writeSerialCommand("DI")
                 self.dispenseStatus = 1
                 return [1, "Dispense On"]
 
@@ -136,7 +136,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 1:
-                self.writeSerialCommand("DS  ")
+                self.writeSerialCommand("DI")
                 self.dispenseStatus = 0
                 return [1, "Dispense Off"]
 

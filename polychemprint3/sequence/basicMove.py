@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Parameterized code for moving axes in X,Y,Z at a set rate
+Moves Axes a set distance in X,Y,Z at set speed
 
-| First created on [dd/mm/yyyy 24h:min:sec]
-| Revised: [DATE]
+| First created on 05/05/2020
+| Revised: 10/8/2020
 | Author: Bijal Patel
 
 """
@@ -16,11 +16,13 @@ import logging
 
 
 class basicMove(sequenceSpec):
-    """[ DESCRIPTION]"""
+    """Sequence for a basic translation in a given direction"""
 
-    ################### Construct/Destruct METHODS ###########################
+    ##################################################################################################################
+    # Construct/Destruct METHODS
+    ##################################################################################################################
     def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
-        """*Initializes [SEQUENCE NAME] object with parameters for this sequence*.
+        """*Initializes basicMove object with parameters for this sequence*.
 
         Parameters
         ----------
@@ -36,12 +38,12 @@ class basicMove(sequenceSpec):
             "creationDate": seqParam("Creation Date",
                                      "05/05/2020", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_CoreUtilities", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Fundamentals", "", "default: PCP_Core"),
             "posMode": seqParam("Positioning Mode", "relative", "absolute/relative",
                                 "Versus current position or absolute origin"),
-            "feedRate": seqParam("Axes Speed", "60", "mm/min",  ""),
+            "feedRate": seqParam("Axes Speed", "60", "mm/min", ""),
             "xMove": seqParam("X movement", "5", "mm",
-                                "distance/location to move in X"),
+                              "distance/location to move in X"),
             "yMove": seqParam("Y movement", "5", "mm",
                               "distance/location to move in Y"),
             "zMove": seqParam("Z movement", "5", "mm",
@@ -51,14 +53,16 @@ class basicMove(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ################### Sequence Actions ###################################
+    ##################################################################################################################
+    # Sequence Actions
+    ##################################################################################################################
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
         Returns
         -------
         bool
-            whether successfully reached the end or not
+            Whether Command Generation Sequence reaches the end or not.
         """
         self.cmdList = []
         cmds = self.cmdList
@@ -74,7 +78,7 @@ class basicMove(sequenceSpec):
             # Step by Step appending commands to list for execution
 
             # 0 Set positioning mode
-            cmds.append("axes.setPosMode(\"" + posMode +  "\")")
+            cmds.append("axes.setPosMode(\"" + posMode + "\")")
 
             # 1 Move at feed rate in X Y and Z
             cmds.append(("axes.move(\"G1 F" + str(feedRate)
@@ -89,12 +93,13 @@ class basicMove(sequenceSpec):
             print("\tgenSequence Terminated by User....")
             return False
         except Exception as inst:
-            print("\tTerminated by Error....")
+            print("\tgenSequence Terminated by Error....")
             logging.exception(inst)
             return False
 
-    ####################### Logging METHODS ###############################
-
+    ##################################################################################################################
+    # Logging METHODS
+    ##################################################################################################################
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.
 

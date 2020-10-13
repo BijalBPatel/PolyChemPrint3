@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Predefined print sequence for simple lines.
+While dispensing, moves axes a set distance in X,Y,Z at set speed
 
 | First created on 13/11/2019 14:41:31
 | Revised:
@@ -32,14 +32,18 @@ class line(sequenceSpec):
             "name": seqParam("name", "line", "",
                              "Change if modifying from default"),
             "description": seqParam("Sequence Description",
-                                    "Single Line in X/Y Direction", "", "line.py"),
+                                    "single line along specified vector", "", "line.py"),
             "creationDate": seqParam("Creation Date",
                                      "16/11/2019", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
             "owner": seqParam("Owner", "PCP_1DCore", "", "default: PCP_Core"),
-            "printSpd": seqParam("Printing Speed", "60", "", ""),
-            "lineDir": seqParam("Line direction", "X", "", "Along X or Y"),
-            "length": seqParam("Line Length", "10", "mm", ""),
+            "feedRate": seqParam("Axes Speed", "60", "mm/min", ""),
+            "xMove": seqParam("X movement", "5", "mm",
+                              "distance/location to move in X"),
+            "yMove": seqParam("Y movement", "5", "mm",
+                              "distance/location to move in Y"),
+            "zMove": seqParam("Z movement", "5", "mm",
+                              "distance/location to move in Z"),
             "toolOnVal": seqParam("Tool ON Value", "100", tool.units,
                                   "Depends on tool loaded"),
             "toolOffVal": seqParam("Tool OFF Value", "000", tool.units,
@@ -48,7 +52,9 @@ class line(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ################### Sequence Actions ###################################
+    ###################################################################################################################
+    # Sequence Actions
+    ###################################################################################################################
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
@@ -61,35 +67,45 @@ class line(sequenceSpec):
         cmds = self.cmdList
         try:
 
-            # Pull values
-            printSpd = self.dictParams.get("printSpd").value
-            lineDir = self.dictParams.get("lineDir").value
-            length = self.dictParams.get("length").value
+            # Pull values for brevity
+            posMode = 'relative'
+            feedRate = self.dictParams.get("feedRate").value
+            xMove = self.dictParams.get("xMove").value
+            yMove = self.dictParams.get("yMove").value
+            zMove = self.dictParams.get("zMove").value
             toolOnValue = self.dictParams.get("toolOnVal").value
+            toolOffValue = self.dictParams.get("toolOffVal").value
 
-            cmds.append("tool.setValue(" + str(toolOnValue) + ")")
-            self.cmdList.append("tool.engage()")
+            # 0 Set positioning mode
+            cmds.append("axes.setPosMode(\"" + posMode + "\")")
 
-            # Print 1st line
-            self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
-                                 + " X" + str(length) + "\\n" + "\")"))
+            # 1 Set Tool Value to On and engage
+            cmds.append("tool.setValue(\"" + str(toolOnValue) + "\")")
+            cmds.append("tool.engage()")
 
-            if lineDir == "Y":  # need to rotate coordinates in cmdList
-                self.cmdList = [cmd.replace('X', 'Y') for cmd in self.cmdList]
+            # 2 Translate axis
+            cmds.append(("axes.move(\"G1 F" + str(feedRate)
+                         + " X" + str(xMove)
+                         + " Y" + str(yMove)
+                         + " Z" + str(zMove)
+                         + "\\n" + "\")"))
 
-            self.cmdList.append("tool.disengage()")
+            # 3 Set Tool Value to off and disengage
+            cmds.append("tool.setValue(\"" + str(toolOffValue) + "\")")
+            cmds.append("tool.disengage()")
             return True
 
         except KeyboardInterrupt:
             print("\tgenSequence Terminated by User....")
             return False
         except Exception as inst:
-            print("\tTerminated by Error....")
+            print("\tgenSequence Terminated by Error....")
             logging.exception(inst)
             return False
 
-    ####################### Logging METHODS ###############################
-
+    ###################################################################################################################
+    # Logging Methods
+    ###################################################################################################################
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.
 

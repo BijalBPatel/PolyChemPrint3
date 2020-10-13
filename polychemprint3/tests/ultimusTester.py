@@ -3,7 +3,7 @@ import time
 from polychemprint3.tools.ultimusExtruder import ultimusExtruder
 
 
-Branch1 = True
+Branch1 = False
 
 if Branch1:
     ### INSTANTIATION TEST
@@ -42,7 +42,7 @@ else:
     print("02 Activation Test ####")
     ext.__writeSerial__(chr(0x05))
     print(ext.readTime(0.1))
-    ext.__writeSerial__(ext.pack("PS  0500"))
+    ext.__writeSerial__(ext.pack("DI"))
     print(ext.readTime(0.1))
     ext.__writeSerial__(chr(0x06))
     print(ext.readTime(0.1))
