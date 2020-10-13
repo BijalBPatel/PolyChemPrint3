@@ -227,7 +227,7 @@ class nullTool(toolSpec, serialDeviceSpec):
         -------
         [1, 'Text Sent + text']
         """
-        print("\tNull Tool Says: Write:" + text)
+        print("\t\tNull Tool Says: Write:" + text)
         return [1, 'Text Sent + text']
 
     def writeSerialCommand(self, cmdString):
@@ -243,7 +243,7 @@ class nullTool(toolSpec, serialDeviceSpec):
         [1, 'Command Sent: ' + cmdString + 'Received: ' + rcvd]
             if exception
         """
-        print("\tNull Tool Says: Write:" + cmdString)
+        print("\t\t\tNull Tool Says: Write:" + cmdString)
         return [1, 'Command Sent: ' + cmdString + '\n Received: '
                 + "Null tool - no receive"]
 
@@ -254,7 +254,7 @@ class nullTool(toolSpec, serialDeviceSpec):
         -------
         [1, inp String of all text read in, empty string if nothing]
         """
-        print('\tReceived from Serial Device: ' + 'Null device input')
+        print('\t\t\tReceived from Serial Device: ' + 'Null device input')
 
 ##############################################################################
 ########################## PCP_BasicLogger METHODS ###########################

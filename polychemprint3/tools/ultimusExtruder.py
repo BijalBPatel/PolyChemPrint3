@@ -73,16 +73,17 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             False if not ready
         """
         passed = False
+        print("\t\t" + "Activating Ultimus Extruder...")
         # Start Serial Device
         [status, message] = self.startSerial()
-        print("\t\t\t" + message)
+        print("\t\t" + message)
         if status == 1:
             # Try initial handshake
             status, message = self.handShakeSerial()
             print("\t\t\t" + message)
             if status == 1:
                 passed = True
-
+        print("\t\t" + "Ultimus Extruder Activated Successfully!")
         return passed
 
     def deactivate(self):
@@ -115,7 +116,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 0:
-                self.writeSerialCommand("DS  ")
+                self.writeSerialCommand("DI")
                 self.dispenseStatus = 1
                 return [1, "Dispense On"]
 
@@ -135,7 +136,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 1:
-                self.writeSerialCommand("DS  ")
+                self.writeSerialCommand("DI")
                 self.dispenseStatus = 0
                 return [1, "Dispense Off"]
 
@@ -159,12 +160,13 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         [output of writeSerialCommand]
         [-1, "Error: Pressure could not be set for Extruder + error text"]
         """
+        print("\t\tSetting Value for UltimusExtruder...")
         try:
             return self.writeSerialCommand("PS  " + pressureVal)
         except Exception as inst:
             return [-1, "Error: Pressure could not be set for Extruder"
                     + inst.__str__()]
-
+        print("\t\tValue Set Successfully for UltimusExtruder!")
     def getState(self):
         """*Returns active state of tool*.
 
@@ -209,7 +211,9 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         [0, 'Not all connection parameters set']
         [-1, "Error: Could not connect to serial device: + error text"]
         """
-        if self.checkIfSerialConnectParamsSet():
+        if not self.checkIfSerialConnectParamsSet():
+            return [0, 'Not all connection parameters set']
+        else:
             # Try to connect, catch errors and return to user
             try:
                 self.ser = serial.Serial(port=self.devAddress,
@@ -217,42 +221,34 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                                          bytesize=serial.EIGHTBITS,
                                          parity=serial.PARITY_NONE,
                                          stopbits=serial.STOPBITS_ONE,
-                                         timeout=1,
+                                         timeout=0,
                                          xonxoff=False,
                                          rtscts=False,
                                          dsrdtr=False,
                                          writeTimeout=2
                                          )
+                portstatus = self.ser.isOpen()
+                return [1, "\tInstantiated PySerial Object... port open = " + str(portstatus) + "."]
+
                 # Use ser for writing
                 # Use sReader for buffered read
-
-                self.sReader = io.TextIOWrapper(io.BufferedReader(self.ser))
+                #sReader = io.TextIOWrapper(io.BufferedReader(self.ser))
 
                 # Clear initial garbage text in output buffer
-                self.ser.reset_output_buffer()
+                #self.ser.reset_output_buffer()
+                # time.sleep(0.25)
 
-                time.sleep(0.25)
-                lineIn = self.sReader.readlines()
-                linesIn = [lineIn]
+                #lineIn = sReader.readlines()
+                #linesIn = [lineIn]
 
                 # keep reading until empty
-                while lineIn != []:
-                    time.sleep(0.25)
-                    lineIn = self.sReader.readlines()
-                    linesIn.append(lineIn)
+                #while lineIn != []:
+                #    time.sleep(0.25)
+                #    lineIn = sReader.readlines()
+                #    linesIn.append(lineIn)
 
             except Exception as inst:
-                return [-1, 'Failed Creating pySerial... ' + inst.__str__()]
-
-        else:  # Not all params were set
-            return [0, 'Not all connection parameters set']
-
-        # Try initial handshake
-        handShakeResponse = self.handShakeSerial()
-        if handShakeResponse[0] == 1:
-            return [1, linesIn]
-        else:
-            return [-2, handShakeResponse[1]]
+                return [-1, 'Failed Creating pySerial... ' + str(inst)]
 
     def stopSerial(self):
         """*Terminates communication*.
@@ -263,11 +259,11 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         [-1, "Error: Tool could not be stopped + error text"]
         """
         try:
-            self.ser.write(chr(4))  # End of transmission code
-            print("Closing UltimusV...\n")
+            self.ser.write(chr(0x04).encode())  # End of transmission code
+            print("\t\tClosing UltimusV...")
             time.sleep(3)
             self.ser.close()
-            print("Closed UltimusV!\n")
+            print("\t\tClosed UltimusV!\n")
             return [1, "Terminated successfully"]
         except Exception as inst:
             return [0, 'Error on closing Serial Device: ' + self.name
@@ -286,15 +282,15 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         try:
             if self.__verbose__:
-                print("\tAttempting handshake with UltimusV...\n")
+                print("\t\t\tAttempting handshake with UltimusV...")
 
             # send ENQ
-            self.__writeSerial__(chr(5))
+            self.__writeSerial__(chr(0x05))
 
             # read response, see if matches acknowledge
-            readIn = self.readTime()
+            readIn = self.readTime(3)[1]
             if chr(6) in readIn:
-                return [1, "Handshake Successful"]
+                return [1, "Handshake Successful, Received ACK"]
             else:
                 return [0, "Handshake Failed, Received: " + readIn]
         except Exception as inst:
@@ -317,9 +313,8 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         if self.checkIfSerialConnectParamsSet():
             try:
-                self.ser.write(text)
-                if self.__verbose__:
-                    print('\tCommand Sent to Extruder: ' + text)
+                self.ser.write(text.encode())
+                print('\t\t\t\tCommand Sent to Extruder: ' + text)
                 return [1, 'Command Sent' + text]
             except Exception as inst:
                 return [0, 'Error on write to Serial Device: '
@@ -343,42 +338,31 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             if exception
         """
         try:
-            self.ser.flush()  # empty output buffer
             # package command string
-            toSend = self.pack(cmdString)
-
-            # Enq -> ACK
-            [flag, message] = self.handShakeSerial()
-
-            if flag:  # handshake passed
-                # write command packet
-                self.__writeSerial__(toSend)
-            else:
-                return [flag, message]
+            self.__writeSerial__(chr(0x05))
+            self.__writeSerial__(self.pack(cmdString))
 
             # receive A0 or A2
-            received = self.readTime().rstrip()
+            received = self.readTime(self.commsTimeOut)[1]
             if "A2" in received:
                 return [0, "Error sending command to Serial Device: "
                         + self.name + ' : ' + 'received A2']
 
             else:
                 if "A0" in received:  # send ACK
-                    self.__writeSerial__(chr(6))
-                    rcvd = self.readTime().rstrip()
-                    return [1, 'Command Sent: ' + cmdString + '\n Received: '
-                            + rcvd]
+                    self.__writeSerial__(chr(0x04))
+                    return [1, 'Command Sent Successfully: ' + cmdString + '-> Received Confirmation: '
+                            + received]
                 else:
-                    self.__writeSerial__(chr(4)) # end transmission
-                    return [0, "Unexpected input from Serial Device: "
+                    self.__writeSerial__(chr(0x04).encode()) # end transmission
+                    return [0, "Unexpected return from Serial Device: "
                             + self.name + ' : ' + received]
-
 
         except Exception as inst:
             return [0, 'Error on sending command to Serial Device: '
-                    + self.name + ' : ' + inst.__str__()]
+                    + self.name + ' : ' + str(inst)]
 
-    def readTime(self):
+    def readTime(self, timeout):
         """*Reads in from serial device until timeout*.
 
         Returns
@@ -386,24 +370,24 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         [1, inp String of all text read in, empty string if nothing]
         [0, 'Read failed + Error' if exception caught]
         """
-        inp = ''  # input string
-        ins = ''  # read in
-        tEnd = time.time() + self.commsTimeOut
+        inp = ''  #  full input string
+        ins = ''  # read in during one time interval
+        tEnd = time.time() + timeout
 
         try:  # Reads input until timeout
             while time.time() < tEnd:
-                ins = self.ser.read()
+                ins = self.ser.readline().decode().rstrip()
                 if ins != "":
                     inp += ins
-            inp = inp.strip  # removes any newlines
+            inp = inp.strip()  # removes any newlines
 
             if self.__verbose__:
-                print('\tReceived from Serial Device: ' + self.name
-                      + ' : ' + inp + '\n')
-            return inp
+                print('\t\t\t\tReceived from Serial Device: ' + self.name
+                      + ' : ' + inp)
+            return [1, inp]
         except Exception as inst:
             return [0, 'Error on read from Serial Device: ' + self.name
-                    + ' : ' + inst.__str__()]
+                    + ' : ' + str(inst)]
 
     ##########################################################################
     ### PCP_BasicLogger METHODS

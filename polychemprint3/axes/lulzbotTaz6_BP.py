@@ -212,7 +212,7 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
                 i = 1
                 while i < 10:
                     time.sleep(1)
-                    print("\t\t(%d/10) Waiting for Printer to initialize..."
+                    print("\t\t\t(%d/10) Waiting for Printer to initialize..."
                           % i)
                     i += 1
                 print("\t\tInitial Read from Taz6: ")
