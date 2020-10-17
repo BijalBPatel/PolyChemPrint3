@@ -2,14 +2,16 @@
 Implements the Tool base class for Nordson EFD Ultimus V Extruder.
 
 | First created on Sun Oct 20 00:03:21 2019
-| Revised: 20/10/2019 00:34:27
+| Revised: 10/17/20
 | Author: Bijal Patel
 
 """
 
 ##############################################################################
-##################### Imports
+# Imports
 ##############################################################################
+import numpy as np
+
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
 import serial
@@ -19,13 +21,13 @@ import logging
 
 
 class ultimusExtruder(serialDeviceSpec, toolSpec):
-    """Implements the Tool base class for Nordson EFD Ultimus V Extruder."""
+    """Implements the toolSpec abstract base class for the Nordson EFD Ultimus V Extruder."""
 
     ###########################################################################
     ### Construct/Destruct METHODS
     ###########################################################################
     def __init__(self,
-                 name="UltimusExtruder",
+                 name="T_UltimusExtruder",
                  units="kPa",
                  devAddress="/dev/ttyS0",
                  baudRate=115200,
@@ -60,23 +62,26 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         super().__init__(**kwargs)
 
     ##########################################################################
-    ### toolSpec METHODS
+    # PCP.tools.toolSpec methods
     ##########################################################################
 
     def activate(self):
-        """*Makes required connections and returns status bool*.
+        """To be called in main.py to load as active tool. Makes required serial connections and returns status as
+               True/False.
 
-        Returns
-        -------
-        bool
-            True if ready to use
-            False if not ready
+               Returns
+               -------
+               bool
+                   True if tool serial connection made and tool is ready to use
+                   False if error generated and tool is not ready for use
         """
         passed = False
         print("\t\t" + "Activating Ultimus Extruder...")
+
         # Start Serial Device
         [status, message] = self.startSerial()
         print("\t\t" + message)
+
         if status == 1:
             # Try initial handshake
             status, message = self.handShakeSerial()
@@ -87,13 +92,14 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         return passed
 
     def deactivate(self):
-        """*Closes communication and returns status bool*.
+        """To be called in main.py to unload as active tool. Closes serial communication and returns status as
+          True/False.
 
-        Returns
-        -------
-        bool
-            True if ready to use
-            False if not ready
+          Returns
+          -------
+          bool
+              True if tool serial connection destroyed and tool is succesfully disabled.
+              False if error generated and serial communication could not be suspended.
         """
         passed = False
         # Stop Serial Device
@@ -101,72 +107,74 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         print("\t\t\t" + message)
         if status == 1:
             passed = True
-
         return passed
 
-    ############################# Activate METHODS ###########################
+    # PCP.tools.toolSpec Tool Action (Dispensing) Methods
     def engage(self):
-        """*Toggles Dispense on*.
+        """Turn tool primary action on (dispense/LASER beam on, etc).
 
         Returns
         -------
-        [1, "Dispense On"]
-        [0, "Error: Dispense Already On"]
-        [-1, 'Failed engaging dispense ' + inst.__str__()]
+        status : two-element list
+            First element (int) indicates whether engage was successful (1), already on (0) or error (-1)\n
+            Second element (String) provides text explanation.
         """
         try:
             if self.dispenseStatus == 0:
                 self.writeSerialCommand("DI")
                 self.dispenseStatus = 1
-                return [1, "Dispense On"]
+                return [1, "Dispense turned on."]
 
             else:
-                return [0, "Error: Dispense Already On"]
+                return [0, "Warning: Dispense should already be on."]
         except Exception as inst:
             return [-1, 'Failed engaging dispense ' + inst.__str__()]
 
     def disengage(self):
-        """*Toggles Dispense off*.
+        """Turn tool primary action off (stops dispense/LASER beam off, etc).
 
         Returns
         -------
-        [1, "Dispense Off"]
-        [0, "Error: Dispense already off"]
-        [-1, 'Failed engaging dispense ' + inst.__str__()]
+        status : two-element list
+            First element (int) indicates whether disengage was successful (1), already off (0), or error (-1).\n
+            Second element (String) provides text explanation.
         """
         try:
             if self.dispenseStatus == 1:
                 self.writeSerialCommand("DI")
                 self.dispenseStatus = 0
-                return [1, "Dispense Off"]
+                return [1, "Dispense turned off."]
 
             else:
-                return [0, "Error: Dispense already off"]
+                return [0, "Warning: Dispense should already be off."]
         except Exception as inst:
             return [-1, 'Failed disengaging dispense ' + inst.__str__()]
 
-    ############################# Value METHODS ###########################
-
     def setValue(self, pressureVal):
-        """*Set Pressure value in kPa*.
+        """Set the extruder output pressure
 
         Parameters
         ----------
         pressureVal: String
-            New value of pressure to set in 4 digits
+            The new value of the pressure as a string, expressed at arbitrary precision/ without leading zeros.
+            Conversion to hardware specific format occurs internally.
+            e.g., (use 23.456 NOT 0234")
 
         Returns
         -------
-        [output of writeSerialCommand]
-        [-1, "Error: Pressure could not be set for Extruder + error text"]
+        status : two-element list
+            First element (int) indicates whether value setting was successful (1) or error (-1).\n
+            Second element provides text explanation.
         """
         print("\t\tSetting Value for UltimusExtruder...")
         try:
+            pressureVal = self.pressureRecode(pressureVal)
             return self.writeSerialCommand("PS  " + pressureVal)
         except Exception as inst:
             return [-1, "Error: Pressure could not be set for Extruder"
                     + inst.__str__()]
         print("\t\tValue Set Successfully for UltimusExtruder!")
+
     def getState(self):
         """*Returns active state of tool*.
 
@@ -232,17 +240,17 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
 
                 # Use ser for writing
                 # Use sReader for buffered read
-                #sReader = io.TextIOWrapper(io.BufferedReader(self.ser))
+                # sReader = io.TextIOWrapper(io.BufferedReader(self.ser))
 
                 # Clear initial garbage text in output buffer
-                #self.ser.reset_output_buffer()
+                # self.ser.reset_output_buffer()
                 # time.sleep(0.25)
 
-                #lineIn = sReader.readlines()
-                #linesIn = [lineIn]
+                # lineIn = sReader.readlines()
+                # linesIn = [lineIn]
 
                 # keep reading until empty
-                #while lineIn != []:
+                # while lineIn != []:
                 #    time.sleep(0.25)
                 #    lineIn = sReader.readlines()
                 #    linesIn.append(lineIn)
@@ -268,6 +276,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         except Exception as inst:
             return [0, 'Error on closing Serial Device: ' + self.name
                     + ' : ' + inst.__str__()]
+
     ################### Communication METHODS ###############################
 
     def handShakeSerial(self):
@@ -354,7 +363,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                     return [1, 'Command Sent Successfully: ' + cmdString + '-> Received Confirmation: '
                             + received]
                 else:
-                    self.__writeSerial__(chr(0x04).encode()) # end transmission
+                    self.__writeSerial__(chr(0x04).encode())  # end transmission
                     return [0, "Unexpected return from Serial Device: "
                             + self.name + ' : ' + received]
 
@@ -370,7 +379,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         [1, inp String of all text read in, empty string if nothing]
         [0, 'Read failed + Error' if exception caught]
         """
-        inp = ''  #  full input string
+        inp = ''  # full input string
         ins = ''  # read in during one time interval
         tEnd = time.time() + timeout
 
@@ -449,7 +458,6 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         checkTotal = 0
         for char in checkString:
-
             checkTotal -= int(hex(ord(char)), 16)
         # convert to hex string
         hexTotal = self.decToHex(checkTotal, 32).upper()
@@ -519,3 +527,33 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
 
         # return strings
         return cmdName, cmdVal
+
+    def pressureRecode(self, presStr):
+        """Converts string from user-readible value to the 4 char format of the Ultimus Extruder.
+
+        Parameters
+        ----------
+        presStr: String
+            Pressure value to transmit as a string of arbitrary precision and length.
+
+        Returns
+        -------
+        presRft :String
+            Pressure value reformatted as 4 char sequence expected by Ultimus Extruder
+        """
+
+        # Convert input string to an int to remove any leading/trailing zeros
+        presRft = float(presStr)
+
+        # Round to tenths place, multiply by 10, and cast as int to remove trailing zero
+        presRft = int(np.around(presRft, decimals=1) * 10)
+
+        # Convert to string and pad with zeros if needed
+        presRft = str(presRft)
+
+        if len(presRft) > 4:
+            return "0000"
+        while len(presRft) < 4:
+            presRft = "0" + presRft
+
+        return presRft

@@ -50,7 +50,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Stable',
 
         # Indicate who your project is intended for
         'Intended Audience :: Science/Research',
@@ -70,7 +70,7 @@ setup(
 	packages=find_packages(),  # Required
 	py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
 	include_package_data=True,
-    python_requires='>=3.0',
+    python_requires='3.7',
 
     install_requires=[
 		'pyserial', 

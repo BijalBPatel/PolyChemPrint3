@@ -2,24 +2,24 @@
 Implements the Tool base class for a null Tool [no action, returns true].
 
 | First created on 13/11/2019 13:33:28
-| Revised: 13/11/2019 13:33:28
+| Revised: 17/10/20
 | Author: Bijal Patel
 
 """
 
 ##############################################################################
-##################### Imports
+# Imports
 ##############################################################################
 
 from polychemprint3.tools.toolSpec import toolSpec
-from polychemprint3.utility.serialDeviceSpec import serialDeviceSpec
 
 
-class nullTool(toolSpec, serialDeviceSpec):
-    """Implements the Tool base class for a null Tool (no action)."""
+class nullTool(toolSpec):
+    """Implements the toolSpec abstract base class for a null tool, a virtual hardware device that only writes to the
+    terminal."""
 
     ###########################################################################
-    ### Construct/Destruct METHODS
+    # Construct/Destruct Methods
     ###########################################################################
     def __init__(self,
                  name="nullTool",
@@ -29,22 +29,22 @@ class nullTool(toolSpec, serialDeviceSpec):
                  commsTimeOut=0.5,
                  __verbose__=0,
                  **kwargs):
-        """*Initializes T_UltimusExtruder Object*.
+        """*Initializes nullTool Object*.
 
         Parameters
         ----------
         name: String
-            tool name
+            Name of the tool
         units: String
-            units for value
+            Units of the primary active value for the tool. E.g, kPa, %, etc.
         devAddress: Strong
-            device address on this computer
+            Device address on this computer
         baudRate: int
-            baud rate
+            Baud rate
         commsTimeOut: int
-            how long to wait for serial device before timeout on reads
+            How long to wait for serial device before timeout on reads
         verbose: bool
-            whether details should be printed to cmd line
+            Whether details should be printed to cmd line
         """
         self.dispenseStatus = 0  # off
         inputs = {"name": name,
@@ -57,225 +57,143 @@ class nullTool(toolSpec, serialDeviceSpec):
         super().__init__(**kwargs)
 
     ##########################################################################
-    ### toolSpec METHODS
+    # PCP.tools.toolSpec methods
     ##########################################################################
 
+    # toolSpec construct/destruct methods
     def activate(self):
-        """*Makes required connections and returns status bool*.
+        """To be called in main.py to load as active tool. Makes required serial connections and returns status as
+        True/False.
 
         Returns
         -------
         bool
-            True if ready to use
-            False if not ready
+            True if tool serial connection made and tool is ready to use
+            False if error generated and tool is not ready for use
         """
         print("\t\tNull Tool Says: Activated")
         return True
 
     def deactivate(self):
-        """*Closes communication and returns status bool*.
+        """To be called in main.py to unload as active tool. Closes serial communication and returns status as
+        True/False.
 
         Returns
         -------
         bool
-            True if ready to use
-            False if not ready
+            True if tool serial connection destroyed and tool is succesfully disabled.
+            False if error generated and serial communication could not be suspended.
         """
         print("\t\tNull Tool Says: Deactivated")
         return True
 
-    ############################# Activate METHODS ###########################
+    # PCP.tools.toolSpec Tool Action (Dispensing) Methods
     def engage(self):
-        """*Toggles Dispense on*.
+        """Turn tool primary action on (dispense/LASER beam on, etc).
 
         Returns
         -------
-        [1, "Dispense On"]
-        [0, "Error: Dispense Already On"]
-        [-1, 'Failed engaging dispense ' + inst.__str__()]
+        status : two-element list
+            First element (int) indicates whether engage was successful (1), already on (0) or error (-1)\n
+            Second element (String) provides text explanation.
         """
         try:
             if self.dispenseStatus == 0:
                 self.dispenseStatus = 1
-                print("\t\tNull Tool Says: Dispense On")
+                print("\t\tNull Tool Says: Tool dispense turned on.")
                 return [1, "Dispense On"]
 
             else:
                 print("\t\tNull Tool Says: Error - Dispense already On")
-                return [0, "Error: Dispense Already On"]
+                return [0, "Warning: Tool status already set to active."]
         except Exception as inst:
             return [-1, 'Failed engaging dispense ' + inst.__str__()]
 
     def disengage(self):
-        """*Toggles Dispense off*.
+        """Turn tool primary action off (stops dispense/LASER beam off, etc).
 
         Returns
         -------
-        [1, "Dispense Off"]
-        [0, "Error: Dispense already off"]
-        [-1, 'Failed engaging dispense ' + inst.__str__()]
+        status : two-element list
+            First element (int) indicates whether disengage was successful (1), already off (0), or error (-1).\n
+            Second element (String) provides text explanation.
         """
         try:
             if self.dispenseStatus == 1:
                 self.dispenseStatus = 0
-                print("\t\tNull Tool Says: Dispense Off")
+                print("\t\tNull Tool Says: Tool dispense turned off")
                 return [1, "Dispense Off"]
 
             else:
-                print("\t\tNull Tool Error: Dispense already Off")
+                print("\t\tNull Tool Says: Error - Dispense already off")
                 return [0, "Error: Dispense already off"]
         except Exception as inst:
             return [-1, 'Failed disengaging dispense ' + inst.__str__()]
 
-    ############################# Value METHODS ###########################
-
-    def setValue(self, newVal):
-        """*Set Value*.
+    def setValue(self, value):
+        """Set the primary tool action value (e.g., Laser power, extruder pressure, etc.).
 
         Parameters
         ----------
-        newVal: String
-            New value to set
+        value: String
+            The new value of the parameter as a string, expressed at arbitrary precision/ without leading zeros.
+            Conversion to hardware specific format occurs internally.
+            e.g., (use 23.456 NOT 0234")
 
         Returns
         -------
-        [output of writeSerialCommand]
-        [-1, "Error: Pressure could not be set for Extruder + error text"]
+        status : two-element list
+            First element (int) indicates whether value setting was successful (1) or error (-1).\n
+            Second element provides text explanation.
         """
         try:
-            print("\t\tNull Tool Says: Value set: " + str(newVal))
+            print("\t\tNull Tool Says: Value set: " + str(value))
             return [1, 'null mode: newVal Set']
         except Exception as inst:
-            print("\t\tNull Tool Error: Value not Set")
+            print("\t\tNull Tool Says: Error - Value not Set")
             return [-1, "Error: value could not be set"
                     + inst.__str__()]
 
     def getState(self):
-        """*Returns active state of tool*.
+        """Returns the current dispense/action state (on/off).
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   [1, "Tool On"]
-        |   [0, "Tool Off"]
-        |   [-1, "Error: Tool activation state cannot be determined + Error]
+        Returns
+        -------
+        status : two-element list
+            First element indicates whether tool is on(1) or off(0) or error(-1).\n
+            Second element provides text explanation.
         """
         try:
             if self.dispenseStatus:
-                print("\t\tNull Tool Says: Dispense On")
+                print("\t\tNull Tool Says: Dispense status is: On")
                 return [1, "Tool On"]
             else:
-                print("\t\tNull Tool Says: Dispense Off")
+                print("\t\tNull Tool Says: Dispense status is: Off")
                 return [0, "Tool Off"]
         except Exception as inst:
             return [-1, "Error: Tool activation state cannot be determined"
                     + inst.__str__()]
 
-    ##########################################################################
-    ### PCP_SerialDevice METHODS
-    ##########################################################################
-
-    def checkIfSerialConnectParamsSet(self):
-        """*Goes through connection parameters and sees if all are set*.
-
-        Returns
-        -------
-        bool
-            True
-        """
-        return True
-
-    def startSerial(self):
-        """*Creates and connects pySerial device*.
-
-        Returns
-        -------
-        [1, "Connected Succesfully to Serial Device"]
-        """
-        return [1, "Connected successfully to Serial Device"]
-
-    def stopSerial(self):
-        """*Terminates communication*.
-
-        Returns
-        -------
-        [1, "Terminated successfully"]
-        """
-        return [1, "Terminated successfully"]
-
-    ################### Communication METHODS ###############################
-
-    def handShakeSerial(self):
-        """*Perform communications handshake with Tool*.
-
-        Returns
-        -------
-        [1, "Handshake Successful"]
-        """
-        return [1, "Handshake Successful"]
-
-    def __writeSerial__(self, text):
-        """*Writes text to serial device*.
-
-        Parameters
-        ----------
-        text: String
-            message to send
-
-        Returns
-        -------
-        [1, 'Text Sent + text']
-        """
-        print("\t\tNull Tool Says: Write:" + text)
-        return [1, 'Text Sent + text']
-
-    def writeSerialCommand(self, cmdString):
-        """*Writes dlcommand to serial device*.
-
-        Parameters
-        ----------
-        cmdString, String
-            the string to send
-
-        Returns
-        -------
-        [1, 'Command Sent: ' + cmdString + 'Received: ' + rcvd]
-            if exception
-        """
-        print("\t\t\tNull Tool Says: Write:" + cmdString)
-        return [1, 'Command Sent: ' + cmdString + '\n Received: '
-                + "Null tool - no receive"]
-
-    def readTime(self):
-        """*Reads in from serial device until timeout*.
-
-        Returns
-        -------
-        [1, inp String of all text read in, empty string if nothing]
-        """
-        print('\t\t\tReceived from Serial Device: ' + 'Null device input')
-
 ##############################################################################
-########################## PCP_BasicLogger METHODS ###########################
+# PCP.utility.loggerSpec methods
 ##############################################################################
 
     def writeLogSelf(self):
-        """*Generates json string containing dict to be written to log file*.
+        """*Generates yaml string containing dict to be written to log file*.
 
         Returns
         -------
-        logJson: String
-            log in json string format
+        logyaml: String
+            log in yaml string format
         """
         return super().writeLogSelf()
 
-    def loadLogSelf(self, jsonString):
+    def loadLogSelf(self, yamlString):
         """*loads json log back into dict*.
 
         Parameters
         ----------
-        jsonString: String
-            json string to be loaded back in
+        yamlString: String
+            yaml string to be loaded back in
         """
-        super().loadLogSelf(jsonString)
+        super().loadLogSelf(yamlString)

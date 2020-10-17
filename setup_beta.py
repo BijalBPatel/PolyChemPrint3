@@ -22,10 +22,11 @@ from setuptools import setup
 
 def read(*names, **kwargs):
     with io.open(
-        join(dirname(__file__), *names),
-        encoding=kwargs.get('encoding', 'utf8')
+            join(dirname(__file__), *names),
+            encoding=kwargs.get('encoding', 'utf8')
     ) as fh:
         return fh.read()
+
 
 here = path.abspath(path.dirname(__file__))
 
@@ -38,7 +39,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='polychemprint3-beta',  # Required
-    version='3.0.1b1',  # Required
+    version='0.0.10',  # Required
     description='FOSS additive manufacturing control software targeted at research Users (Polymer/Paste/BioPrinting) ',
     long_description=long_description,  # Optional
     long_description_content_type='text/x-rst',  # Optional (see note above)
@@ -67,24 +68,23 @@ setup(
     ],
     keywords='3D Printing Additive Manufacturing',  # Optional
     package_dir={'.': 'polychemprint3'},  # Optional
-	packages=find_packages(),  # Required
-	py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
-	include_package_data=True,
-    python_requires='>=3.0',
+    packages=find_packages(),  # Required
+    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    include_package_data=True,
+    python_requires='>= 3',
 
     install_requires=[
-		'pyserial', 
-		'colorama',
-		'pyyaml', 
-		'psutil', 
-		'babel', 
-		'pillow', 
-		'tkfilebrowser', 
-		],  # Optional
+        'pyserial',
+        'colorama',
+        'pyyaml',
+        'psutil',
+        'babel',
+        'pillow',
+        'tkfilebrowser',
+        'pywin32 >= 1.0 ; sys_platform=="win32"'
+    ],  # Optional
 
- 
     extras_require={
-    'win32': 'pywin32'  # Optional
     },
 
     # If there are data files included in your packages that need to be
@@ -92,16 +92,16 @@ setup(
     #
     # If using Python 2.6 or earlier, then these have to be included in
     # MANIFEST.in as well.
-    #package_data={  # Optional
+    # package_data={  # Optional
     #    'sample': ['package_data.dat'],
-    #},
+    # },
 
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages. See:
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files
     #
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    #data_files=[('my_data', ['data/data_file'])],  # Optional
+    # data_files=[('my_data', ['data/data_file'])],  # Optional
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow

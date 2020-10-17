@@ -2,29 +2,34 @@
 """Contains toolSpec Abstract Base Class.
 
 | First created on Sun Oct 20 00:03:21 2019
-| Revised: 13/11/2019 14:29:53
+| Revised: 10/17/2020
 | Author: Bijal Patel
 
 """
+
+##############################################################################
+# Imports
+##############################################################################
 
 from abc import ABC, abstractmethod
 from polychemprint3.utility.loggerSpec import loggerSpec
 
 
 class toolSpec(loggerSpec, ABC):
-    """Interface for all dispensing/writing tools."""
+    """Abstract Base Class for all dispensing/writing tool drivers."""
 
-    ### Construct/Destruct METHODS
+    ###################################################################################################################
+    # Construct/Destruct METHODS
+    ###################################################################################################################
     def __init__(self, name, units, __verbose__, **kwargs):
-        """*Initializes Tool Object*.
+        """Initializes Tool Object.
 
         Parameters
         ----------
         name: String
-            tool name
+            Name of tool.
         units: String
-            Units this tool operates in
-
+            Units of the primary active value for the tool. E.g, kPa, %, etc.
         """
         self.name = name
         self.units = units
@@ -34,99 +39,110 @@ class toolSpec(loggerSpec, ABC):
 
     @abstractmethod
     def activate(self):
-        """*Makes required connections and returns status bool*.
+        """To be called in main.py to load as active tool. Makes required serial connections and returns status as
+        True/False.
 
         Returns
         -------
         bool
-            True if ready to use
-            False if not ready
+            True if tool serial connection made and tool is ready to use
+            False if error generated and tool is not ready for use
         """
         pass
 
     @abstractmethod
     def deactivate(self):
-        """*Closes communication and returns status bool*.
+        """To be called in main.py to unload as active tool. Closes serial communication and returns status as
+        True/False.
 
         Returns
         -------
         bool
-            True if ready to use
-            False if not ready
+            True if tool serial connection destroyed and tool is succesfully disabled.
+            False if error generated and serial communication could not be suspended.
         """
         pass
 
-    ### Dispensing
+    ###################################################################################################################
+    # Tool Action (Dispensing) Methods
+    ###################################################################################################################
     @abstractmethod
     def engage(self):
-        """*Activate tool (dispense/LASER on, etc)*.
+        """Turn tool primary action on (dispense/LASER beam on, etc).
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   [1, "Tool Engaged"]
-        |   [-1, "Error: Tool could not be engaged"]
+        Returns
+        -------
+        status : two-element list
+            First element (int) indicates whether engage was successful (1), already on (0) or error (-1)\n
+            Second element (String) provides text explanation.
         """
         pass
 
     @abstractmethod
     def disengage(self) :
-        """*Deactivates tool (stops dispense/LASER off, etc)*.
-        | *Parameters*
-        |   none
+        """Turn tool primary action off (stops dispense/LASER beam off, etc).
 
-        | *Returns*
-        |   [1, "Tool Disengaged"]
-        |   [-1, "Error: Tool could not be disengaged"]
+        Returns
+        -------
+        status : two-element list
+            First element (int) indicates whether disengage was successful (1), already off (0), or error (-1).\n
+            Second element (String) provides text explanation.
         """
         pass
 
     @abstractmethod
     def setValue(self, value):
-        """*Set Tool value of a specified Tool parameter*.
-        | *Parameters*
-        |   value - the new value of the parameter
+        """Set the primary tool action value (e.g., Laser power, extruder pressure, etc.).
 
-        | *Returns*
-        |   [1, "Value Set succesfully"]
-        |   [-1, "Error: Parameter could not be set for Tool + error text"]
+        Parameters
+        ----------
+        value: String
+            The new value of the parameter as a string, expressed at arbitrary precision/ without leading zeros.
+            Conversion to hardware specific format occurs internally.
+            e.g., (use 23.456 NOT 0234")
+
+        Returns
+        -------
+        status : two-element list
+            First element (int) indicates whether value setting was successful (1) or error (-1).\n
+            Second element provides text explanation.
         """
         pass
 
     @abstractmethod
     def getState(self):
-        """*Returns active state of tool*.
-        | *Parameters*
-        |   none
+        """Returns the current dispense/action state (on/off).
 
-        | *Returns*
-        |   [1, "Tool On"]
-        |   [0, "Tool Off"]
-        |   [-1, "Error: Tool activation state cannot be determined + Error]
+        Returns
+        -------
+        status : two-element list
+            First element indicates whether tool is on(1) or off(0) or error(-1).\n
+            Second element provides text explanation.
         """
         pass
 
-####################### Logging METHODS ###############################
+    ###################################################################################################################
+    # Logging methods
+    ###################################################################################################################
     @abstractmethod
     def writeLogSelf(self):
-        """*Generates json string containing dict to be written to log file*.
+        """Generates yaml string containing __dict__ to be written to log file.
 
         Returns
         -------
         String
-            log in json string format
+            log in yaml string format
         """
         return super().writeLogSelf()
 
     @abstractmethod
-    def loadLogSelf(self, jsonString):
-        """*loads json log back into dict*.
+    def loadLogSelf(self, yamlString):
+        """Loads yaml log back into __dict__.
 
         Parameters
         ----------
-        jsonString: String
-            json string to be loaded back in
+        yamlString: String
+            yaml string to be loaded back in
 
         """
-        super().loadLogSelf(jsonString)
+        super().loadLogSelf(yamlString)
