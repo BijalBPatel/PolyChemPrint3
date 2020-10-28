@@ -27,7 +27,7 @@ from polychemprint3.tools.nullTool import nullTool
 import logging
 import os
 import importlib
-# import time
+import time
 from pathlib import Path
 from colorama import init, Fore, Style
 

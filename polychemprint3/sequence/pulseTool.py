@@ -84,14 +84,14 @@ class pulseTool(sequenceSpec):
                 cmds.append("tool.setValue(\"" + str(toolOn) + "\")")
                 if doDisengage or count == 0:
                     cmds.append("tool.engage()")
-                cmds.append("time.sleep(float(\"" + str(timeOn) + "\")")
+                cmds.append("time.sleep(float(\"" + str(timeOn) + "\"))")
 
                 # Set tool to Off value OR disengage and pause for Off duration
                 if doDisengage:
                     cmds.append("tool.disengage()")
                 else:
                     cmds.append("tool.setValue(\"" + str(toolOff) + "\")")
-                cmds.append("time.sleep(float(\"" + str(timeOff) + "\")")
+                cmds.append("time.sleep(float(\"" + str(timeOff) + "\"))")
 
                 # increment count
                 count += 1

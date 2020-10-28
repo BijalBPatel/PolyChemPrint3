@@ -8,7 +8,7 @@ Specifies modular pre-written motion and dispense sequences for common prints.
 
 """
 import logging
-from time import sleep
+import time
 from abc import ABC, abstractmethod
 from polychemprint3.axes import axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
