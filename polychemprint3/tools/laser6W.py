@@ -23,7 +23,7 @@ class laser6W(serialDeviceSpec, toolSpec):
     def __init__(self,
                  name="BlueLASER6W",
                  units="percent",
-                 devAddress="/dev/ttydiao1234"
+                 devAddress="/dev/ttyACM1"
                             "",
                  baudRate=115200,
                  commsTimeOut=0.1,
