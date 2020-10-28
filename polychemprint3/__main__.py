@@ -7,11 +7,12 @@
 
 """
 #############################################################################
-### Import Statements
+# Import Statements
 #############################################################################
 import copy
 import sys
 from datetime import datetime
+
 try:
     import tkinter as tk
 except ImportError:
@@ -31,7 +32,7 @@ from pathlib import Path
 from colorama import init, Fore, Style
 
 #############################################################################
-### Menu Classes
+# Menu Classes
 #############################################################################
 from polychemprint3.utility.fileHandler import fileHandler
 
@@ -950,8 +951,8 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                         print("\tChoose a file with the GUI window:")
                         tkWindow = tk.Tk()
                         newVal = askopenfilenames(parent=tkWindow, initialdir='/', initialfile='tmp',
-                                                     filetypes=[("GCode Files", "*.gcode|*.txt"),
-                                                                ("All files", "*")])[0]
+                                                  filetypes=[("GCode Files", "*.gcode|*.txt"),
+                                                             ("All files", "*")])[0]
                     oldVal = param.value
                     param.value = newVal
                     print("\tValue changed from %s to %s"
@@ -1166,7 +1167,7 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
 
 
 #############################################################################
-### Start Sequence Methods
+# Start Sequence Methods
 #############################################################################
 
 
@@ -1201,7 +1202,7 @@ def io_preloadText():
 
 
 #########################################################################
-### IO Helper METHODS
+# IO Helper METHODS
 #########################################################################
 
 
@@ -1354,7 +1355,7 @@ def io_MenuManager(initialMenuString):
 
 
 #########################################################################
-### PCP Object Handling File IO METHODS
+# PCP Object Handling File IO METHODS
 #########################################################################
 
 
@@ -1505,6 +1506,7 @@ def io_pollRecipes(silentMode=False):
         print(textCol + "Finished Loading Recipe stub list from Recipes Folder!" + "-" * 33)
         print(Style.RESET_ALL, end="")
 
+
 def io_loadRecipe(rStub: recipeStub):
     """*Attempts to load selected recipeStub into the active Recipe, pulling extra info from yaml file*.
 
@@ -1635,13 +1637,13 @@ def io_startLog():
         rootDir = Path(__file__).absolute().parent
         logDir = rootDir / 'Logs'
         now = datetime.now()
-        strDate = str(now.year) + str(now.month) + str(now.day) + "_" + str(now.hour) \
-                  + str(now.minute) + str(now.second)
+        strDate = str(now.year) + str(now.month) + str(now.day) + "_" + str(now.hour) + str(now.minute) \
+                  + str(now.second)
         strName = str(input("\tEnter Log File Name:"))
         fileName = strDate + "_" + strName
         fileWriter = fileHandler(fullFilePath=str(logDir / fileName) + ".txt")
-        outString = "-" * 50 + "\n" + "Log File Name: " + strName + "\nStarted at: " + strDate + "\n" + "-" * 50 + "\n" \
-                    + __activeRecipe__.writeLogSelf()
+        outString = "-" * 50 + "\n" + "Log File Name: " + strName + "\nStarted at: " + strDate + "\n" + "-" * 50 \
+                    + "\n" + __activeRecipe__.writeLogSelf()
         fileWriter.overWriteToFile(outString)
         return fileWriter
     except Exception as inst:
@@ -1660,8 +1662,8 @@ def io_endLog(fileWriter: fileHandler):
     # Append End status
     try:
         now = datetime.now()
-        strDate = str(now.year) + str(now.month) + str(now.day) + "_" \
-                  + str(now.hour) + str(now.minute) + str(now.second)
+        strDate = str(now.year) + str(now.month) + str(now.day) + "_" + str(now.hour) + str(now.minute) \
+                  + str(now.second)
         print("Recipe completed successfully at: " + strDate)
         finalText = io_Prompt(" Enter any text you'd like to add to the log (q for nothing): ")
         if finalText.lower() == 'q':
@@ -1676,13 +1678,13 @@ def io_endLog(fileWriter: fileHandler):
 
 
 #############################################################################
-### Global attributes
+# Global attributes
 #############################################################################
 
 
 # Program Details
 __version__ = 3.0
-__date__ = "2020/05/11"
+__date__ = "2020/10/23"
 __verbose__ = 1  # reflects how many status messages are shown
 __rootDir__ = Path(__file__).absolute().parent
 
@@ -1707,10 +1709,8 @@ __textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels' / 'LICENSE.txt'}
 
 
 #############################################################################
-### Main METHOD
+# Main METHOD
 #############################################################################
-
-
 def main():
     """*Runs program*."""
     logging.basicConfig(level=logging.DEBUG)  # logging
@@ -1770,5 +1770,7 @@ def main():
     sys.exit()
 
 
+# This code included so that the main method is only run when the python interpreter is executing this python file,
+# i.e., so it doesn't run the main method on import.
 if __name__ == "__main__":
     main()

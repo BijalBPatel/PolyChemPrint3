@@ -14,7 +14,7 @@ import logging
 
 
 class rectangle(sequenceSpec):
-    """Implemented print sequence for circle."""
+    """Implemented print sequence for rectangle."""
 
     ################### Construct/Destruct METHODS ###########################
     def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
