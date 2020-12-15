@@ -1742,7 +1742,7 @@ def main():
             if menuFlag == 'quit':
                 inp = io_Prompt(
                     promptString=("Really quit (Y,q)?"
-                                  " or internal reset? (N): "),
+                                  " or return to main menu? (N): "),
                     validate=True, validResponse=["Y", "N", "q"],
                     caseSensitive=False)
                 if inp.lower() == 'n':
