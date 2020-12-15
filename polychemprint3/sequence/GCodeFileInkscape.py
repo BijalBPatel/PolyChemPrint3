@@ -103,7 +103,8 @@ class GCodeFileInkscape(sequenceSpec):
             return False
 
     def processGCode(self, GLines):
-        """Attempts to filter line by line from GLines to remove garbage and substitute values"""
+        """Attempts to filter line by line from GLines to remove unusable commands, comments, etc and substitute
+        values """
         try:
             cleanGlines = []
             garbageFlags = ["%", "(", "M"]
@@ -232,9 +233,9 @@ class GCodeFileInkscape(sequenceSpec):
 
                         for line in fullGlines:
                             if line.__contains__("tool"):
-                                pass
+                                cmds.append(line)
                             else:
-                                cmdStr = "axes.move(\"" + line + "\")"
+                                cmdStr = "axes.move(\"" + line + "\\n\")"
                                 cmds.append(cmdStr)
 
                         # Post-Sequence
