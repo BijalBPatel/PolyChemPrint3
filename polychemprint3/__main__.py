@@ -963,7 +963,8 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                           + "\tInvalid Choice, resetting menu"
                           + Style.RESET_ALL)
             except KeyboardInterrupt:
-                print("\n\tKeyboardInterrupt received, resetting menu")
+                print("\n\tKeyboardInterrupt received, resetting menu and disengaging tool")
+                tool.disengage()
                 isPrimed = False
 
 
