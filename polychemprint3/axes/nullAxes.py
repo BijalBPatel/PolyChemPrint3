@@ -146,3 +146,8 @@ class nullAxes(Axes3DSpec):
         """
         print("\t\tNull Axes return null abs position")
         return["nullX", "nullY"]
+
+    def setPosZero(self):
+        """*Sets current axes position to absolute (0,0,0)*.
+                """
+        print("\t\tNull Axes set current position as abs zero")

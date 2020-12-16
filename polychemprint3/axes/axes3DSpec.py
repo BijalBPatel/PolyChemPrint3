@@ -120,3 +120,9 @@ class Axes3DSpec(loggerSpec, ABC):
             [X, Y] X and Y positions as strings
         """
         pass
+
+    @abstractmethod
+    def setPosZero(self):
+        """*Sets the current position (absolute) to (0,0,0)*.
+        """
+        pass
