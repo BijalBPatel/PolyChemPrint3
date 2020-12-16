@@ -350,6 +350,8 @@ class ioMenu_1Hardware(ioMenuSpec):
                     axes.move("G0 Z-0.1\n")
                 elif choiceString.lower() == 'z':
                     axes.move("G0 Z-0.01\n")
+                elif choiceString == '':
+                    print("\t\tReceived empty string, no action performed.")
                 elif choiceString.lower() == '0':  # Clean
                     print("\t\tRaising Tool by 20 mm...")
                     axes.move("G1 F2000 Z20\n")
@@ -359,7 +361,7 @@ class ioMenu_1Hardware(ioMenuSpec):
                                              validResponse=["Y", "N"]).lower()
                     if choiceString == 'y':
                         axes.move("G1 F2000 Z-15\n")
-                        axes.move("G1 F100 Z-9\n")
+                        axes.move("G1 F100 Z-4\n")
                         axes.move("G1 F100 Z-1\n")
                     else:
                         pass
