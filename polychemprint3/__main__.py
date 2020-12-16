@@ -280,6 +280,7 @@ class ioMenu_1Hardware(ioMenuSpec):
                                     Fore.GREEN + "Sets the tool value",
                                 Fore.WHITE + "(1) Lift Tool":
                                     Fore.WHITE + "Lift up 20 mm",
+                                Fore.WHITE + "[MS] Sequence": Fore.WHITE + "Quick Switch to Sequence Menu"
                                 }}
         super().__init__(**kwargs)
 
@@ -334,6 +335,8 @@ class ioMenu_1Hardware(ioMenuSpec):
                     pass
                 elif choiceString == 'q':
                     return 'M0MainMenu'
+                elif choiceString.lower() == 'ms':
+                    return 'M1PrintSequence'
                 elif choiceString.lower() == 'a':
                     axes.move("G0 X-1\n")
                 elif choiceString.lower() == 'd':
@@ -483,8 +486,8 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         kwargs = {'name': 'PrintSequenceMenu',
                   'menuTitle': 'Print Sequence Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
-                                Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands"
-                                }}
+                                Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands",
+                                Fore.WHITE + "[H] Hardware": Fore.WHITE + "Quick Switch to the Hardware Menu" }}
         super().__init__(**kwargs)
 
     def ioMenu_printMenu(self):
@@ -561,7 +564,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
 
                 choiceString = io_Prompt(
                     "Enter Command:", validate=True,
-                    validResponse=(["q", "?", "/", ".", ","]
+                    validResponse=(["q", "?", "h", "/", ".", ","]
                                    + stringList)).lower()
 
                 if choiceString in ["/", ".", ","]:
@@ -573,6 +576,8 @@ class ioMenu_1PrintSequence(ioMenuSpec):
                     pass
                 elif choiceString == 'q':
                     return 'M0MainMenu'
+                elif choiceString.lower() == 'h':
+                    return 'M1HardwareMenu'
                 elif choiceString.upper() in stringList:
                     # Instantiate Sequence menu
                     seq = __seqDict__.get(choiceString.upper())
