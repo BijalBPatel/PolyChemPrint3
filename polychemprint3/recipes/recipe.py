@@ -61,7 +61,7 @@ class recipe(fileHandler, loggerSpec):
         super().__init__(**kwargs)
 
     ################### Sequence Manipulation ###########################
-    def addSeq(self, beforeIndex: int, newSeq: sequenceSpec):
+    def addSeq(self, beforeIndex: int, newSeq: sequenceSpec.sequenceSpec):
         """*Adds a copy of the provided sequence to the seqList*.
         Parameters
         ----------

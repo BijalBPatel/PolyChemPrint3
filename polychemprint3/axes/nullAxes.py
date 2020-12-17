@@ -18,19 +18,13 @@ class nullAxes(Axes3DSpec):
     def __init__(self,
                  name='nullAxes',
                  posMode='relative',
-                 __verbose__=0,):
+                 __verbose__=0, ):
         """*Initializes object with default params DOESNT ACTIVATE*.
 
         Parameters
         ----------
         name: String
             name of printer
-        devAddress: String
-            location of serial device for communication
-        baudRate: String
-            baudrate for serial communication
-        commsTimeout: int
-            how long to wait for serial device
         __verbose__: bool
             whether details should be printed to cmd line
         posMode: String
@@ -42,7 +36,7 @@ class nullAxes(Axes3DSpec):
         super().__init__(**kwargs)
 
     #########################################################################
-    ### Axes3DSpecMethods
+    # Axes3DSpecMethods
     #########################################################################
     def activate(self):
         """*Makes required connections and returns status bool*.
@@ -53,7 +47,7 @@ class nullAxes(Axes3DSpec):
             True if ready to use
             False if not ready
         """
-        print("\t\tNull Axes Activated")
+        print("\t\t\tNull Axes Activated")
         return True
 
     def deactivate(self):
@@ -65,7 +59,7 @@ class nullAxes(Axes3DSpec):
             True if closed succesfully
             False if failed
         """
-        print("\t\tNull Axes Deactivated")
+        print("\t\t\tNull Axes Deactivated")
         return True
 
     def setPosMode(self, newPosMode):
@@ -78,10 +72,10 @@ class nullAxes(Axes3DSpec):
         """
         try:
             if newPosMode == 'relative':
-                print("\t\tNull Axes in relative positioning mode")
+                print("\t\t\tNull Axes in relative positioning mode")
                 self.posMode = newPosMode
             elif newPosMode == 'absolute':
-                print("\t\tNull Axes in absolute positioning mode")
+                print("\t\t\tNull Axes in absolute positioning mode")
                 self.posMode = newPosMode
             else:
                 print("Error setting position mode to axes")
@@ -101,7 +95,7 @@ class nullAxes(Axes3DSpec):
         | *Returns*
         |   none
         """
-        print("\t\tNull Axes move Command: " + repr(gcodeString))
+        print("\t\t\tNull Axes move Command: " + repr(gcodeString))
         pass
 
     def sendCmd(self, command):
@@ -112,7 +106,7 @@ class nullAxes(Axes3DSpec):
         command: String
             to write to axes
         """
-        print("\t\tNull Axes sent command: " + repr(command))
+        print("\t\t\tNull Axes sent command: " + repr(command))
         pass
 
     def poll(self, command):
@@ -128,7 +122,7 @@ class nullAxes(Axes3DSpec):
         String
             Response from axes
         """
-        print("\t\tNull Axes returns nullResponse")
+        print("\t\t\tNull Axes returns nullResponse")
         return "nullresponse"
 
     def getAbsPosXY(self):
@@ -144,5 +138,5 @@ class nullAxes(Axes3DSpec):
         String
             [X, Y] X and Y positions as strings
         """
-        print("\t\tNull Axes return null abs position")
-        return["nullX", "nullY"]
+        print("\t\t\tNull Axes return null abs position")
+        return ["nullX", "nullY"]

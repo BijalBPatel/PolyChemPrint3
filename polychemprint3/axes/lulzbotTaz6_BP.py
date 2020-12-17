@@ -58,7 +58,7 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         super().__init__(**kwargs)
 
     #########################################################################
-    ### Axes3DSpecMethods
+    # Axes3DSpecMethods
     #########################################################################
     def activate(self):
         """*Makes required connections and returns status bool*.
@@ -183,10 +183,10 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         m114Split = m114Call.split(' ')
         x = m114Split[0][2:]
         y = m114Split[1][2:]
-        return[x, y]
+        return [x, y]
 
     #########################################################################
-    ### SerialDevice Methods
+    # SerialDevice Methods
     #########################################################################
     def startSerial(self):
         """*Creates pySerial device*.
@@ -315,7 +315,7 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         return inp
 
     #########################################################################
-    ### Unique Methods
+    # Unique Methods
     #########################################################################
     def waitReady(self):
         """*Looks for "ok" in input, waits indefinitely*.
