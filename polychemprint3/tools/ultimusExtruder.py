@@ -76,11 +76,11 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                    False if error generated and tool is not ready for use
         """
         passed = False
-        print("\t\t" + "Activating Ultimus Extruder...")
+        print("\t\t\t" + "Activating Ultimus Extruder.")
 
         # Start Serial Device
         [status, message] = self.startSerial()
-        print("\t\t" + message)
+        print("\t\t\t" + message)
 
         if status == 1:
             # Try initial handshake
@@ -88,7 +88,9 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             print("\t\t\t" + message)
             if status == 1:
                 passed = True
-        print("\t\t" + "Ultimus Extruder Activated Successfully!")
+            print("\t\t\t" + "Ultimus Extruder Activated Successfully!")
+        else:
+            print("\t\t\t" + "Ultimus Extruder Failed to Activate!")
         return passed
 
     def deactivate(self):

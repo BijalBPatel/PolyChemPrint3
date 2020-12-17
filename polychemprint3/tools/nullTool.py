@@ -71,7 +71,7 @@ class nullTool(toolSpec):
             True if tool serial connection made and tool is ready to use
             False if error generated and tool is not ready for use
         """
-        print("\t\tNull Tool Says: Activated")
+        print("\t\t\tNull Tool Says: Activated")
         return True
 
     def deactivate(self):
@@ -84,7 +84,7 @@ class nullTool(toolSpec):
             True if tool serial connection destroyed and tool is succesfully disabled.
             False if error generated and serial communication could not be suspended.
         """
-        print("\t\tNull Tool Says: Deactivated")
+        print("\t\t\tNull Tool Says: Deactivated")
         return True
 
     # PCP.tools.toolSpec Tool Action (Dispensing) Methods
@@ -100,11 +100,11 @@ class nullTool(toolSpec):
         try:
             if self.dispenseStatus == 0:
                 self.dispenseStatus = 1
-                print("\t\tNull Tool Says: Tool dispense turned on.")
+                print("\t\t\tNull Tool Says: Tool dispense turned on.")
                 return [1, "Dispense On"]
 
             else:
-                print("\t\tNull Tool Says: Error - Dispense already On")
+                print("\t\t\tNull Tool Says: Error - Dispense already On")
                 return [0, "Warning: Tool status already set to active."]
         except Exception as inst:
             return [-1, 'Failed engaging dispense ' + inst.__str__()]
@@ -121,11 +121,11 @@ class nullTool(toolSpec):
         try:
             if self.dispenseStatus == 1:
                 self.dispenseStatus = 0
-                print("\t\tNull Tool Says: Tool dispense turned off")
+                print("\t\t\tNull Tool Says: Tool dispense turned off")
                 return [1, "Dispense Off"]
 
             else:
-                print("\t\tNull Tool Says: Error - Dispense already off")
+                print("\t\t\tNull Tool Says: Error - Dispense already off")
                 return [0, "Error: Dispense already off"]
         except Exception as inst:
             return [-1, 'Failed disengaging dispense ' + inst.__str__()]
@@ -147,10 +147,10 @@ class nullTool(toolSpec):
             Second element provides text explanation.
         """
         try:
-            print("\t\tNull Tool Says: Value set: " + str(value))
+            print("\t\t\tNull Tool Says: Value set: " + str(value))
             return [1, 'null mode: newVal Set']
         except Exception as inst:
-            print("\t\tNull Tool Says: Error - Value not Set")
+            print("\t\t\tNull Tool Says: Error - Value not Set")
             return [-1, "Error: value could not be set"
                     + inst.__str__()]
 
@@ -165,10 +165,10 @@ class nullTool(toolSpec):
         """
         try:
             if self.dispenseStatus:
-                print("\t\tNull Tool Says: Dispense status is: On")
+                print("\t\t\tNull Tool Says: Dispense status is: On")
                 return [1, "Tool On"]
             else:
-                print("\t\tNull Tool Says: Dispense status is: Off")
+                print("\t\t\tNull Tool Says: Dispense status is: Off")
                 return [0, "Tool Off"]
         except Exception as inst:
             return [-1, "Error: Tool activation state cannot be determined"

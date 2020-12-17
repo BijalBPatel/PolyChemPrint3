@@ -167,7 +167,6 @@ class ioMenu_1Configuration(ioMenuSpec):
                     choiceString = io_savedCmdOps(choiceString)
                 else:
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
-
                 if choiceString == '?':
                     pass
                 elif choiceString == 'q':
@@ -190,7 +189,7 @@ class ioMenu_1Configuration(ioMenuSpec):
                         print("\tFewer Details will be displayed.")
                 elif choiceString == '2':  # Change Axes
                     print("\t\tCurrently loaded Axes: ")
-                    for axesCode in __axesDict__:  # Prompt User
+                    for axesCode in sorted(__axesDict__):  # Prompt User
                         axesobj = __axesDict__.get(axesCode)
                         axesName = axesobj.name
                         print("\t\t(%-3s) %-10s" %
@@ -198,56 +197,64 @@ class ioMenu_1Configuration(ioMenuSpec):
 
                     subChoice = io_Prompt("Enter device to make active",
                                           validate=True,
-                                          validResponse=[*__axesDict__])
+                                          validResponse=[*__axesDict__, 'q'],
+                                          caseSensitive=False)
+                    # Make uppercase
+                    subChoice = subChoice.upper()
                     newAxes = __axesDict__.get(subChoice)
                     oldAxes = axes
-                    try:
-                        print("\t\tDeactivating old Axes...")
-                        deactiv = oldAxes.deactivate()
-                        print("\t\tActivating new Axes...")
-                        axes = newAxes
-                        activ = axes.activate()
-                        if deactiv == 1 and activ == 1:
-                            print("\t\tAxes Changed and Activated Successfully!")
-                            for seq in __seqDict__.values():
-                                seq.tool = tool
-                                seq.axes = axes
+                    if not subChoice == 'Q':
+                        try:
+                            print("\t\tDeactivating old Axes...")
+                            deactiv = oldAxes.deactivate()
+                            print("\t\tActivating new Axes...")
+                            axes = newAxes
+                            activ = axes.activate()
+                            if deactiv == 1 and activ == 1:
+                                print("\t\tAxes Changed and Activated Successfully!")
+                                for seq in __seqDict__.values():
+                                    seq.tool = tool
+                                    seq.axes = axes
 
-                        else:
-                            print("\t\tError loading Axes, old Axes restored")
+                            else:
+                                print("\t\tError loading Axes, old Axes restored")
+                                axes = oldAxes
+                        except Exception as inst:
+                            print("\t\tError loading new Axes, old Axes restored")
+                            logging.exception(inst)
                             axes = oldAxes
-                    except Exception as inst:
-                        print("\t\tError loading new Axes, old Axes restored")
-                        logging.exception(inst)
-                        axes = oldAxes
 
                 elif choiceString == '3':  # Change Tool
                     print("\t\tCurrently loaded Tools: ")
-                    for toolCode in __toolDict__:  # Prompt User
+                    for toolCode in sorted(__toolDict__):  # Prompt User
                         toolobj = __toolDict__.get(toolCode)
                         toolName = toolobj.name
                         print("\t\t(%-3s) %-10s" % (toolCode, toolName))
 
-                    subChoice = io_Prompt("Enter device to make active",
+                    subChoice = io_Prompt("Enter device to make active, q to quit",
                                           validate=True,
-                                          validResponse=[*__toolDict__])
-                    newtool = __toolDict__.get(subChoice)
-                    oldtool = tool
-                    try:  # TODO Implement validation of tool working here
-                        print("\t\tDeactivating old Tool...")
-                        oldtool.deactivate()
-                        print("\t\tActivating new Tool...")
-                        tool = newtool
-                        if tool.activate():
-                            print("\t\tTool Changed and activated succesfully!")
-                        else:
-                            print("\t\tError loading new tool, old tool restored")
-                            tool = oldtool
+                                          validResponse=[*__toolDict__, 'q'],
+                                          caseSensitive=False)
+                    # make uppercase
+                    subChoice = subChoice.upper()
+                    if not subChoice == 'Q':
+                        newtool = __toolDict__.get(subChoice)
+                        oldtool = tool
+                        try:
+                            print("\t\tDeactivating old Tool...")
+                            oldtool.deactivate()
+                            print("\t\tActivating new Tool...")
+                            tool = newtool
+                            if tool.activate():
+                                print("\t\tTool changed and activated succesfully!")
+                            else:
+                                print("\t\tError loading new tool, old tool restored")
+                                tool = oldtool
 
-                    except Exception as inst:
-                        print("\t\tError loading new tool, old tool restored")
-                        logging.exception(inst)
-                        tool = oldtool
+                        except Exception as inst:
+                            print("\t\tError loading new tool, old tool restored")
+                            logging.exception(inst)
+                            tool = oldtool
                 else:
                     print("Received: " + choiceString)
                     print(Fore.LIGHTRED_EX
@@ -1417,7 +1424,8 @@ def io_loadPCP(objType):
         if (".py" in name[-3:]) and ("Spec" not in name) and ("init" not in name):
             pcpObjFiles.append(name)
 
-    objNum = 0
+    objNum = 1
+    containsNull = 0
     for objFile in pcpObjFiles:
 
         # See if file will compile
@@ -1437,8 +1445,14 @@ def io_loadPCP(objType):
                 obj = getattr(importlib.import_module(moduleDirString + "." + objName), objName)
                 # Depends on object type
                 vars()[objName] = obj(__verbose__=__verbose__, name=objName)
-                objDict.update({"%s%s" % (objCode, objNum): vars()[objName]})
-                objNum += 1
+                # If object name contains 'null' and null spot not already taken, assign it object nubmer 0 so it
+                # stays at the top of the list
+                if objName.__contains__('null') and containsNull == 0:
+                    thisNum = 0
+                else:
+                    thisNum = objNum
+                    objNum += 1
+                objDict.update({"%s%s" % (objCode, thisNum): vars()[objName]})
                 passLoad = 1
             except Exception as inst:
                 passLoad = 0
@@ -1456,6 +1470,8 @@ def io_loadPCP(objType):
             print(Fore.LIGHTGREEN_EX + '  PASS  ' + textCol + "|")
         else:
             print(Fore.RED + '  FAIL  ' + textCol + "|")
+
+
 
     if objType == 'sequence':
         print(textCol + "Finished Loading Sequence Files! " + "-" * 54

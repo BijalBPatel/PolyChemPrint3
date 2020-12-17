@@ -72,11 +72,11 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         passed = False
         # Start Serial Device
         [status, message] = self.startSerial()
-        print("\t\t" + message)
+        print("\t\t\t" + message)
         if status == 1:
             # Try initial handshake
             [hshake, hmessage] = self.handShakeSerial()
-            print("\t\t" + hmessage)
+            print("\t\t\t" + hmessage)
             if hshake == 1:
                 passed = True
 

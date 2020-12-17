@@ -71,8 +71,7 @@ class laser6W(serialDeviceSpec, toolSpec):
         # Start Serial Device
         print("\t\t\tEstablishing Serial Connection to Laser6W...")
         [status, message] = self.startSerial()
-        print(message)
-
+        print('\t' + message)
         # If serial port started successfully
         if status == 1:
             time.sleep(5)
@@ -249,7 +248,7 @@ class laser6W(serialDeviceSpec, toolSpec):
                 return [1, "\t\t\tSerial Connection to Laser6W established successfully! \n\t\t\t\tRead in: [" + linesIn + "]"]
 
             except Exception as inst:
-                return [-1, '\t\t\tFailed Creating pySerial... ' + inst]
+                return [-1, '\t\t\tFailed Creating pySerial... ' + str(inst)]
 
     def stopSerial(self):
         """*Terminates communication*.
