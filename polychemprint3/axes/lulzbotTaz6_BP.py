@@ -185,6 +185,10 @@ class lulzbotTaz6_BP(serialDeviceSpec, Axes3DSpec):
         y = m114Split[1][2:]
         return [x, y]
 
+    def setPosZero(self):
+        """*Sets current axes position to absolute (0,0,0)*.
+                """
+        self.writeReady('G92 X0 Y0 Z0\n')
     #########################################################################
     # SerialDevice Methods
     #########################################################################

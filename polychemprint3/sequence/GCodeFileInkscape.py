@@ -2,8 +2,8 @@
 """
 Parameterized code for reading in a gcode file and reprocessing for PCP3
 
-| First created on 05/14/2020 18:16:00
-| Revised:
+| First created on 2020/05/14 18:16:00
+| Revised: 2020/12/15
 | Author: Bijal Patel
 
 """
@@ -103,7 +103,8 @@ class GCodeFileInkscape(sequenceSpec):
             return False
 
     def processGCode(self, GLines):
-        """Attempts to filter line by line from GLines to remove garbage and substitute values"""
+        """Attempts to filter line by line from GLines to remove unusable commands, comments, etc and substitute
+        values """
         try:
             cleanGlines = []
             garbageFlags = ["%", "(", "M"]
@@ -210,6 +211,8 @@ class GCodeFileInkscape(sequenceSpec):
 
         self.cmdList = []
         cmds = self.cmdList
+        toolOffValue = self.dictParams.get("Ttrv").value
+
         try:
             print("\t\tAttempting to read GCode File into RAM...")
             GLines = self.importFromGFile()
@@ -225,19 +228,22 @@ class GCodeFileInkscape(sequenceSpec):
                         print("\t\tTool Commands added successfully!")
                         print("\t\tLoading Python Commands!")
 
-                        # Pre-Sequence
-                        # Add line for abs positioning
+                        # Pre-Sequence #######################################
+                        # Set to absolute positioning mode and set current position as 0,0,0
                         cmds.append("axes.setPosMode(\"absolute\")")
+                        cmds.append("axes.setPosZero()")
+                        # Engage tool at off pressure
+                        cmds.append("tool.setValue(" + str(toolOffValue) + ")")
                         cmds.append("tool.engage()")
-
+                        # Main Sequence ######################################
                         for line in fullGlines:
                             if line.__contains__("tool"):
-                                pass
+                                cmds.append(line)
                             else:
-                                cmdStr = "axes.move(\"" + line + "\")"
+                                cmdStr = "axes.move(\"" + line + "\\n\")"
                                 cmds.append(cmdStr)
 
-                        # Post-Sequence
+                        # Post-Sequence #####################################
                         cmds.append("tool.disengage()")
                         cmds.append("axes.setPosMode(\"relative\")")  # Add line to return to relative positioning
                         print("\t\tLoading complete!")

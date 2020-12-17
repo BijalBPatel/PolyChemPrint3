@@ -280,6 +280,7 @@ class ioMenu_1Hardware(ioMenuSpec):
                                     Fore.GREEN + "Sets the tool value",
                                 Fore.WHITE + "(1) Lift Tool":
                                     Fore.WHITE + "Lift up 20 mm",
+                                Fore.WHITE + "[MS] Sequence": Fore.WHITE + "Quick Switch to Sequence Menu"
                                 }}
         super().__init__(**kwargs)
 
@@ -334,6 +335,8 @@ class ioMenu_1Hardware(ioMenuSpec):
                     pass
                 elif choiceString == 'q':
                     return 'M0MainMenu'
+                elif choiceString.lower() == 'ms':
+                    return 'M1PrintSequence'
                 elif choiceString.lower() == 'a':
                     axes.move("G0 X-1\n")
                 elif choiceString.lower() == 'd':
@@ -350,6 +353,8 @@ class ioMenu_1Hardware(ioMenuSpec):
                     axes.move("G0 Z-0.1\n")
                 elif choiceString.lower() == 'z':
                     axes.move("G0 Z-0.01\n")
+                elif choiceString == '':
+                    print("\t\tReceived empty string, no action performed.")
                 elif choiceString.lower() == '0':  # Clean
                     print("\t\tRaising Tool by 20 mm...")
                     axes.move("G1 F2000 Z20\n")
@@ -359,7 +364,7 @@ class ioMenu_1Hardware(ioMenuSpec):
                                              validResponse=["Y", "N"]).lower()
                     if choiceString == 'y':
                         axes.move("G1 F2000 Z-15\n")
-                        axes.move("G1 F100 Z-9\n")
+                        axes.move("G1 F100 Z-4\n")
                         axes.move("G1 F100 Z-1\n")
                     else:
                         pass
@@ -481,8 +486,8 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         kwargs = {'name': 'PrintSequenceMenu',
                   'menuTitle': 'Print Sequence Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
-                                Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands"
-                                }}
+                                Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands",
+                                Fore.WHITE + "[H] Hardware": Fore.WHITE + "Quick Switch to the Hardware Menu" }}
         super().__init__(**kwargs)
 
     def ioMenu_printMenu(self):
@@ -559,7 +564,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
 
                 choiceString = io_Prompt(
                     "Enter Command:", validate=True,
-                    validResponse=(["q", "?", "/", ".", ","]
+                    validResponse=(["q", "?", "h", "/", ".", ","]
                                    + stringList)).lower()
 
                 if choiceString in ["/", ".", ","]:
@@ -571,6 +576,8 @@ class ioMenu_1PrintSequence(ioMenuSpec):
                     pass
                 elif choiceString == 'q':
                     return 'M0MainMenu'
+                elif choiceString.lower() == 'h':
+                    return 'M1HardwareMenu'
                 elif choiceString.upper() in stringList:
                     # Instantiate Sequence menu
                     seq = __seqDict__.get(choiceString.upper())
@@ -963,7 +970,8 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                           + "\tInvalid Choice, resetting menu"
                           + Style.RESET_ALL)
             except KeyboardInterrupt:
-                print("\n\tKeyboardInterrupt received, resetting menu")
+                print("\n\tKeyboardInterrupt received, resetting menu and disengaging tool")
+                tool.disengage()
                 isPrimed = False
 
 
@@ -1741,7 +1749,7 @@ def main():
             if menuFlag == 'quit':
                 inp = io_Prompt(
                     promptString=("Really quit (Y,q)?"
-                                  " or internal reset? (N): "),
+                                  " or return to main menu? (N): "),
                     validate=True, validResponse=["Y", "N", "q"],
                     caseSensitive=False)
                 if inp.lower() == 'n':
