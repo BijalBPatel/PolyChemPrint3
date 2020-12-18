@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun  5 18:06:46 2020
+3D Pyramid with base along XY axes.
 
-@author: Yilong Chang
+| First created (dd/mm/yyyy): 05/06/2020
+| Revised (dd/mm/yyyy): 17/12/2020 - BP
+| Author: Yilong Chang
+
 """
 
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
@@ -16,8 +19,8 @@ import logging
 class pyramid(sequenceSpec):
     """Implemented print sequence for circle."""
 
-    ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+    # Construct/Destruct METHODS ######################################################################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
         """*Initializes pyramid object with parameters for this sequence*.
 
         Parameters
@@ -27,14 +30,14 @@ class pyramid(sequenceSpec):
         """
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "pyrimad", "",
+            "name": seqParam("name", "pyramid", "",
                              "Change if modifying from default"),
             "description": seqParam("Sequence Description",
-                                    "length in x,width in y, and height in z", "", ""),
+                                    "3D Pyramid with base along XY axes", "", ""),
             "creationDate": seqParam("Creation Date",
                                      "16/11/2019", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Yilong Chang", "", ""),
-            "owner": seqParam("Owner", "PCP_1DCore", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_3DGeometries", "", "default: PCP_Core"),
             "printSpd": seqParam("Printing Speed", "60", "", ""),
             "width": seqParam("Width", "10", "mm", "in y direction"),
             "length": seqParam("Length", "20", "mm", "in x direction"),
@@ -48,7 +51,7 @@ class pyramid(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-        ################### Sequence Actions ###################################
+    # sequenceSpec Methods ###########################################################################################
 
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
@@ -137,7 +140,7 @@ class pyramid(sequenceSpec):
             logging.exception(inst)
             return False
 
-        ####################### Logging METHODS ###############################
+    # loggerSpec Methods #############################################################################################
 
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.

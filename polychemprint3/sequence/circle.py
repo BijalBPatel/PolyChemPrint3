@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun  3 15:52:17 2020
+2D Rectangle along the XY axes
 
-@author: Yilong Chang
+| First created (dd/mm/yyyy): 03/06/2020
+| Revised (dd/mm/yyyy): 17/12/2020 - BP
+| Author: Bijal Patel
+| Author: Yilong Chang
 """
 
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
@@ -14,10 +17,10 @@ import logging
 
 
 class circle(sequenceSpec):
-    """Implemented print sequence for circle."""
+    """Implemented print sequence for a 2D circle."""
 
-    ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+    # Construct/Destruct METHODS ######################################################################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
         """*Initializes circle object with parameters for this sequence*.
 
         Parameters
@@ -27,14 +30,13 @@ class circle(sequenceSpec):
         """
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "circle", "",
-                             "Change if modifying from default"),
+            "name": seqParam("name", "circle", "", ""),
             "description": seqParam("Sequence Description",
-                                    "a circle", "", "current positon of nozzle is center"),
+                                    "A 2D circle with the start position at the center", "", ""),
             "creationDate": seqParam("Creation Date",
                                      "16/11/2019", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Yilong Chang", "", ""),
-            "owner": seqParam("Owner", "PCP_1DCore", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Simple2D", "", "default: PCP_Core"),
             "printSpd": seqParam("Printing Speed", "60", "", ""),
             "radius": seqParam("Radius", "10", "mm", ""),
             "step": seqParam("Steps in x and y", "0.5", "mm", "smaller value lead to rounder circle"),
@@ -46,7 +48,7 @@ class circle(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ################### Sequence Actions ###################################
+    # sequenceSpec Methods ###########################################################################################
 
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
@@ -73,7 +75,7 @@ class circle(sequenceSpec):
             self.cmdList.append("tool.engage()")
 
             part = 1
-            quadrant = 1;
+            quadrant = 1
             while part < 5:
 
                 # print first quadrant
@@ -138,7 +140,7 @@ class circle(sequenceSpec):
             logging.exception(inst)
             return False
 
-    ####################### Logging METHODS ###############################
+    # loggerSpec Methods #############################################################################################
 
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.

@@ -494,7 +494,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
                   'menuTitle': 'Print Sequence Menu',
                   'menuItems': {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
                                 Fore.LIGHTMAGENTA_EX + "[?]": Fore.LIGHTMAGENTA_EX + "List Commands",
-                                Fore.WHITE + "[H] Hardware": Fore.WHITE + "Quick Switch to the Hardware Menu" }}
+                                Fore.WHITE + "[H] Hardware": Fore.WHITE + "Quick Switch to the Hardware Menu"}}
         super().__init__(**kwargs)
 
     def ioMenu_printMenu(self):
@@ -517,6 +517,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
               'as python files and loaded to RAM when the program launches.')
         print("\tChoose a sequence code to Edit/Execute:\n")
 
+        print("\t(%-3s) %-35s| %-25s| %-55s" % ("Cmd", "Name", "Group", "Description"))
         for seqNum in __seqDict__:
             seqName = __seqDict__.get(seqNum).dictParams.get("name").value
             seqGrp = __seqDict__.get(seqNum).dictParams.get("owner").value
@@ -821,7 +822,8 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
 
         kwargs = {'name': self.seq.dictParams.get("name").value,
                   'menuTitle': "Sequence: "
-                               + self.seq.dictParams.get("name").value,
+                               + self.seq.dictParams.get("name").value + ": "
+                               + self.seq.dictParams.get("description").value,
                   'menuItems': menuItems}
         super().__init__(**kwargs)
 
@@ -849,11 +851,13 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         for pNum in self.paramsMenuDict:
             param = self.paramsMenuDict.get(pNum)
             paramStrings.append(
-                "\t(%-3s) %-25s| %-45s| %-20s| %-30s"
-                % (str(pNum), param.name, param.value, param.unit,
-                   param.helpString))
+                "\t(%-3s) %-25s| %-45s| %-10s| %-50s"
+                % (str(pNum), str(param.name)[:23], str(param.value)[:43], str(param.unit)[:10],
+                   str(param.helpString)))
 
         # Print param menu options
+        print("\t(%-3s) %-25s| %-45s| %-10s| %-50s"
+              % ("Cmd", "Parameter Name", "Parameter Value", "Units", "Description"))
         for outString in paramStrings:
             print(outString)
 
@@ -1437,7 +1441,7 @@ def io_loadPCP(objType):
             print(Fore.LIGHTRED_EX + '\t\t' + objFile
                   + "\tfailed syntax check" + textCol)
 
-        # See if file will load
+        # See if file will load, if so assign it a number and add to the objectDict
         if passCompile:
             try:
                 # Load
@@ -1470,8 +1474,6 @@ def io_loadPCP(objType):
             print(Fore.LIGHTGREEN_EX + '  PASS  ' + textCol + "|")
         else:
             print(Fore.RED + '  FAIL  ' + textCol + "|")
-
-
 
     if objType == 'sequence':
         print(textCol + "Finished Loading Sequence Files! " + "-" * 54
@@ -1647,11 +1649,35 @@ def io_displayRecipe():
     return outStrings
 
 
-def io_startLog():
-    """*Creates a log file for the current recipe and writes pre-run parameters to it*.
+def io_reOrderSeq():
+    """Reassigns sequence numbers in seqDict based on (1st) owner and (2nd) alphabetical order.
+    """
+    global __seqDict__
+    # First, generate a list of owners
+    ownersList = []
+    for seqName in __seqDict__:
+        seq = __seqDict__.get(seqName)
+        thisOwner = seq.dictParams.get("owner").value
+        if not ownersList.__contains__(thisOwner):
+            ownersList.append(thisOwner)
 
-      Parameters
-      ----------
+    newSeqDict = {}
+    seqNum = 1
+    # Now, go through the old seqDict in order of owners, then alphabetically, assign numbers and add to the new dict
+    for owner in ownersList:
+        for seqCode in sorted(__seqDict__):
+            seq = __seqDict__.get(seqCode)
+            thisOwner = seq.dictParams.get("owner").value
+            newSeqCode = "S" + str(seqNum)
+            if owner == thisOwner:
+                newSeqDict[newSeqCode] = seq
+                seqNum += 1
+    # Overwrite the old dict with the new dict
+    __seqDict__ = newSeqDict
+
+
+def io_startLog():
+    """Creates a log file for the current recipe and writes pre-run parameters to it.
 
       """
     global __activeRecipe__
@@ -1748,6 +1774,7 @@ def main():
     io_loadPCP('axes')
     io_loadPCP('tools')
     io_loadPCP('sequence')
+    io_reOrderSeq()  # Reorders sequences in the seqDict based on their type (owner)
     io_pollRecipes()
     # Interface Start Sequencea
     io_StartText()

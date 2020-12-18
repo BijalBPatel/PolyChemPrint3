@@ -7,20 +7,19 @@ Pulses Tool dispense at a set interval for a given number of times
 | Author: Bijal Patel
 
 """
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
 from polychemprint3.axes.nullAxes import nullAxes
-import time
 import logging
 
 
 class pulseTool(sequenceSpec):
     """Implemented print sequence for pulseTool."""
 
-    ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+    # Construct/Destruct METHODS ######################################################################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
         """*Initializes pulseTool object with parameters for this sequence*.
 
         Parameters
@@ -33,16 +32,17 @@ class pulseTool(sequenceSpec):
             "name": seqParam("name", "pulseTool", "",
                              "Change if modifying from default"),
             "description": seqParam("Sequence Description",
-                                    "Tool On/Pause cycles", "", "pulseTool.py"),
+                                    "Pulse Tool at a set value for a given number of cycles", "", "pulseTool.py"),
             "creationDate": seqParam("Creation Date",
                                      "28/10/2020", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_CoreUtilities", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Fundamentals", "", ""),
 
             "toolOn": seqParam("Tool on Value", "5", "", "Value to set the Tool for during ON time"),
             "toolOff": seqParam("Tool Off Value", "-1", "", "Value to set the Tool for during OFF time, -1 forces tool "
                                                             "disengage instead of Off Value"),
-            "timeOn": seqParam("On Time", "1.00", "seconds", "Per cycle, how long should the tool be ON for (accepts decimals)?"),
+            "timeOn": seqParam("On Time", "1.00", "seconds", "Per cycle, how long should the tool be ON for (accepts "
+                                                             "decimals)?"),
             "timeOff": seqParam("Off Time", "1.00", "seconds", "Per cycle, how long should the tool be OFF for?"),
             "numCycles": seqParam("Cycles", "1", "", "How many cycles to execute?"),
             "pauseFinal": seqParam("Include Final Pause?", "N", "(Y/N)", "Should the sequence end with a pause?")
@@ -51,7 +51,7 @@ class pulseTool(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ################### Sequence Actions ###################################
+    # sequenceSpec Methods ###########################################################################################
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
@@ -104,7 +104,6 @@ class pulseTool(sequenceSpec):
             if pauseFinal == "N":
                 cmds.pop()
 
-
             return True
 
         except KeyboardInterrupt:
@@ -115,7 +114,7 @@ class pulseTool(sequenceSpec):
             logging.exception(inst)
             return False
 
-    ####################### Logging METHODS ###############################
+    # loggerSpec Methods #############################################################################################
 
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.

@@ -7,7 +7,7 @@
 
 """
 
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
@@ -18,8 +18,8 @@ import logging
 class plate(sequenceSpec):
     """Implemented print sequence for plates."""
 
-    ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+    # Construct/Destruct METHODS ######################################################################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
         """*Initializes gapLine object with parameters for this sequence*.
 
         Parameters
@@ -32,11 +32,12 @@ class plate(sequenceSpec):
             "name": seqParam("name", "plate", "",
                              "Change if modifying from default"),
             "description": seqParam("Sequence Description",
-                                    "Meanderline Plate", "", "plate.py"),
+                                    "Meanderline plate with adjustable parameters and speed/value screening",
+                                    "", "plate.py"),
             "creationDate": seqParam("Creation Date",
                                      "13/11/2019", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_1DCore", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Simple2D", "", ""),
             "printSpd": seqParam("Printing Speed", "60", "", ""),
             "lineDir": seqParam("Line direction", "X", "", "Along X or Y"),
             "pitch": seqParam("Line Pitch", "1", "mm", ""),
@@ -52,7 +53,7 @@ class plate(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ################### Sequence Actions ###################################
+    # sequenceSpec Methods ###########################################################################################
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
@@ -94,7 +95,7 @@ class plate(sequenceSpec):
                 if direct == 'right':
                     printSpd = eval(str(printSpd) + str(spdOp) + str(spdInc))
                     toolOnValue = eval(str(toolOnValue)
-                                           + str(valOp) + str(valInc))
+                                       + str(valOp) + str(valInc))
                     cmds.append("tool.setValue(\""
                                 + str(toolOnValue) + "\")")
                     cmds.append(("axes.move(\"G1 F" + str(printSpd)
@@ -138,7 +139,7 @@ class plate(sequenceSpec):
             logging.exception(inst)
             return False
 
-    ####################### Logging METHODS ###############################
+    # loggerSpec Methods #############################################################################################
 
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.

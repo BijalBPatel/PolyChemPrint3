@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-[DESCRIPTION: Predefined print sequence for simple lines.]
+Sequence for introducing a pause. The length of time can be set, or it can resume on user input.
 
-| First created on [dd/mm/yyyy 24h:min:sec]
-| Revised: [DATE]
-| Author: [NAME]
+| First created (dd/mm/yyyy): 05/05/2020
+| Revised (dd/mm/yyyy): 17/12/2020 - BP
+| Author: Bijal Patel
 
 """
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
@@ -16,11 +16,11 @@ import logging
 
 
 class pause(sequenceSpec):
-    """[ DESCRIPTION]"""
+    """Sequence for introducing a pause. The length of time can be set, or it can resume on user input."""
 
-    ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
-        """*Initializes [SEQUENCE NAME] object with parameters for this sequence*.
+    # Construct/Destruct METHODS ######################################################################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+        """*Initializes pause object with parameters for this sequence*.
 
         Parameters
         ----------
@@ -30,13 +30,14 @@ class pause(sequenceSpec):
         # Create Params dict
         self.dictParams = {
             "name": seqParam("name", "pause", "",
-                             "Change if modifying from default"),
+                             ""),
             "description": seqParam("Sequence Description",
-                                    "Pause execution", "", "pause.py"),
+                                    "Pause execution for a set duration, or until user confirms",
+                                    "", "pause.py"),
             "creationDate": seqParam("Creation Date",
                                      "05/05/2020", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_CoreUtilities", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Fundamentals", "", ""),
             "pauseTime": seqParam("pauseTime", "1", "seconds", "time to wait before next cmd sent"),
             "doPrompt": seqParam("Prompt to Continue?", "N", "(Y/N)", "Will user be prompted to resume?")
         }
@@ -44,7 +45,7 @@ class pause(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ################### Sequence Actions ###################################
+    # sequenceSpec Methods ###########################################################################################
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
@@ -53,8 +54,8 @@ class pause(sequenceSpec):
         bool
             whether successfully reached the end or not
         """
-        self.cmdList = []
-        cmds = self.cmdList
+        self.cmdList = []  # empty the cmdLists
+        cmds = self.cmdList  # rename for brevity
         try:
 
             # Pull values for brevity
@@ -64,13 +65,13 @@ class pause(sequenceSpec):
             # Step by Step appending commands to list for execution
 
             # 0 Do mandated pause regardless of prompt
-            self.cmdList.append("print(\"\\tpausing...\", end =\" \")")
-            self.cmdList.append("sleep(" + str(pauseTime) + ")")
-            self.cmdList.append("print(\" pause ended!\")")
+            cmds.append("print(\"\\tpausing...\", end =\" \")")
+            cmds.append("sleep(" + str(pauseTime) + ")")
+            cmds.append("print(\" pause ended!\")")
 
             # Prompt user to continue if needed
             if doPrompt == "Y":
-                self.cmdList.append("input(\"Press any key to continue: \")")
+                cmds.append("input(\"Press any key to continue: \")")
 
             return True
 
@@ -82,7 +83,7 @@ class pause(sequenceSpec):
             logging.exception(inst)
             return False
 
-    ####################### Logging METHODS ###############################
+    # loggerSpec Methods #############################################################################################
 
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-[DESCRIPTION: Predefined print sequence for simple lines.]
+Sequence for changing tool value or dispense state.
 
-| First created on [dd/mm/yyyy 24h:min:sec]
-| Revised: [DATE]
-| Author: [NAME]
+| First created (dd/mm/yyyy): 05/05/2020
+| Revised (dd/mm/yyyy): 17/12/2020 - BP
+| Author: Bijal Patel
 
 """
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
@@ -16,11 +16,11 @@ import logging
 
 
 class setToolState(sequenceSpec):
-    """[ DESCRIPTION]"""
+    """Sequence for changing tool value or dispense state."""
 
-    ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
-        """*Initializes [SEQUENCE NAME] object with parameters for this sequence*.
+    # Construct/Destruct METHODS ######################################################################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+        """*Initializes setToolState object with parameters for this sequence*.
 
         Parameters
         ----------
@@ -29,24 +29,23 @@ class setToolState(sequenceSpec):
         """
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "setToolState", "",
-                             "Change if modifying from default"),
+            "name": seqParam("name", "setToolState", "", ""),
             "description": seqParam("Sequence Description",
                                     "Set Tool Value or Dispense State", "", "setToolState.py"),
             "creationDate": seqParam("Creation Date",
                                      "05/05/2020", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_CoreUtilities", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Fundamentals", "", ""),
             "dispenseState": seqParam("dispenseState", "NoChange", "On/Off/NoChange",
-                                "Engage/Disengage/No Change"),
+                                      "Engage/Disengage/No Change"),
             "newVal": seqParam("newVal", "NoChange", "New value to set: Number or NoChange",
-                                "New Tool Value to Set"),
+                               "New Tool Value to Set"),
         }
 
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ################### Sequence Actions ###################################
+    # sequenceSpec Methods ###########################################################################################
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
@@ -84,7 +83,7 @@ class setToolState(sequenceSpec):
             logging.exception(inst)
             return False
 
-    ####################### Logging METHODS ###############################
+    # loggerSpec Methods #############################################################################################
 
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.

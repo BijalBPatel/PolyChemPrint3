@@ -51,7 +51,7 @@ class GCodeFile3DSlicer(sequenceSpec):
             "creationDate": seqParam("Creation Date",
                                      currentDate, "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_CoreUtilities", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Advanced", "", "default: PCP_Core"),
             "filePath": seqParam("GCodeFilePath", "PathUnset", "",
                                  "Full File Path to target GCode File"),
             "Ton": seqParam("Tool on Value", "5", "",

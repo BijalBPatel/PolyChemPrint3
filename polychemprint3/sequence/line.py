@@ -3,11 +3,11 @@
 While dispensing, moves axes a set distance in X,Y,Z at set speed
 
 | First created on 13/11/2019 14:41:31
-| Revised:
+| Revised (dd/mm/yyyy): 17/12/2020 - BP
 | Author: Bijal Patel
 
 """
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
@@ -18,8 +18,8 @@ import logging
 class line(sequenceSpec):
     """Implemented print sequence for single lines."""
 
-    ################### Construct/Destruct METHODS ###########################
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+    # Construct/Destruct METHODS ######################################################################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
         """*Initializes gapLine object with parameters for this sequence*.
 
         Parameters
@@ -29,14 +29,13 @@ class line(sequenceSpec):
         """
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "line", "",
-                             "Change if modifying from default"),
+            "name": seqParam("name", "line", "", ""),
             "description": seqParam("Sequence Description",
-                                    "single line along specified vector", "", "line.py"),
+                                    "A single line along a specified vector", "", "line.py"),
             "creationDate": seqParam("Creation Date",
                                      "16/11/2019", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_1DCore", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Fundamentals", "", "default: PCP_Core"),
             "feedRate": seqParam("Axes Speed", "60", "mm/min", ""),
             "xMove": seqParam("X movement", "5", "mm",
                               "distance/location to move in X"),
@@ -52,9 +51,7 @@ class line(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ###################################################################################################################
-    # Sequence Actions
-    ###################################################################################################################
+    # sequenceSpec Methods ###########################################################################################
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
@@ -103,9 +100,7 @@ class line(sequenceSpec):
             logging.exception(inst)
             return False
 
-    ###################################################################################################################
-    # Logging Methods
-    ###################################################################################################################
+    # loggerSpec Methods #############################################################################################
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.
 

@@ -4,7 +4,7 @@ Cura is a free software that converts CAD files (commonly .STL) into GCode for F
 
 Steo 0: Printer/ Program Settings
 
-Either create a "Custom FFF Printer" or modify your 3D pritner's profile to reflect the following.
+Either create a "Custom FFF Printer" or modify your 3D printer's profile to reflect the following.
 
 1. Delete any start or end Gcode.
 2. Set the origin at center of the bed.
