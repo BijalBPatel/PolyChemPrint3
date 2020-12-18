@@ -29,9 +29,9 @@ d)  At this stage, your artwork is complete. Clone this layer to a new layer abo
 a)	From the top toolbar, choose Extensions -> GCodeTools -> Orientation Points.
 b)  In the window that appears:
 
-    * Choose 2-points mode
-    * Set Z surface to 0.000
-    * Set Z-depth to -1.
+    1. Choose 2-points mode
+    2. Set Z surface to 0.000
+    3. Set Z-depth to -1.
 
 c)  Click Apply when you are done and you should see two coordinates point appearing on your drawing sheet. One on the bottom left corner with coordinates of (0,0; 0,0; 0,0). The other one on the on the bottom margin of drawing sheet with coordinates of (100.0; 0.0; -1.0)
 
@@ -41,24 +41,25 @@ a)  From the top toolbar, choose Extensions -> GCodeTools -> Tools Library.
 b)	In the window that appears, select  the 'default' tool and press Apply.
 c)	A text panel will appear on top of your drawing. Move it to the side with the selection tool (S) and then select the text editing tool (T).
 d)  Edit the following parameters in the text panel.
-    * Set diameter to your tool diameter (optional).
-    * Set feed to 9999.
-    * Set penetration feed to 9998.
-    * Set passing feed to 1000.
+
+    1. Set diameter to your tool diameter (optional).
+    2. Set feed to 9999.
+    3. Set penetration feed to 9998.
+    4. Set passing feed to 1000.
 
 **Step 6: Enter G-code processing parameters**
 
 a)	From the top toolbar, choose Extensions -> GCodeTools -> Path-to-Gcode. A window with 4 tabs will appear.
 b)	In the "Path to GCode" tab, set the cutting order to "pass by pass".
 c)  In the "Options" tab, set the 'Offset along Z axis' to 1.00. Also, check the "Select all paths if nothing is selected" checkbox.
-d)	In the "Preferences" tab:
+d)  In the "Preferences" tab:
 
-    * Enter the filename for your exported G-code file.
-    * Enter the full path to the export directory in the 'directory' field.
-    * Set 'Z safe height for G00 move over blank' to 2.00'
+    1. Enter the filename for your exported G-code file.
+    2. Enter the full path to the export directory in the 'directory' field.
+    3. Set 'Z safe height for G00 move over blank' to 2.00'
 
 e)  Generate log files if you would like.
-f) At this stage, everything is ready to generate a gcode file. Clone the layer above your current layer and lock/hide all previous layers.
+f)  At this stage, everything is ready to generate a gcode file. Clone the layer above your current layer and lock/hide all previous layers.
 
 **Step 7: Generate and export G-code File**
 
@@ -69,7 +70,7 @@ b)  If a warning appears that no paths were selected, just press ok and GCodeToo
 
 a)  Open the G-code file that you have generated and look through it for obvious errors such as:
 
-    * No/ very few commands -> Likely the plugin didnt select your drawing, or your drawing wasnt in the top layer.
-    * Printing steps aren't at Z0, travel steps arent at Z3. -> you have made a mistake in steps 4 or 6.
+    1. No/ very few commands -> Likely the plugin didnt select your drawing, or your drawing wasnt in the top layer.
+    2. Printing steps aren't at Z0, travel steps arent at Z3. -> you have made a mistake in steps 4 or 6.
 
 b)  Use a program like `CAMotics <camotics.org>`__ or `NC Viewer <https://ncviewer.com/>`__ to visually inspect the toolpath BEFORE you try it on the printer.
