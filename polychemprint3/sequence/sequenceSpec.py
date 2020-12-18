@@ -10,7 +10,7 @@ Specifies modular pre-written motion and dispense sequences for common prints.
 import logging
 import time
 from abc import ABC, abstractmethod
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.utility.loggerSpec import loggerSpec
 from polychemprint3.tools.nullTool import nullTool
@@ -20,9 +20,9 @@ from polychemprint3.axes.nullAxes import nullAxes
 class sequenceSpec(loggerSpec, ABC):
     """Abstract Base Class for predefined print sequences."""
 
-    ################### Construct/Destruct METHODS ###########################
+    # Construct/Destruct METHODS #####################################################################################
     @abstractmethod
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), dictParams: dict = None,
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), dictParams: dict = None,
                  __verbose__: bool = 0, **kwargs):
         """*Initializes sequence object*.
 
