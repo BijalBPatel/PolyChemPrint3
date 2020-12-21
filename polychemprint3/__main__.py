@@ -11,6 +11,7 @@
 import copy
 import sys
 from datetime import datetime
+
 try:
     import tkinter as tk
 except ImportError:
@@ -34,12 +35,14 @@ from polychemprint3.utility.fileHandler import fileHandler
 
 # Menu Classes ###############################################################
 class ioMenu_0Main(ioMenuSpec):
-    """Contains data and methods for implemented Main Menu."""
+    """The main menu is the root of the PCP3 command-line interface."""
 
     def __init__(self, **kwargs):
-        """*Initializes Main Menu Object*."""
+        """Initializes Main Menu Object."""
         kwargs = {'name': 'Main',
-                  'menuTitle': 'Main Menu', 'menuItems':
+                  'menuTitle': 'Main Menu',
+                  'menuDesc': 'the root of the PCP3 command-line interface.',
+                  'menuItems':
                       {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
                        Fore.LIGHTMAGENTA_EX + "[?]":
                            Fore.LIGHTMAGENTA_EX + "Repeat menu options",
@@ -59,7 +62,7 @@ class ioMenu_0Main(ioMenuSpec):
         super().__init__(**kwargs)
 
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs Menu operations - loops.
 
         Returns
         -------
@@ -112,7 +115,7 @@ class ioMenu_1Configuration(ioMenuSpec):
     """Contains data and methods for implemented Configuration Menu."""
 
     def __init__(self, **kwargs):
-        """*Initializes Configuration Menu Object*."""
+        """Initializes Configuration Menu Object."""
         kwargs = {
             'name': 'ConfigurationMenu',
             'menuTitle': 'Configuration/About Menu',
@@ -131,7 +134,7 @@ class ioMenu_1Configuration(ioMenuSpec):
         super().__init__(**kwargs)
 
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs Menu operations - loops.
 
         Returns
         -------
@@ -267,123 +270,222 @@ class ioMenu_1Configuration(ioMenuSpec):
 
 
 class ioMenu_1Hardware(ioMenuSpec):
-    """Contains data and methods for implemented Hardware Menu."""
+    """The hardware menu allows for direct control of hardware and for
+    launching the active sequence or recipe."""
 
     def __init__(self, **kwargs):
-        """*Initializes Hardware Menu Object*."""
+        """Initializes Hardware Menu Object."""
         kwargs = {'name': 'HardwareMenu',
-                  'menuTitle': 'Hardware Menu',
+                  'menuTitle': 'Hardware Control Menu',
+                  'menuDesc': "Allows for direct control of hardware and "
+                              "launching the active sequence or recipe.",
+                  'menuInstruc': Fore.WHITE + "Choose an execution option "
+                                              "or directly enter a GCODE "
+                                              "command for the axes. "
+                                 + Fore.RED
+                                 + '\n\tBe careful! There is '
+                                   'limited error-checking!'
+                                 + Style.RESET_ALL,
                   'menuItems': {
                       Fore.LIGHTRED_EX + "[q]":
                           Fore.LIGHTRED_EX + "Quit",
                       Fore.LIGHTMAGENTA_EX + "[?]":
                           Fore.LIGHTMAGENTA_EX + "List Commands",
-                      Fore.WHITE + "a,d;r,f;s,w;x,z":
-                          Fore.WHITE + "Jog -+ 1mm (X; Y; Z; Z-0.1,-.01)",
-                      Fore.WHITE + "(0) Clean Routine":
+                      Fore.WHITE + "[#SP, #SV, #SE, #SM]":
+                          Fore.WHITE + "Prime, View, Execute, or Modify "
+                                       "Active Sequence",
+                      Fore.WHITE + "[#RP, #RV, #RE, #RM]":
+                          Fore.WHITE + "Prime, View, Execute, or Modify "
+                                       "Active Recipe",
+                      Fore.YELLOW + "a,d; r,f; s,w":
+                          Fore.YELLOW + "Coarse Jog -,+ 1mm in X; Y; Z",
+                      Fore.YELLOW + "x,z; c,v":
+                          Fore.YELLOW + "Fine Jog in Z [-0.1, -0.01; +0.1, "
+                                        "+ 0.01] mm",
+                      Fore.WHITE + "(1) Clean Routine":
                           Fore.WHITE + "Lift up 20 mm, lower on cmd",
-                      Fore.WHITE + "(1) Lift Tool":
+                      Fore.WHITE + "(2) Lift Tool":
                           Fore.WHITE + "Lift up 20 mm",
+                      Fore.WHITE + "(3) Bring Bed Forward/Back":
+                          Fore.WHITE + "Bring bed forward Y+50 mm, return on "
+                                       "cmd",
                       Fore.GREEN + "Ton":
                           Fore.GREEN + "Engage Tool Dispense",
                       Fore.GREEN + "Toff":
                           Fore.GREEN + "Disengage Tool Dispense",
                       Fore.GREEN + "T[Value]":
                           Fore.GREEN + "Sets the tool value",
-                      Fore.WHITE + "(1) Lift Tool":
-                          Fore.WHITE + "Lift up 20 mm",
-                      Fore.WHITE + "[MS] Sequence":
-                          Fore.WHITE + "Quick Switch to Sequence Menu"
+                      Fore.WHITE + "[#MS, #MR]":
+                          Fore.WHITE + "Quick Switch to Sequence or Recipe "
+                                       "Menus"
                   }}
         super().__init__(**kwargs)
 
     # ioMenuSpec METHODS ####################################################
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs menu operations and loops on user input.
 
         Returns
         -------
-            String
-                title of next menu to call
+            str
+                Title of next menu to call
         """
+        # Pull in global values
         global __savedInp__
         global __lastInp__
         global __verbose__
         global tool
         global axes
+        global __activeRecipe__
+        global __activeSequence__
 
-        # Menu Loop
+        # Menu Loop Variables
         doQuitMenu = False
-
+        isSeqPrimed = False
+        isRecPrimed = False
         print('\tSetting Axes to relative positioning...')
         axes.setPosMode('relative')
+
+        # Loop until user wants to quit or a return is made
         while not doQuitMenu:
             try:
+                # Initialize and display menu
                 self.__init__()
                 self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 self.ioMenu_printMenu()
-
+                # Prompt user for menu option and force to lowercase
                 choiceString = io_Prompt("Enter Command:", validate=False,
-                                         validResponse=["q", "?", "0",
-                                                        "1", "2", "3", "/",
-                                                        ".", ",", "a", "d",
-                                                        "r", "f", "s", "w",
-                                                        "x", "z"]).lower()
+                                         validResponse=[]).lower()
+                # Operate based on user input
+                # If action is based on saved command, pass to the saved
+                # command helper function
                 if choiceString in ["/", ".", ","]:
                     choiceString = io_savedCmdOps(choiceString)
+                # Otherwise save this command as the last command.
                 else:
                     self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
-
-                if choiceString[:1].lower() == 't':  # Tool command
-                    if choiceString.lower() == 'ton':
+                # Check if it is a tool command
+                if choiceString[:1] == 't':  # Tool command
+                    # If it is the tool on, engage the tool
+                    if choiceString == 'ton':
                         print("\tEngaging Tool")
                         print("\t" + tool.engage()[1])
-
-                    elif choiceString.lower() == 'toff':
+                    # Else if it's tool off, disengage the tool
+                    elif choiceString == 'toff':
                         print("\tDisengaging Tool")
                         print("\t" + tool.disengage()[1])
+                    # Else pass the rest of the string as the tool value
                     else:
                         tool.setValue(choiceString[1:])
+                # If the user wants to repeat the menu
                 elif choiceString == '?':
                     pass
+                # If the user wants to quit the menu
                 elif choiceString == 'q':
                     return 'M0MainMenu'
-                elif choiceString.lower() == 'ms':
+                # If the user wants to do an operation on the active sequence
+                elif choiceString in ['#sp', '#sv', '#se', '#sm']:
+                    # If no active sequence, send back to the hardware menu
+                    if __activeSequence__ is None:
+                        print("\tNo active sequence, activate in the "
+                              "sequence menu.")
+                    # Prime Sequence [generate commands]
+                    elif choiceString == '#sp':
+                        print("\tGenerating print commands for the active "
+                              "sequence...")
+                        __activeSequence__.genSequence()
+                        isSeqPrimed = True
+                        print("\tCommands generated for the active sequence!")
+                    # View Sequence [display commands]
+                    elif choiceString == '#sv':
+                        print("\tOutputting python commands for the active "
+                              "sequence:")
+                        if not isSeqPrimed:
+                            __activeSequence__.genSequence()
+                        for line in __activeSequence__.cmdList:
+                            print(Fore.LIGHTMAGENTA_EX + "\t" + repr(line))
+                        print(Style.RESET_ALL, end='')
+                    # Execute Sequence [display commands]
+                    elif choiceString == '#se':
+                        print("\tExecuting Print! Ctrl + C to Cancel")
+                        if not isSeqPrimed:
+                            __activeSequence__.genSequence()
+                        __activeSequence__.operateSeq()
+                        print("\tSequence Complete!")
+                    elif choiceString == '#sm':
+                        seqMen = ioMenu_2SequenceOptions(__activeSequence__)
+                        seqMen.io_Operate()
+                    else:  # Should never happen
+                        pass
+                # If the user wants to do an operation on the active recipe
+                elif choiceString == '#rp':
+                    print('\tWork in progress...')
+                    # Todo link prime recipe in hardware menu
+                elif choiceString == '#rv':
+                    print('\tWork in progress...')
+                    # Todo link view recipe in hardware menu
+                elif choiceString == '#re':
+                    print('\tWork in progress...')
+                    # Todo link edit recipe in hardware menu
+                elif choiceString == '#rm':
+                    print('\tWork in progress...')
+                    # Todo link modify recipe in hardware menu
+                # If the user wants to quick switch to another menu
+                elif choiceString == '#ms':
                     return 'M1PrintSequence'
-                elif choiceString.lower() == 'a':
-                    axes.move("G0 X-1\n")
-                elif choiceString.lower() == 'd':
-                    axes.move("G0 X1\n")
-                elif choiceString.lower() == 'r':
-                    axes.move("G0 Y-1\n")
-                elif choiceString.lower() == 'f':
-                    axes.move("G0 Y1\n")
-                elif choiceString.lower() == 'w':
-                    axes.move("G0 Z1\n")
-                elif choiceString.lower() == 's':
-                    axes.move("G0 Z-1\n")
-                elif choiceString.lower() == 'x':
-                    axes.move("G0 Z-0.1\n")
-                elif choiceString.lower() == 'z':
-                    axes.move("G0 Z-0.01\n")
+                elif choiceString == '#mr':
+                    return 'M1PrintRecipe'
+                # If the user wants to use one of the coarse or fine jog cmds.
+                elif choiceString == 'a':
+                    axes.move("G1 F500 X-1\n")
+                elif choiceString == 'd':
+                    axes.move("G1 F500 X1\n")
+                elif choiceString == 'r':
+                    axes.move("G1 F500 Y-1\n")
+                elif choiceString == 'f':
+                    axes.move("G1 F500 Y1\n")
+                elif choiceString == 'w':
+                    axes.move("G1 F500 Z1\n")
+                elif choiceString == 's':
+                    axes.move("G1 F500 Z-1\n")
+                elif choiceString == 'x':
+                    axes.move("G1 F100 Z-0.1\n")
+                elif choiceString == 'z':
+                    axes.move("G1 F60 Z-0.01\n")
+                elif choiceString == 'c':
+                    axes.move("G1 F100 Z0.1\n")
+                elif choiceString == 'v':
+                    axes.move("G1 F60 Z0.01\n")
+                # If user accidently hits enter on nothing
                 elif choiceString == '':
                     print("\t\tReceived empty string, no action performed.")
-                elif choiceString.lower() == '0':  # Clean
+                # If user wants to use a convenient routine
+                elif choiceString == '1':  # Clean Routine
                     print("\t\tRaising Tool by 20 mm...")
                     axes.move("G1 F2000 Z20\n")
                     # Prompt to Lower
-                    choiceString = io_Prompt("Lower 20 mm?(Y/N):",
+                    choiceString = io_Prompt("\tLower 20 mm?(Y/N):",
                                              validate=True,
                                              validResponse=["Y", "N"]).lower()
                     if choiceString == 'y':
                         axes.move("G1 F2000 Z-15\n")
-                        axes.move("G1 F100 Z-4\n")
+                        axes.move("G1 F500 Z-4\n")
                         axes.move("G1 F100 Z-1\n")
-                    else:
-                        pass
-                elif choiceString == '1':  # Just Lift
+                elif choiceString == '2':  # Just Lift
                     print("\t\tRaising Tool by 20 mm...")
                     axes.move("G1 F2000 Z20\n")
+                elif choiceString == '3':  # Bring Bed Forward
+                    print("\t\tBringing Bed forward Y+50 mm...")
+                    axes.move("G1 F2000 Y50\n")
+                    # Prompt to return
+                    choiceString = io_Prompt("\tReturn Y-50 mm? (Y/N):",
+                                             validate=True,
+                                             validResponse=["Y", "N"]).lower()
+                    if choiceString == 'y':
+                        axes.move("G1 F2000 Y-45\n")
+                        axes.move("G1 F500 Y-4\n")
+                        axes.move("G1 F100 Y-1\n")
+                # If user wants to send input directly to axes
                 else:  # Send to axes
                     print("\tReceived: " + choiceString)
                     axes.move(choiceString.upper() + "\n")
@@ -393,43 +495,28 @@ class ioMenu_1Hardware(ioMenuSpec):
                 print("\n\tTool Automatically Disengaged")
 
     def ioMenu_printMenu(self):
-        """*Prints formatted menu options from menuItems dict*."""
+        """Prints formatted menu options from menuItems dict."""
+        # Print default menu name,description, params etc. from super()
+        super().ioMenu_printMenu()
 
-        print(Style.RESET_ALL)
-        print("-" * 150)
-        print("###\t" + self.menuTitle)
-        print("-" * 150)
+        # Get active sequence info
+        if __activeSequence__ is None:
+            seqName = "No Sequence Set"
+        else:
+            seqName = __activeSequence__.dictParams.get('name').value
 
-        print(
-            '\tFrom this menu you can directly send commands to the hardware. '
-            + Fore.RED + 'Be careful! There is limited error-checking!')
-        print(
-            Fore.WHITE + "\tChoose an execution option or directly enter a "
-                         "GCODE command for the axes:\n")
-
-        print(Style.RESET_ALL)
-        # Print std menu options
-        for key in sorted(self.menuItems):
-            print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
-        print(Style.RESET_ALL)
-
-        storedCmds = {Fore.LIGHTCYAN_EX
-                      + "[/] Repeat Last Command": self.lastCmd,
-                      Fore.LIGHTCYAN_EX
-                      + "[.] Repeat Saved Command": self.memCmd,
-                      Fore.LIGHTCYAN_EX
-                      + "[,] Store Saved Command": "Will Prompt for command"}
-
-        for key in storedCmds:
-            print("\t%-40s|  %-25s" % (key, storedCmds.get(key)))
-        print(Style.RESET_ALL)
+        # Also print active recipe and sequence information
+        print(Fore.LIGHTYELLOW_EX)
+        print("\t%-35s|  %-25s" % ("Active Sequence:", seqName))
+        print("\t%-35s|  %-25s" % ("Active Recipe:", __activeRecipe__.name))
+        print(Style.RESET_ALL, end="")
 
 
 class ioMenu_1PrintFile(ioMenuSpec):
     """Contains data and methods for implemented Print File Menu."""
 
     def __init__(self, **kwargs):
-        """*Initializes PrintFile Menu Object*."""
+        """Initializes PrintFile Menu Object."""
         kwargs = {'name': 'PrintFileMenu',
                   'menuTitle': 'Print File Menu',
                   'menuItems': {
@@ -446,7 +533,7 @@ class ioMenu_1PrintFile(ioMenuSpec):
         super().__init__(**kwargs)
 
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs Menu operations - loops.
 
         Returns
         -------
@@ -461,7 +548,7 @@ class ioMenu_2PrintFileOptions(ioMenuSpec):
     """Contains data and methods for implemented PrintFileOptions Menu."""
 
     def __init__(self, **kwargs):
-        """*Initializes PrintFileOptions Menu Object*."""
+        """Initializes PrintFileOptions Menu Object."""
         kwargs = {'name': 'PrintFileOptionsMenu',
                   'menuTitle': 'Print File Options Menu',
                   'menuItems': {
@@ -484,7 +571,7 @@ class ioMenu_2PrintFileOptions(ioMenuSpec):
         super().__init__(**kwargs)
 
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs Menu operations - loops.
 
         Returns
         -------
@@ -499,7 +586,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
     """Contains data and methods for implemented PrintSequence Menu."""
 
     def __init__(self, **kwargs):
-        """*Initializes Print Sequence Menu Object*."""
+        """Initializes Print Sequence Menu Object."""
         kwargs = {'name': 'PrintSequenceMenu',
                   'menuTitle': 'Print Sequence Menu',
                   'menuItems': {
@@ -512,7 +599,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         super().__init__(**kwargs)
 
     def ioMenu_printMenu(self):
-        """*Prints formatted menu options from menuItems dict*."""
+        """Prints formatted menu options from menuItems dict."""
         # Need to generate menu items and actions based on shapes loaded in
         # For now just 1 big list
 
@@ -561,7 +648,7 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         print(Style.RESET_ALL)
 
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs Menu operations - loops.
 
         Returns
         -------
@@ -623,7 +710,7 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
     """Contains data and methods for implemented PrintRecipe Menu."""
 
     def __init__(self, **kwargs):
-        """*Initializes Print Recipe Menu Object*."""
+        """Initializes Print Recipe Menu Object."""
         kwargs = {'name': 'PrintRecipeMenu',
                   'menuTitle': 'Recipe Menu',
                   'menuItems': {
@@ -654,7 +741,7 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
         super().__init__(**kwargs)
 
     def ioMenu_printMenu(self):
-        """*Prints formatted menu options from menuItems dict*."""
+        """Prints formatted menu options from menuItems dict."""
 
         print(Style.RESET_ALL)
         print("-" * 150)
@@ -686,7 +773,7 @@ class ioMenu_1PrintRecipe(ioMenuSpec):
         print(Style.RESET_ALL)
 
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs Menu operations - loops.
 
         Returns
         -------
@@ -850,7 +937,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
     """Contains data and methods for print sequence options Menu."""
 
     def __init__(self, seq: sequenceSpec, **kwargs):
-        """*Initializes Print Sequence Options Menu Object*.
+        """Initializes Print Sequence Options Menu Object.
 
         Parameters
         ----------
@@ -868,7 +955,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                      Fore.YELLOW + "[Add]":
                          Fore.YELLOW + "Add/Insert sequence as configured "
                                        "into active recipe",
-                     Fore.LIGHTGREEN_EX + "[GO]":
+                     Fore.LIGHTGREEN_EX + "[ACTIVATE]":
                          Fore.LIGHTGREEN_EX + "Engage Print Sequence"}
         print(Style.RESET_ALL)
 
@@ -880,7 +967,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         super().__init__(**kwargs)
 
     def ioMenu_printMenu(self):
-        """*Prints formatted menu options from menuItems dict*."""
+        """Prints formatted menu options from menuItems dict."""
         print(Style.RESET_ALL)
         print("-" * 150)
         print("###\t" + self.menuTitle)
@@ -935,7 +1022,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         print(Style.RESET_ALL)
 
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs Menu operations - loops.
 
         Returns
         -------
@@ -944,6 +1031,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         """
         global __savedInp__
         global __lastInp__
+        global __activeSequence__
         # Menu Loop
         doQuitMenu = False
         isPrimed = False
@@ -962,7 +1050,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     "Enter Command:",
                     validate=True,
                     validResponse=["q", "/", ".", ",",
-                                   "PRIME", "VIEW", "GO",
+                                   "PRIME", "VIEW", "ACTIVATE",
                                    "ADD"] + paramOptionList).lower()
 
                 if choiceString in ["/", ".", ","]:
@@ -983,18 +1071,10 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     for line in self.seq.cmdList:
                         print(Fore.LIGHTMAGENTA_EX + "\t" + repr(line))
                     print(Style.RESET_ALL, end='')
-                elif choiceString.upper() == 'GO':
-                    if isPrimed:
-                        print("\tExecuting Print! Ctrl + C to Cancel")
-                        self.seq.operateSeq()
-                        print("\tSequence Complete!")
-                    else:
-                        self.seq.genSequence()
-                        isPrimed = True
-                        print("\tCommands Generated!")
-                        print("\tExecuting Print! Ctrl + C to Cancel")
-                        self.seq.operateSeq()
-                        print("\tSequence Complete!")
+                elif choiceString.upper() == 'ACTIVATE':
+                    __activeSequence__ = self.seq
+                    print("\tSequence Activated, execute from the "
+                          "hardware menu.")
                 elif choiceString.upper() == "ADD":
                     # attempt to add to active recipe
                     if __activeRecipe__.name == 'NoRecipeNameSet':
@@ -1058,7 +1138,7 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
     """Contains data and methods for recipe edit options menu."""
 
     def __init__(self, **kwargs):
-        """*Initializes recipe edit options Menu Object*.
+        """Initializes recipe edit options Menu Object.
 
         """
 
@@ -1084,7 +1164,7 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
         super().__init__(**kwargs)
 
     def ioMenu_printMenu(self):
-        """*Prints formatted menu options from menuItems dict*."""
+        """Prints formatted menu options from menuItems dict."""
         print(Style.RESET_ALL)
         print("-" * 150)
         print("###\t" + self.menuTitle)
@@ -1101,7 +1181,7 @@ class ioMenu_2RecipeOptions(ioMenuSpec):
         print(Style.RESET_ALL)
 
     def io_Operate(self):
-        """*Performs Menu operations - loops*.
+        """Performs Menu operations - loops.
 
         Returns
         -------
@@ -1290,16 +1370,17 @@ def io_setupConsole():
             os.system("mode con cols=150 lines=2000")
         elif sys.platform.startswith('linux'):
             os.system("printf '\\e[8;40;150t'")
-    except Exception:
+    except Exception as inst:
         print("\tFailed to resize terminal")
+        logging.exception(inst)
 
 
 def io_StartText():
     """Displays start screen."""
-    print(("=" * 150) + "\n" + ("=" * 150))
+    print("=" * 150)
     print("\tPolyChemPrint3 - Version:" + str(__version__)
           + "\tRevised: " + __date__)
-    print(("=" * 150) + "\n" + ("=" * 150))
+    print("=" * 150)
 
 
 def io_preloadText():
@@ -1307,35 +1388,35 @@ def io_preloadText():
     print("#" * 150)
     print("\tStarting PolyChemPrint3 Load Sequence...")
     print("#" * 150)
-    print("Step:" + " " * 59 + "| Syntax Checked | Loaded |")
+    print("Step:" + " " * 55 + "| Syntax Checked | Loaded |")
 
 
 # IO Helper METHODS ##########################################################
 
 def io_TestCode():
-    """*Executes a block of test code from main menu*."""
+    """Executes a block of test code from main menu."""
     print("\tBegin Test Code")
     print("\tEnd Test Code")
 
 
-def io_Prompt(promptString, validate=False, validResponse=None,
+def io_Prompt(promptString: str, validate=False, validResponse=None,
               caseSensitive=False):
     """Prompts user for input and may validate against a list of options.
 
     Parameters
     ----------
     promptString: str
-        to display as prompt
+        text to display as a prompt to the user.
     validate: bool
-        for whether to validate input
+        whether or not to validate input againt validResponse
     validResponse: list of str
-        valid input strings
+        list of valid input strings, ignored if validate == false
     caseSensitive: bool
-        whether prompt should be case sensitive
+        whether validation should be made on a case sensitive basis
 
     Returns
     -------
-    String
+    str
         inputString from user
     """
     if validResponse is None:
@@ -1520,10 +1601,11 @@ def io_loadPCP(objType):
         try:
             compile(open(objDir / objFile, 'r').read(), objFile, "exec")
             passCompile = 1
-        except Exception:
+        except Exception as inst:
             passCompile = 0
             print(Fore.LIGHTRED_EX + '\t\t' + objFile
                   + "\tfailed syntax check" + textCol)
+            logging.exception(inst)
 
         # See if file will load, if so assign it a number and add to the
         # objectDict
@@ -1803,8 +1885,8 @@ def io_startLog():
         logDir = rootDir / 'Logs'
         now = datetime.now()
         strDate = str(now.year) + str(now.month) + str(now.day) + "_" \
-                                + str(now.hour) + str(now.minute) \
-                                + str(now.second)
+                  + str(now.hour) + str(now.minute) \
+                  + str(now.second)
         strName = str(input("\tEnter Log File Name:"))
         fileName = strDate + "_" + strName
         fileWriter = fileHandler(fullFilePath=str(logDir / fileName) + ".txt")
@@ -1819,8 +1901,8 @@ def io_startLog():
 
 
 def io_endLog(fileWriter: fileHandler):
-    """*Creates a log file for the current recipe and writes final
-    parameters to it*.
+    """Creates a log file for the current recipe and writes final
+    parameters to it.
 
     Parameters
     ----------
@@ -1864,13 +1946,14 @@ axes = nullAxes()
 tool = nullTool()
 
 # Instantiated Objects
-__seqDict__ = {}
-__toolDict__ = {}
-__axesDict__ = {}
-__recipeStubList__ = []
-__activeRecipe__ = recipe()
+__seqDict__ = {}  # Empty dictionary to hold sequences
+__toolDict__ = {}  # Empty dictionary to hold tools
+__axesDict__ = {}  # Empty dictionary to hold axes
+__recipeStubList__ = []  # Empty list to hold recipe stubs
+__activeRecipe__ = recipe()  # Initialize a new (default) recipe object
+__activeSequence__ = None  # No default sequence exists, so initialize as None
 
-# Relative paths
+# Paths to text files that may need to be loaded.
 __textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels' / 'LICENSE.txt'}
 
 
@@ -1931,7 +2014,7 @@ def main():
                 print('\tExiting Program - Goodbye!')
                 doQuitProgram = True
 
-    # Exit Sequence
+    # Exit program
     sys.exit()
 
 
