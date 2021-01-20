@@ -49,16 +49,18 @@ class ioMenu_0Main(ioMenuSpec):
                        Fore.WHITE + "[T] Test Code":
                            Fore.WHITE + "Run test code",
                        Fore.WHITE + "(1) Hardware Control Menu":
-                           Fore.WHITE + "Send commands directly to hardware",
+                           Fore.WHITE + "Send commands directly to hardware "
+                                        "and execute active sequence/recipes",
                        Fore.WHITE + "(0) Configuration/About":
                            Fore.WHITE
                            + "Software setup, options, choose Tool/Axes",
                        Fore.WHITE + "(3) Recipe Menu":
                            Fore.WHITE
-                           + "Configure/Execute multi-sequence recipes",
+                           + "Configure/Activate multi-sequence recipes",
                        Fore.WHITE + "(2) Sequence Menu":
                            Fore.WHITE
-                           + "Configure/Execute predefined command sequences"}}
+                           + "Configure/Activate predefined command "
+                             "sequences"}}
         super().__init__(**kwargs)
 
     def io_Operate(self):
@@ -321,7 +323,7 @@ class ioMenu_1Hardware(ioMenuSpec):
                   }}
         super().__init__(**kwargs)
 
-    # ioMenuSpec METHODS ####################################################
+    # ioMenuSpec METHODS #####################################################
     def io_Operate(self):
         """Performs menu operations and loops on user input.
 
@@ -402,6 +404,7 @@ class ioMenu_1Hardware(ioMenuSpec):
                               "sequence:")
                         if not isSeqPrimed:
                             __activeSequence__.genSequence()
+                            isSeqPrimed = True
                         for line in __activeSequence__.cmdList:
                             print(Fore.LIGHTMAGENTA_EX + "\t" + repr(line))
                         print(Style.RESET_ALL, end='')
@@ -410,9 +413,11 @@ class ioMenu_1Hardware(ioMenuSpec):
                         print("\tExecuting Print! Ctrl + C to Cancel")
                         if not isSeqPrimed:
                             __activeSequence__.genSequence()
+                            isSeqPrimed = True
                         __activeSequence__.operateSeq()
                         print("\tSequence Complete!")
                     elif choiceString == '#sm':
+                        isSeqPrimed = False
                         seqMen = ioMenu_2SequenceOptions(__activeSequence__)
                         seqMen.io_Operate()
                     else:  # Should never happen
@@ -490,9 +495,11 @@ class ioMenu_1Hardware(ioMenuSpec):
                     print("\tReceived: " + choiceString)
                     axes.move(choiceString.upper() + "\n")
             except KeyboardInterrupt:
-                tool.disengage()
                 print("\n\tKeyboardInterrupt received, resetting menu")
-                print("\n\tTool Automatically Disengaged")
+                if tool.getState()[0]:
+                    tool.disengage()
+                print("\tTool Automatically Disengaged")
+                return 'M1HardwareMenu'
 
     def ioMenu_printMenu(self):
         """Prints formatted menu options from menuItems dict."""

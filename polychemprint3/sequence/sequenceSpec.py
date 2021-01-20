@@ -3,7 +3,7 @@
 Specifies modular pre-written motion and dispense sequences for common prints.
 
 | First created on Sun Oct 20 00:08:15 2019
-| Revised: 20/10/2019 00:34:27
+| Revised (dd/mm/yyyy): 01/18/2021 - BP
 | Author: Bijal Patel
 
 """
@@ -20,9 +20,10 @@ from polychemprint3.axes.nullAxes import nullAxes
 class sequenceSpec(loggerSpec, ABC):
     """Abstract Base Class for predefined print sequences."""
 
-    # Construct/Destruct METHODS #####################################################################################
+    # Construct/Destruct METHODS #############################################
     @abstractmethod
-    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), dictParams: dict = None,
+    def __init__(self, axes: Axes3DSpec = nullAxes(),
+                 tool: toolSpec = nullTool(), dictParams: dict = None,
                  __verbose__: bool = 0, **kwargs):
         """*Initializes sequence object*.
 
@@ -41,9 +42,13 @@ class sequenceSpec(loggerSpec, ABC):
 
         # Provide default values to dictParams if initialized without
         if dictParams is None:
-            dictParams = {"name": seqParam("Sequence Name", "default", "default", "default"),
-                          "description": seqParam("Sequence description", "default", "default", "default"),
-                          "owner": seqParam("PCP_Default", "default", "default", "default"),
+            dictParams = {"name": seqParam("Sequence Name", "default",
+                                           "default", "default"),
+                          "description": seqParam("Sequence description",
+                                                  "default", "default",
+                                                  "default"),
+                          "owner": seqParam("PCP_Default", "default",
+                                            "default", "default"),
                           }
 
         self.dictParams = dictParams
@@ -52,11 +57,11 @@ class sequenceSpec(loggerSpec, ABC):
         self.cmdList = []
         super().__init__(**kwargs)
 
-    ################### Parameter Methods ###########################
+    # Parameter Methods ######################################################
     def updateParams(self):
         pass
-    ################### Sequence Actions ###################################
 
+    # Sequence Actions ######################################################
     def operateSeq(self, **kwargs):
         """*Performs print sequence*.
         Returns
@@ -72,9 +77,6 @@ class sequenceSpec(loggerSpec, ABC):
                 eval(line)
             return True
 
-        except KeyboardInterrupt:
-            print("\tTerminated by User....")
-            return False
         except Exception as inst:
             print("\tTerminated by Error....")
             logging.exception(inst)
@@ -91,7 +93,7 @@ class sequenceSpec(loggerSpec, ABC):
         """
         pass
 
-    ####################### Logging METHODS ###############################
+    # Logging METHODS #######################################################
     @abstractmethod
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.
@@ -119,7 +121,7 @@ class sequenceSpec(loggerSpec, ABC):
 class seqParam:
     """Base Class for parameters used in sequences."""
 
-    ################### Construct/Destruct METHODS ###########################
+    # Construct/Destruct METHODS #############################################
     def __init__(self, name, value, unit, helpString):
         """*Initializes parameter object*.
 
