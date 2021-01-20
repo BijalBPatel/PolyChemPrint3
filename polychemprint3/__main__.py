@@ -345,13 +345,13 @@ class ioMenu_1Hardware(ioMenuSpec):
         doQuitMenu = False
         isSeqPrimed = False
         isRecPrimed = False
-        print('\tSetting Axes to relative positioning...')
-        axes.setPosMode('relative')
 
         # Loop until user wants to quit or a return is made
         while not doQuitMenu:
             try:
                 # Initialize and display menu
+                print('\tSetting Axes to relative positioning...')
+                axes.setPosMode('relative')
                 self.__init__()
                 self.ioMenu_updateStoredCmds(__lastInp__, __savedInp__)
                 self.ioMenu_printMenu()

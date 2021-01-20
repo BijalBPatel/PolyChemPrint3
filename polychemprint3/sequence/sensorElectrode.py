@@ -96,7 +96,7 @@ class sensorElectrode(sequenceSpec):
             [x1e, y1e] = [leadIns + linewidth / 2, 0]
             [x2sa, y2sa] = [leadIns + xOverlap + channlength,
                             channlength + linewidth]
-            [x2ea, y2ea] = [leadIns + linewidth / 2, leadIns + linewidth / 2]
+            [x2ea, y2ea] = [leadIns + linewidth / 2, channlength + linewidth]
             [x2eb, y2eb] = [leadIns + linewidth / 2,
                             0 - channlength - linewidth]
             [x2ec, y2ec] = [leadIns + xOverlap + channlength,
@@ -116,7 +116,7 @@ class sensorElectrode(sequenceSpec):
                             2 * (-linewidth - channlength)]
 
             # Booleans
-            cleanSteps = cleanSteps.lower() == 'T'
+            cleanSteps = cleanSteps.lower() == 't'
 
             # Set current position to absolute zero
             self.cmdList.append("axes.setPosMode(\"absolute\")")
@@ -150,11 +150,12 @@ class sensorElectrode(sequenceSpec):
                                     "begin')")
                 self.cmdList.append("tool.setValue(" + str(toolTrvlVal) + ")")
                 self.cmdList.append("tool.engage()")
-                self.cmdList.append(("axes.move(\"G1 F2000" + " Z-18"
+                self.cmdList.append(("axes.move(\"G1 F2000" + " Z2"
                                      + "\\n" + "\")"))
-                self.cmdList.append(("axes.move(\"G1 F500" + " Z-2"
+                self.cmdList.append(("axes.move(\"G1 F500" + " Z0"
                                      + "\\n" + "\")"))
-
+            self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                 + " Z0" + "\\n" + "\")"))
             # 2 Print stroke two
             self.cmdList.append("tool.setValue(" + str(toolOnVal) + ")")
             self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
@@ -187,11 +188,12 @@ class sensorElectrode(sequenceSpec):
                                     "begin')")
                 self.cmdList.append("tool.setValue(" + str(toolTrvlVal) + ")")
                 self.cmdList.append("tool.engage()")
-                self.cmdList.append(("axes.move(\"G1 F2000" + " Z-18"
+                self.cmdList.append(("axes.move(\"G1 F2000" + " Z2"
                                      + "\\n" + "\")"))
-                self.cmdList.append(("axes.move(\"G1 F500" + " Z-2"
+                self.cmdList.append(("axes.move(\"G1 F500" + " Z0"
                                      + "\\n" + "\")"))
-
+            self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                 + " Z0" + "\\n" + "\")"))
             # 3 Print stroke three
             self.cmdList.append("tool.setValue(" + str(toolOnVal) + ")")
             self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
@@ -216,11 +218,12 @@ class sensorElectrode(sequenceSpec):
                                     "begin')")
                 self.cmdList.append("tool.setValue(" + str(toolTrvlVal) + ")")
                 self.cmdList.append("tool.engage()")
-                self.cmdList.append(("axes.move(\"G1 F2000" + " Z-18"
+                self.cmdList.append(("axes.move(\"G1 F2000" + " Z2"
                                      + "\\n" + "\")"))
-                self.cmdList.append(("axes.move(\"G1 F500" + " Z-2"
+                self.cmdList.append(("axes.move(\"G1 F500" + " Z0"
                                      + "\\n" + "\")"))
-
+            self.cmdList.append(("axes.move(\"G1 F" + str(trvlSpd)
+                                 + " Z0" + "\\n" + "\")"))
             # 4 Print stroke four
             self.cmdList.append("tool.setValue(" + str(toolOnVal) + ")")
             self.cmdList.append(("axes.move(\"G1 F" + str(printSpd)
@@ -246,6 +249,7 @@ class sensorElectrode(sequenceSpec):
                                  + "\\n" + "\")"))
             self.cmdList.append("tool.setValue(" + str(toolOffVal) + ")")
             self.cmdList.append("tool.disengage()")
+
             return True
         except KeyboardInterrupt:
             print("\tgenSequence Terminated by User....")

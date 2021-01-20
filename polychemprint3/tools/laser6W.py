@@ -26,7 +26,7 @@ class laser6W(serialDeviceSpec, toolSpec):
                  devAddress="/dev/ttyACM1"
                             "",
                  baudRate=115200,
-                 commsTimeOut=0.1,
+                 commsTimeOut=0.001,
                  __verbose__=1,
                  **kwargs):
         """*Initializes Tool Object*.

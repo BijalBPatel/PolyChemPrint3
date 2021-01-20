@@ -199,8 +199,8 @@ class GCodeFileInkscape(sequenceSpec):
         """
         Zheight = str(self.dictParams.get("Zhop").value)
         toolOnValue = self.dictParams.get("Ton").value
-        tooltrvValue = self.dictParams.get("Toff").value
-        toolOffValue = self.dictParams.get("Ttrv").value
+        tooltrvValue = self.dictParams.get("Ttrv").value
+        toolOffValue = self.dictParams.get("Toff").value
         try:
             fullLines = []  # This list will include tool commands.
             lastZval = "Z0"
