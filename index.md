@@ -1,6 +1,12 @@
 >> Note: 'final' cleanup/ reformatting of package and this website is underway. 
 
-<span style="text-decoration: underline;">**What is PolyChemPrint3 (PCP3)?**</span> _**Short form:** PCP3 functions something like a mix of [Pronterface](https://www.pronterface.com/) and a [GCode Slic(3)r](https://slic3r.org/), but for arbitrary axes/toolhead (extruder/syringe pump/ LASER/ etc.) combinations and streamlined for research of non-thermoplastic materials._ This project aims to help bridge the gap between commercially mature FDM 3D-printing and the expanded range of deposition tools and material palette of modern additive manufacturing (AM) research. The centerpiece of this work is the **open source PolyChemPrint3 python package,** available as a [distributable package on PyPi](https://pypi.org/project/polychemprint3/) and (more usefully) from [source code on Github.](https://github.com/BijalBPatel/PolyChemPrint3) A full user manual and software documentation are available via [readthedocs.io](https://polychemprint3.readthedocs.io/en/latest/). PCP3 is essentially the **control software for benchtop additive manufacturing equipment**. It handles **synchronized communication between motion axes and the myriad AM toolheads** (extruders, syringe pumps, Lasers) that are used in modern AM materials research. Along with the software package, this webpage and associated docs describe o**ur research group's hardware implementation**: centered on the Lulzbot Taz 6 3D printer with various print/toolheads that we have used for processing a variety of materials (polymer solutions, thermoplastics, conductive polymers, chocolate, Laser etching of small molecule crystals). <span style="text-decoration: underline;">**Key Features:**</span>
+<span style="text-decoration: underline;">**What is PolyChemPrint3 (PCP3)?**</span> 
+
+_**Short form:** PCP3 functions something like a mix of [Pronterface](https://www.pronterface.com/) and a [GCode Slic(3)r](https://slic3r.org/), but for arbitrary axes/toolhead (extruder/syringe pump/ LASER/ etc.) combinations and streamlined for research of non-thermoplastic materials._ 
+
+This project aims to help bridge the gap between commercially mature FDM 3D-printing and the expanded range of deposition tools and material palette of modern additive manufacturing (AM) research. The centerpiece of this work is the **open source PolyChemPrint3 python package,** available as a [distributable package on PyPi](https://pypi.org/project/polychemprint3/) and (more usefully) from [source code on Github.](https://github.com/BijalBPatel/PolyChemPrint3) A full user manual and software documentation are available via [readthedocs.io](https://polychemprint3.readthedocs.io/en/latest/). PCP3 is essentially the **control software for benchtop additive manufacturing equipment**. It handles **synchronized communication between motion axes and the myriad AM toolheads** (extruders, syringe pumps, Lasers) that are used in modern AM materials research. Along with the software package, this webpage and associated docs describe o**ur research group's hardware implementation**: centered on the Lulzbot Taz 6 3D printer with various print/toolheads that we have used for processing a variety of materials (polymer solutions, thermoplastics, conductive polymers, chocolate, Laser etching of small molecule crystals). <span style="text-decoration: underline;">
+
+**Key Features:**</span>
 
 *   **Free, Open source, object oriented, and excessively documented:** The program is written in an extensible, 'minimum coding required' way. You do not need to be a computer scientist to use and extend this program.
 *   **Easy Hardware integration:** New tools and axes need only be capable of two-way serial communication to be integrated: allowing for the use of commercial 3D printers, industrial linear stages, or a (weird) combination to be easily integrated alongside pneumatic extruders, lasers, syringe pumps, etc.
@@ -46,42 +52,6 @@
 
 <span style="text-decoration: underline;">**Funding Sources:**</span>
 
-*   National Science Foundation DMREF Award No. DMR-1727605
 *   Startup Funds of the [Diao Group](http://diao.scs.illinois.edu/Diao_Lab/Home.html) from the University of Illinois [Department of Chemical and Biomolecular Engineering](https://chbe.illinois.edu/).
-## Welcome to GitHub Pages
 
-You can use the [editor on GitHub](https://github.com/BijalBPatel/PolyChemPrint3/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/BijalBPatel/PolyChemPrint3/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+*   National Science Foundation DMREF Award No. DMR-1727605
