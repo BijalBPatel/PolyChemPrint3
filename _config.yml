@@ -1,2 +1,6 @@
 theme: jekyll-theme-minimal
+title: PolyChemPrint(3)
+description: 3D printer control software for non-FDM materials research
+  (Polymer Solution/Paste/Bio/Laser Patterning). Free and Open Source, Python
+  3.3+
 logo: /images/TOC_V3_Option4v2.png
