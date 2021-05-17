@@ -26,12 +26,14 @@ import logging
 
 
 class GCodeFileInkscape(sequenceSpec):
-    """Sequence template for importing GCODE motion commands and tool triggers into PCP Recipe framework
+    """Sequence template for importing GCODE motion commands and tool
+    triggers into PCP Recipe framework
 
     """
 
-    # Construct/Destruct Methods ######################################################################################
-    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+    # Construct/Destruct Methods #############################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(),
+                 tool: toolSpec = nullTool(), **kwargs):
         """*Initializes GCodeFile object with parameters for this sequence*.
 
         Parameters
@@ -54,7 +56,7 @@ class GCodeFileInkscape(sequenceSpec):
             "creationDate": seqParam("Creation Date",
                                      currentDate, "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
-            "owner": seqParam("Owner", "PCP_Advanced", "", "default: PCP_Core"),
+            "owner": seqParam("Owner", "PCP_Advanced", "", ""),
             "filePath": seqParam("GCodeFilePath", "PathUnset", "",
                                  "Full File Path to target GCode File"),
             "feedRate": seqParam("Printing Speed", "60", "mm/min",
@@ -76,10 +78,11 @@ class GCodeFileInkscape(sequenceSpec):
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    # Unique Methods  #################################################################################################
+    # Unique Methods  ########################################################
 
     def importFromGFile(self):
-        """Attempts to read line by line from GcodeFile at GCodeFilePath and return the read lines as a list.
+        """Attempts to read line by line from GcodeFile at GCodeFilePath
+        and return the read lines as a list.
 
         Returns
         -------
@@ -95,8 +98,11 @@ class GCodeFileInkscape(sequenceSpec):
             while not GFile.testFileIO('r'):
                 print("\tError opening file... retry selecting GCodeFile:")
                 tkWindow = tk.Tk()
-                GFilePath = askopenfilenames(parent=tkWindow, initialdir='/', initialfile='tmp',
-                                             filetypes=[("GCode Files", "*.gcode|*.txt"), ("All files", "*")])[0]
+                GFilePath = askopenfilenames(parent=tkWindow, initialdir='/',
+                                             initialfile='tmp',
+                                             filetypes=[("GCode Files",
+                                                         "*.gcode|*.txt"),
+                                                        ("All files", "*")])[0]
                 self.dictParams.get("filePath").value = str(GFilePath)
                 GFile.fullFilePath = str(GFilePath)
             return GFile.readFullFile()
@@ -105,13 +111,15 @@ class GCodeFileInkscape(sequenceSpec):
             logging.exception(inst)
 
     def processGCode(self, GLines):
-        """Parses each line in Glines to remove unusable commands and reconstitutes motion, feed strings with the
-        rates the user provides in the CLI.
+        """Parses each line in Glines to remove unusable commands and
+        reconstitutes motion, feed strings with the rates the user provides
+        in the CLI.
 
         Returns
         -------
         procGlines: list of str
-            A list of GCode lines processed to remove garbage and include user-specified feeds, z height.
+            A list of GCode lines processed to remove garbage and include
+            user-specified feeds, z height.
 
         """
         try:
@@ -125,7 +133,8 @@ class GCodeFileInkscape(sequenceSpec):
                     pass
                 else:
                     cleanGlines.append(line)
-            # Now parse GCode into blocks and substitute user provided values where possible
+            # Now parse GCode into blocks and substitute user provided
+            # values where possible
             procGLines = []
             for line in cleanGlines:
                 # Break line into blocks
@@ -141,14 +150,18 @@ class GCodeFileInkscape(sequenceSpec):
                 zSpd = str(self.dictParams.get("zRate").value)
                 trvSpd = str(self.dictParams.get("trvRate").value)
 
-                # Go through each block and substitute in user-provided values for speeds, zheight
+                # Go through each block and substitute in user-provided
+                # values for speeds, zheight
                 for block in blocks:
                     if block == "":
                         pass
-                    elif block[0] in direct:  # motion string in the XY plane
+                    # motion string in the XY plane
+                    elif block[0] in direct:
                         motionStr = motionStr + block + " "
-                    elif block[0] == "Z":  # motion string in Z, eligible for substitution
-                        if block.__contains__("Z3"):  # I.e. a raised (non-printing) step.
+                    # motion string in Z, eligible for # substitution
+                    elif block[0] == "Z":
+                        if block.__contains__("Z3"):
+                            # i.e. a raised (non-printing) step.
                             motionStr = motionStr + "Z" + Zheight + " "
                         else:  # Should be Z0 for printing step
                             motionStr = motionStr + block + " "
@@ -199,7 +212,8 @@ class GCodeFileInkscape(sequenceSpec):
                 else:  # Shouldn't ever get here
                     zVal = lastZval
                 if zVal == Zheight and lastZval == "Z0":  # This is a raise/travel move
-                    fullLines.append("tool.setValue(" + str(tooltrvValue) + ")")
+                    fullLines.append(
+                        "tool.setValue(" + str(tooltrvValue) + ")")
                     fullLines.append(line)
                 elif zVal == "Z0" and lastZval == Zheight:  # This is a lower/ print move
                     fullLines.append(line)
@@ -262,7 +276,8 @@ class GCodeFileInkscape(sequenceSpec):
 
                         # Post-Sequence #####################################
                         cmds.append("tool.disengage()")
-                        cmds.append("axes.setPosMode(\"relative\")")  # Add line to return to relative positioning
+                        cmds.append(
+                            "axes.setPosMode(\"relative\")")  # Add line to return to relative positioning
                         print("\t\tLoading complete!")
                         return True
             return False

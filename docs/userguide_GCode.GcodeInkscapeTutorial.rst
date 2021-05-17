@@ -50,7 +50,7 @@ d)  Edit the following parameters in the text panel.
 **Step 6: Enter G-code processing parameters**
 
 a)	From the top toolbar, choose Extensions -> GCodeTools -> Path-to-Gcode. A window with 4 tabs will appear.
-b)	In the "Path to GCode" tab, set the cutting order to "pass by pass".
+b)	In the "Path to GCode" tab, set the cutting order to "pass by pass" and use depth function d.
 c)  In the "Options" tab, set the 'Offset along Z axis' to 1.00. Also, check the "Select all paths if nothing is selected" checkbox.
 d)  In the "Preferences" tab:
 
@@ -59,7 +59,8 @@ d)  In the "Preferences" tab:
     3. Set 'Z safe height for G00 move over blank' to 2.00'
 
 e)  Generate log files if you would like.
-f)  At this stage, everything is ready to generate a gcode file. Clone the layer above your current layer and lock/hide all previous layers.
+f)  At this stage, everything is ready to generate a gcode file. Save
+    another copy of this file and delete all sublayers.
 
 **Step 7: Generate and export G-code File**
 

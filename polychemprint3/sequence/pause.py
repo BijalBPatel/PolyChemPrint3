@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Sequence for introducing a pause. The length of time can be set, or it can resume on user input.
+"""Sequence for introducing a pause. The length of time can be set,
+or it can resume on user input.
 
 | First created (dd/mm/yyyy): 05/05/2020
 | Revised (dd/mm/yyyy): 17/12/2020 - BP
@@ -16,10 +16,12 @@ import logging
 
 
 class pause(sequenceSpec):
-    """Sequence for introducing a pause. The length of time can be set, or it can resume on user input."""
+    """Sequence for introducing a pause. The length of time can be set,
+    or it can resume on user input. """
 
-    # Construct/Destruct METHODS ######################################################################################
-    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+    # Construct/Destruct METHODS #############################################
+    def __init__(self, axes: Axes3DSpec = nullAxes(),
+                 tool: toolSpec = nullTool(), **kwargs):
         """*Initializes pause object with parameters for this sequence*.
 
         Parameters
@@ -32,20 +34,23 @@ class pause(sequenceSpec):
             "name": seqParam("name", "pause", "",
                              ""),
             "description": seqParam("Sequence Description",
-                                    "Pause execution for a set duration, or until user confirms",
+                                    "Pause execution for a set duration, "
+                                    "or until user confirms",
                                     "", "pause.py"),
             "creationDate": seqParam("Creation Date",
                                      "05/05/2020", "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
             "owner": seqParam("Owner", "PCP_Fundamentals", "", ""),
-            "pauseTime": seqParam("pauseTime", "1", "seconds", "time to wait before next cmd sent"),
-            "doPrompt": seqParam("Prompt to Continue?", "N", "(Y/N)", "Will user be prompted to resume?")
+            "pauseTime": seqParam("pauseTime", "1", "seconds",
+                                  "time to wait before next cmd sent"),
+            "doPrompt": seqParam("Prompt to Continue?", "N", "(Y/N)",
+                                 "Will user be prompted to resume?")
         }
 
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    # sequenceSpec Methods ###########################################################################################
+    # sequenceSpec Methods ###################################################
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
 
@@ -66,7 +71,7 @@ class pause(sequenceSpec):
 
             # 0 Do mandated pause regardless of prompt
             cmds.append("print(\"\\tpausing...\", end =\" \")")
-            cmds.append("sleep(" + str(pauseTime) + ")")
+            cmds.append("time.sleep(" + str(pauseTime) + ")")
             cmds.append("print(\" pause ended!\")")
 
             # Prompt user to continue if needed
@@ -83,7 +88,7 @@ class pause(sequenceSpec):
             logging.exception(inst)
             return False
 
-    # loggerSpec Methods #############################################################################################
+    # loggerSpec Methods #####################################################
 
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.
