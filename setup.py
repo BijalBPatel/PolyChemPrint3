@@ -70,7 +70,7 @@ setup(
 	packages=find_packages(),  # Required
 	py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
 	include_package_data=True,
-    python_requires='3.7',
+    python_requires='',
 
     install_requires=[
 		'pyserial', 
