@@ -79,7 +79,8 @@ setup(
 		'psutil', 
 		'babel', 
 		'pillow', 
-		'tkfilebrowser', 
+		'tkfilebrowser',
+        'numpy'
 		],  # Optional
 
  

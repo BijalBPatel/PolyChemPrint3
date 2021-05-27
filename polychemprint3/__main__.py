@@ -22,6 +22,7 @@ import os
 import importlib
 from pathlib import Path
 from colorama import init, Fore, Style
+import textwrap
 
 # Internal PCP3 Imports
 from polychemprint3.commandLineInterface.ioMenuSpec import ioMenuSpec
@@ -174,6 +175,16 @@ class ioMenu_1Configuration(ioMenuSpec):
                     print("\n\tPolyChemPrint3 v" + str(__version__)
                           + "\n\t" + str(__date__)
                           + "\n\tBy Bijal Patel bbpatel2@illinois.edu")
+
+                    citationString = "Patel, B. B.; Chang, Y.; Park, S. K.; Wang, S.; Rosheck, J.; Patel, K.; Walsh, " \
+                                     "D.; Guironnet, D.; Diao, Y. PolyChemPrint: A Hardware and Software Framework " \
+                                     "for Benchtop Additive Manufacturing of Functional Polymeric Materials. Journal " \
+                                     "of Polymer Science 2021. "
+                    citationList = textwrap.wrap(citationString,width=70)
+                    print("\n\tIf this program has been of value to your work, please cite the following:\n")
+                    for line in citationList:
+                        print("\t" + str(line))
+                    print("\n\thttps://doi.org/10.1002/pol.20210086")
                     print("\n\tProvided under the University of Illinois"
                           "/NCSA\n\tOpen Source License\n")
                     panelTitle = 'License'
