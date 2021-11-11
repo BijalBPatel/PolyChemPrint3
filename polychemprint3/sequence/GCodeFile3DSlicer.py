@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Parameterized code for reading in a gcode file and reprocessing for PCP3
+Parameterized code for reading in a gcode file for 3D printing and reprocessing for PCP3
 
 | First created on 05/14/2020 18:16:00
 | Revised: 11/11/21
@@ -10,7 +10,7 @@ Parameterized code for reading in a gcode file and reprocessing for PCP3
 import re
 from datetime import datetime
 from polychemprint3.utility.fileHandler import fileHandler
-from polychemprint3.axes import axes3DSpec
+from polychemprint3.axes.axes3DSpec import Axes3DSpec
 from polychemprint3.tools.toolSpec import toolSpec
 from polychemprint3.sequence.sequenceSpec import sequenceSpec, seqParam
 from polychemprint3.tools.nullTool import nullTool
@@ -25,13 +25,13 @@ from tkfilebrowser import askopendirname, askopenfilenames, asksaveasfilename
 import logging
 
 
-class GCodeFile3DSlicerv2(sequenceSpec):
+class GCodeFile3DSlicer(sequenceSpec):
     """Sequence template for importing 3D GCODE motion commands and tool
     triggers into PCP Recipe framework"""
 
     # CONSTRUCT/DESTRUCT METHODS ###
-    def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
-        """*Initializes GCodeFile object with parameters for this sequence*.
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
+        """Initializes GCodeFile object with parameters for this sequence.
 
         Parameters
         ----------
@@ -45,8 +45,7 @@ class GCodeFile3DSlicerv2(sequenceSpec):
 
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "GCodeFile3DSlicerv2", "",
-                             ""),
+            "name": seqParam("name", "GCodeFile3DSlicer", "", ""),
             "description": seqParam("Sequence Description",
                                     "Adapts 3D GCode with triggered dispense", "", ""),
             "creationDate": seqParam("Creation Date",
@@ -55,8 +54,7 @@ class GCodeFile3DSlicerv2(sequenceSpec):
             "owner": seqParam("Owner", "PCP_Advanced", "", "default: PCP_Core"),
             "filePath": seqParam("GCodeFilePath", "PathUnset", "",
                                  "Full File Path to target GCode File"),
-            "Ton": seqParam("Tool on Value", "5", "",
-                            "Tool value when dispensing"),
+            "Ton": seqParam("Tool on Value", "5", "", "Tool value when dispensing"),
             "Toff": seqParam("Tool off Value", "0", "",
                              "Tool value when not dispensing"),
             "Ttrv": seqParam("Tool travel Value", "0", "",
