@@ -212,7 +212,7 @@ class GCodeFile3DSlicer(sequenceSpec):
                             if line.__contains__("tool"):
                                 cmds.append(line)
                             else:
-                                cmdStr = "axes.move(\"" + line + "\")"
+                                cmdStr = "axes.move(\"" + line + "\\n\")"
                                 cmds.append(cmdStr)
 
                         # Post-Sequence
