@@ -3,7 +3,7 @@
 Parameterized code for reading in a gcode file and reprocessing for PCP3
 
 | First created on 05/14/2020 18:16:00
-| Revised:
+| Revised: 11/11/21
 | Author: Bijal Patel
 
 """
@@ -25,10 +25,11 @@ from tkfilebrowser import askopendirname, askopenfilenames, asksaveasfilename
 import logging
 
 
-class GCodeFile3DSlicer(sequenceSpec):
-    """Sequence template for importing GCODE motion commands and tool triggers into PCP Recipe framework"""
+class GCodeFile3DSlicerv2(sequenceSpec):
+    """Sequence template for importing 3D GCODE motion commands and tool
+    triggers into PCP Recipe framework"""
 
-    ################### Construct/Destruct METHODS ###########################
+    # CONSTRUCT/DESTRUCT METHODS ###
     def __init__(self, axes: axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), **kwargs):
         """*Initializes GCodeFile object with parameters for this sequence*.
 
@@ -44,10 +45,10 @@ class GCodeFile3DSlicer(sequenceSpec):
 
         # Create Params dict
         self.dictParams = {
-            "name": seqParam("name", "GCodeFile3DSlicer", "",
-                             "Emulated Retractions by stopping flow"),
+            "name": seqParam("name", "GCodeFile3DSlicerv2", "",
+                             ""),
             "description": seqParam("Sequence Description",
-                                    "Imported from GCodeFile", "", ""),
+                                    "Adapts 3D GCode with triggered dispense", "", ""),
             "creationDate": seqParam("Creation Date",
                                      currentDate, "", "dd/mm/yyyy"),
             "createdBy": seqParam("Created By", "Bijal Patel", "", ""),
@@ -56,16 +57,16 @@ class GCodeFile3DSlicer(sequenceSpec):
                                  "Full File Path to target GCode File"),
             "Ton": seqParam("Tool on Value", "5", "",
                             "Tool value when dispensing"),
-            "Toff": seqParam("Tool off Value", "5", "",
+            "Toff": seqParam("Tool off Value", "0", "",
                              "Tool value when not dispensing"),
-            "Ttrv": seqParam("Tool travel Value", "5", "",
+            "Ttrv": seqParam("Tool travel Value", "0", "",
                              "Tool value during travel moves"),
         }
 
         # Pass values to parent
         super().__init__(axes, tool, self.dictParams, **kwargs)
 
-    ################### Unique Methods  ####################################
+    # UNIQUE METHODS ###
 
     def importFromGFile(self):
         """Attempts to read line by line from GcodeFile at GCodeFilePath into memory"""
@@ -98,7 +99,7 @@ class GCodeFile3DSlicer(sequenceSpec):
         """Attempts to filter line by line from GLines to remove garbage and substitute values"""
         try:
             cleanGlines = []
-            garbageFlags = ["%", "(", "M"]
+            garbageFlags = ["%", "(", "M", ";"]
             for line in GLines:
                 if line == "":
                     pass
@@ -111,47 +112,25 @@ class GCodeFile3DSlicer(sequenceSpec):
                 # Break line into blocks
                 blocks = re.split('[ (]', line)
 
-                direct = ["X", "Y", "I", "J", "K"]
+                direct = ["X", "Y", "Z", "I", "J", "K"]
 
                 cmdStr = ""  # G etc cmd
                 motionStr = ""  # XYZIJK
                 feedStr = ""  # F
-
-                # Pull values to subst in
-                Zheight = str(self.dictParams.get("Zhop").value)
-                printSpd = str(self.dictParams.get("feedRate").value)
-                zSpd = str(self.dictParams.get("zRate").value)
-                trvSpd = str(self.dictParams.get("trvRate").value)
 
                 for block in blocks:
                     if block == "":
                         pass
                     elif block[0] in direct:  # motion string
                         motionStr = motionStr + block + " "
-                    elif block[0] == "Z":  # Motion string in Z
-
-                        if block.__contains__("Z2"):
-                            motionStr = motionStr + "Z" + Zheight + " "
-                        else:
-                            motionStr = motionStr + block + " "
                     elif block[0] == "G":  # Cmd string
-                        if block[0:3] == "G00":  # Travel Move
-                            cmdStr = cmdStr + block + " "
-                            feedStr = "F" + trvSpd + " "
-                        else:
-                            cmdStr = cmdStr + block + " "
+                        cmdStr = cmdStr + block + " "
                     elif block[0] == "F":  # Feed string
-                        if block.__contains__("F9999"):
-                            feedStr = feedStr + "F" + printSpd + " "
-                        elif block.__contains__("F9998"):
-                            feedStr = feedStr + "F" + zSpd + " "
-                        else:  # Should never happen
-                            feedStr = feedStr + "F" + printSpd + " "
+                        feedStr = feedStr + block + " "
                     else:
                         pass  # Throw away anything else
                 # Reconstruct String
                 procGLines.append(cmdStr + feedStr + motionStr)
-
             return procGLines
 
         except Exception as inst:
@@ -165,23 +144,28 @@ class GCodeFile3DSlicer(sequenceSpec):
         toolOffValue = self.dictParams.get("Ttrv").value
         try:
             fullLines = []
-            lastZval = "Z0"
+            lastGval = "G1"
             for line in procGlines:
-                if line.__contains__("Z2"):
-                    zVal = "Z2"
-                elif line.__contains__("Z0"):
-                    zVal = "Z0"
+                #print(line)
+                if line.__contains__("G1"):
+                    gVal = "G1"
+                elif line.__contains__("G0"):
+                    gVal = "G0"
                 else:
-                    zVal = lastZval
-                if zVal == "Z2" and lastZval == "Z0":
+                    gVal = lastGval
+                #print("Current GVal: " + gVal + ", Last GVal: " + lastGval)
+                # if currently on travel move, and last was extrude move
+                if gVal == "G0" and lastGval == "G1":
                     fullLines.append("tool.setValue(" + str(tooltrvValue) + ")")
                     fullLines.append(line)
-                elif zVal == "Z0" and lastZval == "Z2":
-                    fullLines.append(line)
+                    #print("Flag")
+                # if currently on extrude move and last was travel move
+                elif gVal == "G1" and lastGval == "G0":
                     fullLines.append("tool.setValue(" + str(toolOnValue) + ")")
+                    fullLines.append(line)
                 else:
                     fullLines.append(line)
-                lastZval = zVal
+                lastGval = gVal
             fullLines.append("tool.setValue(" + str(toolOffValue) + ")")
             return fullLines
         except Exception as inst:
@@ -189,7 +173,7 @@ class GCodeFile3DSlicer(sequenceSpec):
             logging.exception(inst)
             return False
 
-    ################### Sequence Methods ###################################
+    # SEQUENCE METHODS ###
 
     def genSequence(self):
         """*Loads print sequence into a list into cmdList attribute*.
@@ -199,6 +183,9 @@ class GCodeFile3DSlicer(sequenceSpec):
         bool
             whether successfully reached the end or not
         """
+
+        # pull tool off value
+        toolOffValue = self.dictParams.get("Ttrv").value
 
         self.cmdList = []
         cmds = self.cmdList
@@ -220,11 +207,12 @@ class GCodeFile3DSlicer(sequenceSpec):
                         # Pre-Sequence
                         # Add line for abs positioning
                         cmds.append("axes.setPosMode(\"absolute\")")
+                        cmds.append("tool.setValue(" + str(toolOffValue) + ")")
                         cmds.append("tool.engage()")
 
                         for line in fullGlines:
                             if line.__contains__("tool"):
-                                pass
+                                cmds.append(line)
                             else:
                                 cmdStr = "axes.move(\"" + line + "\")"
                                 cmds.append(cmdStr)
@@ -232,6 +220,9 @@ class GCodeFile3DSlicer(sequenceSpec):
                         # Post-Sequence
                         cmds.append("tool.disengage()")
                         cmds.append("axes.setPosMode(\"relative\")")  # Add line to return to relative positioning
+
+                        #print(*cmds, sep = "\n")
+
                         print("\t\tLoading complete!")
                         return True
 
@@ -245,7 +236,7 @@ class GCodeFile3DSlicer(sequenceSpec):
             logging.exception(inst)
             return False
 
-    ####################### Logging METHODS ###############################
+    # LOGGING METHODS ###
 
     def writeLogSelf(self):
         """*Generates log string containing dict to be written to log file*.
