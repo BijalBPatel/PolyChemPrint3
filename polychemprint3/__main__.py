@@ -307,9 +307,6 @@ class ioMenu_1Hardware(ioMenuSpec):
                       Fore.WHITE + "[#SP, #SV, #SE, #SM]":
                           Fore.WHITE + "Prime, View, Execute, or Modify "
                                        "Active Sequence",
-                      Fore.WHITE + "[#RP, #RV, #RE, #RM]":
-                          Fore.WHITE + "Prime, View, Execute, or Modify "
-                                       "Active Recipe",
                       Fore.YELLOW + "a,d; r,f; s,w":
                           Fore.YELLOW + "Coarse Jog -,+ 1mm in X; Y; Z",
                       Fore.YELLOW + "x,z; c,v":
@@ -433,19 +430,6 @@ class ioMenu_1Hardware(ioMenuSpec):
                         seqMen.io_Operate()
                     else:  # Should never happen
                         pass
-                # If the user wants to do an operation on the active recipe
-                elif choiceString == '#rp':
-                    print('\tWork in progress...')
-                    # Todo link prime recipe in hardware menu
-                elif choiceString == '#rv':
-                    print('\tWork in progress...')
-                    # Todo link view recipe in hardware menu
-                elif choiceString == '#re':
-                    print('\tWork in progress...')
-                    # Todo link edit recipe in hardware menu
-                elif choiceString == '#rm':
-                    print('\tWork in progress...')
-                    # Todo link modify recipe in hardware menu
                 # If the user wants to quick switch to another menu
                 elif choiceString == '#ms':
                     return 'M1PrintSequence'
