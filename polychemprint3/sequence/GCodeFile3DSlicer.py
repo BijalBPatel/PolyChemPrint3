@@ -205,6 +205,8 @@ class GCodeFile3DSlicer(sequenceSpec):
                         # Pre-Sequence
                         # Add line for abs positioning
                         cmds.append("axes.setPosMode(\"absolute\")")
+                        cmds.append("axes.setPosZero()")
+
                         cmds.append("tool.setValue(" + str(toolOffValue) + ")")
                         cmds.append("tool.engage()")
 
