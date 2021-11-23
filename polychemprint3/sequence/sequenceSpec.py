@@ -22,9 +22,8 @@ class sequenceSpec(loggerSpec, ABC):
 
     # Construct/Destruct METHODS #############################################
     @abstractmethod
-    def __init__(self, axes: Axes3DSpec = nullAxes(),
-                 tool: toolSpec = nullTool(), dictParams: dict = None,
-                 __verbose__: bool = 0, **kwargs):
+    def __init__(self, axes: Axes3DSpec = nullAxes(), tool: toolSpec = nullTool(), dictParams: dict = None, __verbose__: bool = 0, tool2: toolSpec = nullTool(),
+                 tool3: toolSpec = nullTool(), **kwargs):
         """*Initializes sequence object*.
 
         Parameters
@@ -39,17 +38,14 @@ class sequenceSpec(loggerSpec, ABC):
         # Pass in active axes/tool
         self.axes = axes
         self.tool = tool
+        self.tool2 = tool2
+        self.tool3 = tool3
 
         # Provide default values to dictParams if initialized without
         if dictParams is None:
-            dictParams = {"name": seqParam("Sequence Name", "default",
-                                           "default", "default"),
-                          "description": seqParam("Sequence description",
-                                                  "default", "default",
-                                                  "default"),
-                          "owner": seqParam("PCP_Default", "default",
-                                            "default", "default"),
-                          }
+            dictParams = {"name": seqParam("Sequence Name", "default", "default", "default"),
+                          "description": seqParam("Sequence description", "default", "default", "default"),
+                          "owner": seqParam("PCP_Default", "default", "default", "default"), }
 
         self.dictParams = dictParams
         self.verbose = __verbose__

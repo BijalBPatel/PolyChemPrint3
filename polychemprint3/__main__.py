@@ -131,6 +131,8 @@ class ioMenu_1Configuration(ioMenuSpec):
         global tool2
         global tool3
         global axes
+        global isSeqPrimed
+        global isRecPrimed
 
         # Menu Loop
         doQuitMenu = False
@@ -209,6 +211,8 @@ class ioMenu_1Configuration(ioMenuSpec):
                             axes = oldAxes
 
                 elif choiceString == '3':  # Change Tool 1
+                    isSeqPrimed = False
+                    isRecPrimed = False
                     print("\t\tCurrently Loaded Tool Options: ")
                     for toolCode in sorted(__toolDict__):
                         toolobj = __toolDict__.get(toolCode)
@@ -361,6 +365,8 @@ class ioMenu_1Hardware(ioMenuSpec):
         global axes
         global __activeRecipe__
         global __activeSequence__
+        global isSeqPrimed
+        global isRecPrimed
 
         # Menu Loop Variables
         doQuitMenu = False
@@ -690,6 +696,8 @@ class ioMenu_1PrintSequence(ioMenuSpec):
         for seq in __seqDict__.values():
             seq.axes = axes
             seq.tool = tool
+            seq.tool2 = tool2
+            seq.tool3 = tool3
             seq.updateParams()
 
         # Menu Loop
@@ -937,6 +945,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
         menuItems = {Fore.LIGHTRED_EX + "[q]": Fore.LIGHTRED_EX + "Quit",
                      Fore.LIGHTYELLOW_EX + "[PRIME]": Fore.LIGHTYELLOW_EX + "Generate Print Commands",
                      Fore.LIGHTYELLOW_EX + "[VIEW]": Fore.LIGHTYELLOW_EX + "View Print Commands",
+                     Fore.LIGHTYELLOW_EX + "[EXPORT]": Fore.LIGHTYELLOW_EX + "Export Generated Commands to File",
                      Fore.YELLOW + "[Add]": Fore.YELLOW + "Add/Insert sequence as configured "
                                                           "into active recipe",
                      Fore.LIGHTGREEN_EX + "[ACTIVATE]": Fore.LIGHTGREEN_EX + "Engage Print Sequence"}
@@ -1021,7 +1030,7 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     paramOptionList.append(str(x))
 
                 choiceString = io_Prompt("Enter Command:", validate=True,
-                                         validResponse=["q", "/", ".", ",", "PRIME", "VIEW", "ACTIVATE",
+                                         validResponse=["q", "/", ".", ",", "PRIME", "VIEW", "EXPORT", "ACTIVATE",
                                                         "ADD"] + paramOptionList).lower()
 
                 if choiceString in ["/", ".", ","]:
@@ -1038,14 +1047,45 @@ class ioMenu_2SequenceOptions(ioMenuSpec):
                     isPrimed = True
                     print("\tCommands Generated!")
                 elif choiceString.upper() == 'VIEW':
-                    print("\tOutputting Python Commands:")
-                    for line in self.seq.cmdList:
-                        print(Fore.LIGHTMAGENTA_EX + "\t" + repr(line))
-                    print(Style.RESET_ALL, end='')
+                    if isPrimed:
+                        print("\tOutputting Python Commands:")
+                        for line in self.seq.cmdList:
+                            print(Fore.LIGHTMAGENTA_EX + "\t" + repr(line))
+                        print(Style.RESET_ALL, end='')
+                    else:
+                        print("\tError: Must Prime Sequence First")
                 elif choiceString.upper() == 'ACTIVATE':
-                    __activeSequence__ = self.seq
-                    print("\tSequence Activated, execute from the "
-                          "hardware menu.")
+                    if isPrimed:
+                        __activeSequence__ = self.seq
+                        print("\tSequence Activated, execute from the "
+                              "hardware menu.")
+                    else:
+                        print("\tError: Must Prime Sequence First")
+                elif choiceString.upper() == 'EXPORT':
+                    if isPrimed:
+                        print("\tExporting List of Python Commands to file:")
+                        try:
+                            print("\tAttempting to export sequence list of commands to text file...")
+                            rootDir = Path(__file__).absolute().parent
+                            exportDir = rootDir / 'data' / 'ExportedSequences'
+                            now = datetime.now()
+                            strDate = str(now.year) + str(now.month) + str(now.day) + "_" + str(now.hour) + str(
+                                now.minute) + str(now.second)
+                            strName = str(input("\tEnter Export File Name:"))
+                            fileName = strDate + "_" + strName
+                            fullpath = str(exportDir / fileName) + ".PCP"
+                            outFile = Path(fullpath)
+                            outFile.touch(exist_ok=True)
+                            fileWriter = fileHandler(fullFilePath=fullpath)
+                            for line in self.seq.cmdList:
+                                fileWriter.appendToFile(line+'\n')
+
+                        except Exception as inst:
+                            print(Fore.RED + "\tError Exporting Sequence" + Style.RESET_ALL)
+                            logging.exception(inst)
+                        print("\tSuccess! Exported List of Python Commands to file:" + str(fullpath))
+                    else:
+                        print("\tError: Must Prime Sequence First")
                 elif choiceString.upper() == "ADD":
                     # attempt to add to active recipe
                     if __activeRecipe__.name == 'NoRecipeNameSet':
@@ -1832,6 +1872,8 @@ __axesDict__ = {}  # Empty dictionary to hold axes
 __recipeStubList__ = []  # Empty list to hold recipe stubs
 __activeRecipe__ = recipe()  # Initialize a new (default) recipe object
 __activeSequence__ = None  # No default sequence exists, so initialize as None
+isSeqPrimed = False
+isRecPrimed = False
 
 # Paths to text files that may need to be loaded.
 __textDict__ = {'License': __rootDir__ / 'data' / 'TextPanels' / 'LICENSE.txt'}
