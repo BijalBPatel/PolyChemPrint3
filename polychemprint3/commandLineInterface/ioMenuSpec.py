@@ -57,7 +57,7 @@ class ioMenuSpec(ioElementSpec, ABC):
 
         pass
 
-    def ioMenu_printMenu(self):
+    def ioMenu_printMenu(self, showStoredCmds = True):
         """Prints formatted menu options from menuItems dict."""
         # Print Header
         print(Style.RESET_ALL + "-" * 150)
@@ -69,15 +69,17 @@ class ioMenuSpec(ioElementSpec, ABC):
         for key in sorted(self.menuItems):
             print("\t%-40s|  %-25s" % (key, self.menuItems.get(key)))
         print(Style.RESET_ALL)
-        storedCmds = {Fore.LIGHTCYAN_EX
-                      + "[/] Repeat Last Command": self.lastCmd,
-                      Fore.LIGHTCYAN_EX
-                      + "[.] Repeat Saved Command": self.memCmd,
-                      Fore.LIGHTCYAN_EX
-                      + "[,] Store Saved Command": "Will Prompt for command"}
-        for key in storedCmds:
-            print("\t%-40s|  %-25s" % (key, storedCmds.get(key))
-                  + Style.RESET_ALL)
+
+        if showStoredCmds:
+            storedCmds = {Fore.LIGHTCYAN_EX
+                          + "[/] Repeat Last Command": self.lastCmd,
+                          Fore.LIGHTCYAN_EX
+                          + "[.] Repeat Saved Command": self.memCmd,
+                          Fore.LIGHTCYAN_EX
+                          + "[,] Store Saved Command": "Will Prompt for command"}
+            for key in storedCmds:
+                print("\t%-40s|  %-25s" % (key, storedCmds.get(key))
+                      + Style.RESET_ALL)
 
     def ioMenu_updateStoredCmds(self, lastCmd, memCmd):
         """Updates stored commands local to this menu item from inputs.
