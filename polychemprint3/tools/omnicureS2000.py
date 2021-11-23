@@ -1,8 +1,8 @@
 """
-Implements the Tool base class for Nordson EFD Ultimus V Extruder.
+Implements the Tool base class for Excelitas/Lumen Dynamics Omnicure S2000.
 
-| First created on Sun Oct 20 00:03:21 2019
-| Revised: 10/17/20
+| First created on 211122
+| Revised:
 | Author: Bijal Patel
 
 """
@@ -18,23 +18,23 @@ import serial
 import io
 import time
 import logging
+import crcmod.predefined
 
 
-class ultimusExtruder(serialDeviceSpec, toolSpec):
-    """Implements the toolSpec abstract base class for the Nordson EFD Ultimus V Extruder."""
+class omnicureS2000(serialDeviceSpec, toolSpec):
+    """Implements the toolSpec abstract base class for the Excelitas/Lumen Dynamics Omnicure S2000."""
 
-    ###########################################################################
-    ### Construct/Destruct METHODS
-    ###########################################################################
+    ### CONSTRUCT/DESTRUCT METHODS
+
     def __init__(self,
-                 name="T_UltimusExtruder",
-                 units="kPa",
-                 devAddress="/dev/ttyS0",
-                 baudRate=115200,
+                 name="T_OmnicureS2000",
+                 units="percent",
+                 devAddress="/dev/ttyUSB0",
+                 baudRate=19200,
                  commsTimeOut=0.1,
                  __verbose__=1,
                  **kwargs):
-        """*Initializes T_UltimusExtruder Object*.
+        """*Initializes Omnicure S2000 Object*.
 
         Parameters
         ----------
@@ -42,7 +42,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             tool name
         units: String
             units for value
-        devAddress: Strong
+        devAddress: String
             device address on this computer
         baudRate: int
             baud rate
@@ -76,21 +76,26 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                    False if error generated and tool is not ready for use
         """
         passed = False
-        print("\t\t\t" + "Activating Ultimus Extruder.")
+        print("\t\t\t" + "Activating Omnicure S2000.")
 
         # Start Serial Device
         [status, message] = self.startSerial()
         print("\t\t\t" + message)
 
         if status == 1:
-            # Try initial handshake
-            status, message = self.handShakeSerial()
-            print("\t\t\t" + message)
-            if status == 1:
-                passed = True
-            print("\t\t\t" + "Ultimus Extruder Activated Successfully!")
-        else:
-            print("\t\t\t" + "Ultimus Extruder Failed to Activate!")
+            # Try initial handshake several times
+            tryCounter = 1
+            notDone = True
+            while (tryCounter < 3 and notDone):
+                status, message = self.handShakeSerial()
+                print("\t\t\t" + message)
+                if status == 1:
+                    passed = True
+                    notDone = False
+                    print("\t\t\t" + "Omnicure S2000 Activated Successfully!")
+                else:
+                    tryCounter += 1
+                    print("\t\t\t" + "Omnicure S2000 Failed to Activate!")
         return passed
 
     def deactivate(self):
@@ -104,11 +109,28 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
               False if error generated and serial communication could not be suspended.
         """
         passed = False
+        print("\t\t\t" + "Deactivating Omnicure S2000.")
+
+        if self.dispenseStatus == 1:
+            print("\t\t\t" + "!!!UV Shutter is detected as OPEN. For safety, shutter will be closed before disconnecting.")
+            self.disengage()
+
+        # Send disconnect command to Omnicure
+        status, message = self.writeSerialCommand("DCON")
+        if "CLOSE" in message:
+            closeStatus = 1
+        else:
+            closeStatus = 0
+
         # Stop Serial Device
         [status, message] = self.stopSerial()
-        print("\t\t\t" + message)
-        if status == 1:
+        if status & closeStatus == 1:
             passed = True
+
+        if passed == 1:
+            print("\t\t\t" + "Omnicure S2000 Deactivated Successfully!")
+        else:
+            print("\t\t\t" + "Omnicure S2000 Failed to Deactivate!")
         return passed
 
     # PCP.tools.toolSpec Tool Action (Dispensing) Methods
@@ -123,14 +145,14 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 0:
-                self.writeSerialCommand("DI")
+                self.writeSerialCommand("OPN")
                 self.dispenseStatus = 1
-                return [1, "Dispense turned on."]
+                return [1, "UV Shutter Opened."]
 
             else:
-                return [0, "Warning: Dispense should already be on."]
+                return [0, "Warning: UV Shutter should already be on."]
         except Exception as inst:
-            return [-1, 'Failed engaging dispense ' + inst.__str__()]
+            return [-1, 'Failed engaging UV Shutter ' + inst.__str__()]
 
     def disengage(self):
         """Turn tool primary action off (stops dispense/LASER beam off, etc).
@@ -143,24 +165,25 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         try:
             if self.dispenseStatus == 1:
-                self.writeSerialCommand("DI")
+                self.writeSerialCommand("CLS")
                 self.dispenseStatus = 0
-                return [1, "Dispense turned off."]
+                return [1, "UV Shutter Closed."]
 
             else:
-                return [0, "Warning: Dispense should already be off."]
+                self.writeSerialCommand("CLS")
+                return [0, "Warning: UV Shutter should already be off."]
         except Exception as inst:
-            return [-1, 'Failed disengaging dispense ' + inst.__str__()]
+            return [-1, 'Failed disengaging UV Shutter ' + inst.__str__()]
 
-    def setValue(self, pressureVal):
-        """Set the extruder output pressure
+
+    def setValue(self, intVal):
+        """Set the Omnicure Output Intensity
 
         Parameters
         ----------
-        pressureVal: String
-            The new value of the pressure as a string, expressed at arbitrary precision/ without leading zeros.
-            Conversion to hardware specific format occurs internally.
-            e.g., (use 23.456 NOT 0234")
+        intVal: String
+            The new value of the output iris opening/level/irradiance as a string.
+            Conversion to specific format occurs internally.
 
         Returns
         -------
@@ -168,25 +191,65 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             First element (int) indicates whether value setting was successful (1) or error (-1).\n
             Second element provides text explanation.
         """
-        print("\t\tSetting Value for UltimusExtruder...")
+        print("\t\tSetting Value for Omnicure...")
         try:
-            pressureVal = self.pressureRecode(pressureVal)
-            return self.writeSerialCommand("PS  " + pressureVal)
+            errText = ""
+            # 1 for iris opening %, 2 for level-set mode, 3 for irradiance mode
+            operatingMode = 1
+
+            intVal = intVal.rstrip()
+            setSuccess = False
+
+            if operatingMode == 1: # uncalibrated iris mode
+                # Force to nearest integer
+                if intVal.isdigit():
+                    intVal = int(intVal)
+                else:
+                    print("\t\t\t!!!Rounding intensity value to nearest integer")
+                    intVal = round(float(intVal))
+
+                # Manual says 0 < val <= 100, needs to be integer
+                if intVal == 0:
+                    intVal = 1
+                    print("\t\t\tSetpoint too low, reset to minimum value of 1")
+                elif intVal > 100:
+                    intVal = 100
+                    print("\t\t\tSetpoint too high, reset to maximum value of 100")
+                else:
+                    pass
+                [writeStatus, response] = self.writeSerialCommand("SIL" + str(intVal))
+                if "Received" in response:
+                    setSuccess = True
+
+            elif operatingMode == 2: # level set mode
+                [writeStatus, response] = self.writeSerialCommand("SPW" + str(intVal))
+                if "Received" in response:
+                    setSuccess = True
+            elif operatingMode == 3: # irradiance mode
+                [writeStatus, response] = self.writeSerialCommand("SIR" + str(intVal))
+                if "Received" in response:
+                    setSuccess = True
+            else:
+                print("Error in omnicureS2000 setValue code")
+
+            if setSuccess == True:
+                print("\t\tValue Set Successfully for OmnicureS2000!")
+            else:
+                print("Omnicure Value Set Error: " + repr(response))
+
         except Exception as inst:
-            return [-1, "Error: Pressure could not be set for Extruder"
+            return [-1, "Error: Intensity could not be set for Extruder"
                     + inst.__str__()]
-        print("\t\tValue Set Successfully for UltimusExtruder!")
+
 
     def getState(self):
-        """*Returns active state of tool*.
+        """Returns active state of tool [software record only].
 
-        | *Parameters*
-        |   none
-
-        | *Returns*
-        |   [1, "Tool On"]
-        |   [0, "Tool Off"]
-        |   [-1, "Error: Tool activation state cannot be determined + Error]
+        Returns
+        -------
+            [1, "Tool On"]
+            [0, "Tool Off"]
+            [-1, "Error: Tool activation state cannot be determined + Error]
         """
         try:
             if self.dispenseStatus == 1:
@@ -197,9 +260,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
             return [-1, "Error: Tool activation state cannot be determined"
                     + inst.__str__()]
 
-    ##########################################################################
     ### PCP_SerialDevice METHODS
-    ##########################################################################
 
     def checkIfSerialConnectParamsSet(self):
         """*Goes through connection parameters and sees if all are set*.
@@ -235,16 +296,33 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                                          xonxoff=False,
                                          rtscts=False,
                                          dsrdtr=False,
-                                         writeTimeout=2
+                                         writeTimeout=0.2
                                          )
                 portstatus = self.ser.isOpen()
                 return [1, "\tInstantiated PySerial Object... port open = " + str(portstatus) + "."]
+
+                # Use ser for writing
+                # Use sReader for buffered read
+                # sReader = io.TextIOWrapper(io.BufferedReader(self.ser))
+
+                # Clear initial garbage text in output buffer
+                # self.ser.reset_output_buffer()
+                # time.sleep(0.25)
+
+                # lineIn = sReader.readlines()
+                # linesIn = [lineIn]
+
+                # keep reading until empty
+                # while lineIn != []:
+                #    time.sleep(0.25)
+                #    lineIn = sReader.readlines()
+                #    linesIn.append(lineIn)
 
             except Exception as inst:
                 return [-1, 'Failed Creating pySerial... ' + str(inst)]
 
     def stopSerial(self):
-        """*Terminates communication*.
+        """Terminates serial port.
 
         Returns
         -------
@@ -252,11 +330,9 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         [-1, "Error: Tool could not be stopped + error text"]
         """
         try:
-            self.ser.write(chr(0x04).encode())  # End of transmission code
-            print("\t\tClosing UltimusV...")
-            time.sleep(3)
+            print("\t\t\t\tClosing Tool Serial Port...")
             self.ser.close()
-            print("\t\tClosed UltimusV!\n")
+            print("\t\t\t\tClosed Tool Serial Port!")
             return [1, "Terminated successfully"]
         except Exception as inst:
             return [0, 'Error on closing Serial Device: ' + self.name
@@ -265,7 +341,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
     ################### Communication METHODS ###############################
 
     def handShakeSerial(self):
-        """*Perform communications handshake with Tool*.
+        """Perform communications handshake with Tool.
 
         Returns
         -------
@@ -276,15 +352,14 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         try:
             if self.__verbose__:
-                print("\t\t\tAttempting handshake with UltimusV...")
+                print("\t\t\tAttempting handshake with Tool...")
 
-            # send ENQ
-            self.__writeSerial__(chr(0x05))
+            # send  CONN request and  read response
+            readIn = self.writeSerialCommand("CONN")[1]
 
-            # read response, see if matches acknowledge
-            readIn = self.readTime(3)[1]
-            if chr(6) in readIn:
-                return [1, "Handshake Successful, Received ACK"]
+            # see if matches acknowledge
+            if "READY" in readIn.upper():
+                return [1, "Handshake Successful, Received Ready Response"]
             else:
                 return [0, "Handshake Failed, Received: " + readIn]
         except Exception as inst:
@@ -308,9 +383,11 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         if self.checkIfSerialConnectParamsSet():
             try:
                 self.ser.write(text.encode())
-                print('\t\t\t\tCommand Sent to Extruder: ' + text)
+                self.ser.write("\r".encode())
+                print('\t\t\t\tCommand Sent to Omnicure: ' + repr(text))
                 return [1, 'Command Sent' + text]
             except Exception as inst:
+                print(inst.__str__())
                 return [0, 'Error on write to Serial Device: '
                         + self.name + ' : ' + inst.__str__()]
         else:
@@ -318,7 +395,7 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
                     + self.name + ' : ' + 'serial parameters unset']
 
     def writeSerialCommand(self, cmdString):
-        """*Writes dlcommand to serial device*.
+        """Writes packaged command to serial device and receives response [doesnt validate]
 
         Parameters
         ----------
@@ -327,30 +404,16 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
 
         Returns
         -------
-        [1, 'Command Sent: ' + cmdString + 'Received: ' + rcvd]
+        [1, Received Text]
         [0, "Error sending cmd : " + self.name + ' : ' + Error']
             if exception
         """
         try:
             # package command string
-            self.__writeSerial__(chr(0x05))
             self.__writeSerial__(self.pack(cmdString))
 
-            # receive A0 or A2
-            received = self.readTime(self.commsTimeOut)[1]
-            if "A2" in received:
-                return [0, "Error sending command to Serial Device: "
-                        + self.name + ' : ' + 'received A2']
-
-            else:
-                if "A0" in received:  # send ACK
-                    self.__writeSerial__(chr(0x04))
-                    return [1, 'Command Sent Successfully: ' + cmdString + '-> Received Confirmation: '
-                            + received]
-                else:
-                    self.__writeSerial__(chr(0x04).encode())  # end transmission
-                    return [0, "Unexpected return from Serial Device: "
-                            + self.name + ' : ' + received]
+            received = self.readTime(self.commsTimeOut)
+            return [1, received[1]]
 
         except Exception as inst:
             return [0, 'Error on sending command to Serial Device: '
@@ -370,17 +433,17 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
 
         try:  # Reads input until timeout
             while time.time() < tEnd:
-                ins = self.ser.readline().decode().rstrip()
+                ins = self.ser.readline().decode()
                 if ins != "":
                     inp += ins
-            inp = inp.strip()  # removes any newlines
+            #inp = inp.strip()  # removes any newlines
 
             if self.__verbose__:
-                print('\t\t\t\tReceived from Serial Device: ' + self.name
-                      + ' : ' + inp)
+                print('\t\t\t\tReceived from Serial Device ' + self.name
+                      + ' : ' + repr(inp))
             return [1, inp]
         except Exception as inst:
-            return [0, 'Error on read from Serial Device: ' + self.name
+            return [0, 'Error on read from Serial Device ' + self.name
                     + ' : ' + str(inst)]
 
     ##########################################################################
@@ -407,138 +470,77 @@ class ultimusExtruder(serialDeviceSpec, toolSpec):
         """
         super().loadLogSelf(jsonString)
 
-    ##########################################################################
-    ### Unique METHODS
-    ##########################################################################
-    def decToHex(self, num, bits):
-        """*Converts number from decimal to 2s compliment hexadecimal*.
+    ### UNIQUE METHODS
 
-        Logic: subtract hex value from 0 and output least significant byte
+    def calcCRC8Maxim(self, checkString):
+        """Calculates the CRC-8 value using the MAXIM standard, expresses as hexadecimal, and returns as string of length 2.
+
         Parameters
         ----------
-        num: int
-            decimal number to convert
-        bits: int
-            number of bits [python int = 32 bits]
+        checkString, string to compute CRC-8-Maxim value from
 
         Returns
         -------
-        String
-            number in 2s compliment hexadecimal
+        capitalized string of length 2 containing hexadecimal CRC8 Value
         """
-        if num < 0:
-            return hex((1 << bits) + num)
-        else:
-            return hex(num)
 
-    def calc_checkSum(self, checkString):
-        """*Calculates checksum and returns as string of length 2*.
+        # Notes for figuring out this part
+        # Omnicure manual has example C++ code for manual calculation
+        # Instead, pulled two examples "CONN" -> 0x18, "READY" -> 0x0A
+        # Use online calculator to figure out which CRC-8 Algorithm they implemented
+        # https: // crccalc.com /
+        # CRC-8/MAXIM gives correct values
+        # Googled "CRC Python Packages" until I found one that implements CRC-8 MAXIM
+        # http://crcmod.sourceforge.net/crcmod.predefined.html
 
-        Logic: subtract hex value from 0 and output least significant byte
-        | *Parameters*
-        |   checkString, string to compute checksum from
+        encodedString = checkString.encode()
+        crc8_func = crcmod.predefined.mkCrcFun('crc-8-maxim')
+        hexCRC8 = hex(crc8_func(encodedString))
 
-        | *Returns*
-        |    Capitalized hex string of length 2
-        """
-        checkTotal = 0
-        for char in checkString:
-            checkTotal -= int(hex(ord(char)), 16)
-        # convert to hex string
-        hexTotal = self.decToHex(checkTotal, 32).upper()
-        return hexTotal[-2:]
+        crc8String = str(hexCRC8)[2:].upper()
+        if len(crc8String) < 2:
+            crc8String = "0" + crc8String
+        return crc8String
 
     def pack(self, cmdString):
-        """*Packages a command packet*.
-
-        | Proper syntax of command packet: STX + DataString + Checksum + ETX
-        | Datastring = NumBytes + CommandName + Command Data
+        """Packages a command packet to send to the Omnicure S2000 over RS232
+        Proper syntax of command packet: CommandString + CRC-8 + Newline
 
         Parameters
         ----------
         cmdString: String
-            input command string, first 4 char are cmdName, rest are data
+            input command string as per Omnicure user manual section 16
 
         Returns
         -------
         String
-            packaged command string to send to extruder
+            packaged command string to send to omnicure
         """
-        cmdName = cmdString[0:4]
-        cmdData = cmdString[4:]
 
-        # Create NumBytesField
-        # hex number of format 0x# or 0x##
-        nBytes = len(cmdName + cmdData)
-        # convert to hex string remove 0x and add leading 0 if nBytes < 16
-        if nBytes < 16:
-            nBytes = hex(nBytes)[2:].upper()
-            nBytes = '0' + nBytes
-        else:
-            nBytes = hex(nBytes)[2:].upper()
+        # Calculate CRC-8 Value
+        crc8String = self.calcCRC8Maxim(cmdString)
 
-        # create Data string
-        dataString = nBytes + cmdName + cmdData
-
-        # Calculate Checksum
-        checkSum = self.calc_checkSum(dataString)
-
-        # Add Start/End transmission characters and return
-        return chr(2) + dataString + checkSum + chr(3)
+        # Compose output string and return
+        outString = cmdString + crc8String
+        return outString
 
     def unpack(self, packetIn):
-        """*Unpacks a command packet for cmd name and value*.
+        """Unpacks a command packet for cmd name and value*.
 
         Parameters
         ----------
         packetIn: String
-            data packet from extruder - STX + DataString + Checksum + ETX
+            data packet from omnicure: String + CRC8 Value [1 byte] + newline char
 
         Returns
         -------
-        String: cmdName
-            command name
-        String: cmdVal
-            command value [can be empty string]
+        dataString: response
+            response text from omnicure
         """
         packetIn = packetIn.rstrip()  # remove any trailing/leading whitespace
 
-        # Remove STX, numBytes, remove Checksum,ETX
-        dataString = packetIn[3, -3]
+        # Remove CRC8 Value without validating
+        dataString = packetIn[:-2]
 
-        # Pull cmd name from start of string
-        cmdName = dataString[0:4]
-        cmdVal = dataString[4:]
-
-        # return strings
-        return cmdName, cmdVal
-
-    def pressureRecode(self, presStr):
-        """Converts string from user-readible value to the 4 char format of the Ultimus Extruder.
-
-        Parameters
-        ----------
-        presStr: String
-            Pressure value to transmit as a string of arbitrary precision and length.
-
-        Returns
-        -------
-        presRft :String
-            Pressure value reformatted as 4 char sequence expected by Ultimus Extruder
-        """
-
-        # Convert input string to an int to remove any leading/trailing zeros
-        presRft = float(presStr)
-
-        # Round to tenths place, multiply by 10, and cast as int to remove trailing zero
-        presRft = int(np.around(presRft, decimals=1) * 10)
-
-        # Convert to string and pad with zeros if needed
-        presRft = str(presRft)
-
-        if len(presRft) > 4:
-            return "0000"
-        while len(presRft) < 4:
-            presRft = "0" + presRft
-
-        return presRft
+        # return string
+        return dataString
