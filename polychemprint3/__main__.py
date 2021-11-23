@@ -390,11 +390,11 @@ class ioMenu_1Hardware(ioMenuSpec):
                 if choiceString[:2] == 't1':  # Tool 1 command
                     # If it is the tool on, engage the tool
                     if choiceString == 't1 on':
-                        print("\tEngaging Tool 1")
+                        print("\t\tEngaging Tool 1")
                         print("\t\t" + tool.engage()[1])
                     # Else if it's tool off, disengage the tool
                     elif choiceString == 't1 off':
-                        print("\tDisengaging Tool 1")
+                        print("\t\tDisengaging Tool 1")
                         print("\t\t" + tool.disengage()[1])
                     # Else if rest of string is empty, user typod
                     elif choiceString[3:] == '':
@@ -405,11 +405,11 @@ class ioMenu_1Hardware(ioMenuSpec):
                 elif choiceString[:2] == 't2':  # Tool 2 command
                     # If it is the tool on, engage the tool
                     if choiceString == 't2 on':
-                        print("\tEngaging Tool 2")
+                        print("\t\tEngaging Tool 2")
                         print("\t\t" + tool2.engage()[1])
                     # Else if it's tool off, disengage the tool
                     elif choiceString == 't2 off':
-                        print("\tDisengaging Tool 2")
+                        print("\t\tDisengaging Tool 2")
                         print("\t\t" + tool2.disengage()[1])
                     # Else if rest of string is empty, user typod
                     elif choiceString[3:] == '':
@@ -420,11 +420,11 @@ class ioMenu_1Hardware(ioMenuSpec):
                 elif choiceString[:2] == 't3':  # Tool 3 command
                     # If it is the tool on, engage the tool
                     if choiceString == 't3 on':
-                        print("\tEngaging Tool 3")
+                        print("\t\tEngaging Tool 3")
                         print("\t\t" + tool3.engage()[1])
                     # Else if it's tool off, disengage the tool
                     elif choiceString == 't3 off':
-                        print("\tDisengaging Tool 3")
+                        print("\t\tDisengaging Tool 3")
                         print("\t\t" + tool3.disengage()[1])
                     # Else if rest of string is empty, user typod
                     elif choiceString[3:] == '':
