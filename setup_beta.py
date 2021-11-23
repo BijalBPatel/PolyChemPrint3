@@ -81,6 +81,7 @@ setup(
         'babel',
         'pillow',
         'tkfilebrowser',
+        'crcmod',
         'pywin32 >= 1.0 ; sys_platform=="win32"'
     ],  # Optional
 

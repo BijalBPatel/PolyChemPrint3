@@ -80,7 +80,8 @@ setup(
 		'babel', 
 		'pillow', 
 		'tkfilebrowser',
-        'numpy'
+        'numpy',
+        'crcmod'
 		],  # Optional
 
  
