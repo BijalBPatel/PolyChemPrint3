@@ -67,6 +67,8 @@ class sequenceSpec(loggerSpec, ABC):
         """
         axes = self.axes
         tool = self.tool
+        tool2 = self.tool2
+        tool3 = self.tool3
 
         try:
             for line in self.cmdList:
